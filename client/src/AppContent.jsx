@@ -27,6 +27,8 @@ import Shipping from "./components/Shipping";
 import Terms from "./components/Terms";
 import VerifyEmail from "./page/VerifyEmail";
 import AdminShipping from "./page/AdminShipping";
+import Contact from "./page/ContactUs";
+import Blog from "./page/Blog";
 
 const AppContent = () => {
     const { loading } = useLoading();
@@ -44,6 +46,8 @@ const AppContent = () => {
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/shipping" element={<Shipping />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/blog" element={<Blog />} />
                 {/* protected routes */}
                 <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
                 <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />

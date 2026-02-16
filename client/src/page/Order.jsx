@@ -6,10 +6,10 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const statusColor = {
-    PREPARING: "bg-yellow-100 text-yellow-700",
-    PLACED: "bg-yellow-100 text-yellow-700",
-    DISPATCHED: "bg-blue-100 text-blue-700",
-    DELIVERED: "bg-green-100 text-green-700",
+    PREPARING: "bg-[#D4AF37]/20 text-[#D4AF37]",
+    PLACED: "bg-[#D4AF37]/20 text-[#D4AF37]",
+    DISPATCHED: "bg-[#D4AF37]/15 text-[#C9A227]",
+    DELIVERED: "bg-[#D4AF37]/25 text-[#0F0F0F]",
 };
 
 const Order = () => {
@@ -47,16 +47,16 @@ const Order = () => {
         return "PLACED";
     };
 
-    if (loading) return <Loader />; // ✅ Show Loader while fetching
+    if (loading) return <Loader />;
 
     return (
         <>
             <Navbar />
 
-            <div className="min-h-screen pt-28 pb-12 px-4">
+            <div className="min-h-screen pt-28 pb-12 px-4 bg-white text-black">
                 <div className="max-w-6xl mx-auto">
                     <h1 className="text-3xl sm:text-4xl font-extrabold mb-8 text-center">
-                        My <span className="text-[#57b957]">Orders</span>
+                        My <span className="text-[#D4AF37]">Orders</span>
                     </h1>
 
                     {orders.length === 0 ? (
@@ -64,7 +64,7 @@ const Order = () => {
                             <p className="text-gray-500 text-lg mb-4">No orders placed yet.</p>
                             <a
                                 href="/products/all-products"
-                                className="inline-block px-6 py-3 bg-[#57b957] text-white rounded-full shadow-lg hover:bg-[#46a846] transition"
+                                className="inline-block px-6 py-3 bg-[#D4AF37] text-white rounded-full shadow-lg hover:bg-[#C9A227] transition"
                             >
                                 Browse Products
                             </a>
@@ -99,7 +99,7 @@ const Order = () => {
                                                     {order.paymentMethod === "COD" ? "Cash on Delivery" : "Online Payment"}
                                                 </span>
                                             </p>
-                                            <p className="text-lg font-bold text-[#57b957]">
+                                            <p className="text-lg font-bold text-[#D4AF37]">
                                                 Total: ₹{order.totalAmount.toLocaleString()}
                                             </p>
                                         </div>
@@ -108,7 +108,7 @@ const Order = () => {
                                         <div className="divide-y">
                                             {order.items.map((item, index) => {
                                                 const product = item.product;
-                                                if (!product) return null; // skip if product is null
+                                                if (!product) return null;
 
                                                 return (
                                                     <div key={index} className="flex items-center gap-4 p-6 hover:bg-gray-50 transition">
@@ -118,25 +118,31 @@ const Order = () => {
                                                             className="w-20 h-20 object-cover rounded-xl border"
                                                         />
                                                         <div className="flex-1">
-                                                            <p className="font-semibold text-gray-800">{product.name || "Deleted Product"}</p>
+                                                            <p className="font-semibold text-gray-800">
+                                                                {product.name || "Deleted Product"}
+                                                            </p>
                                                             <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                                                             <p className="text-sm text-gray-500">Price: ₹{item.price}</p>
                                                         </div>
-                                                        <p className="font-semibold text-gray-800">₹{item.price * item.quantity}</p>
+                                                        <p className="font-semibold text-gray-800">
+                                                            ₹{item.price * item.quantity}
+                                                        </p>
                                                     </div>
                                                 );
                                             })}
-
                                         </div>
 
                                         {/* Footer */}
                                         <div className="p-6 border-t border-gray-100 flex justify-between items-center">
                                             <p className="text-sm text-gray-500">
-                                                Order Status: <span className="font-medium">{currentStatus}</span>
+                                                Order Status:{" "}
+                                                <span className="font-medium text-[#D4AF37]">
+                                                    {currentStatus}
+                                                </span>
                                             </p>
                                             <button
                                                 onClick={() => navigate(`/order/${order._id}`)}
-                                                className="px-4 py-2 rounded-full bg-[#57b957] text-white shadow hover:bg-[#46a846] transition text-sm cursor-pointer"
+                                                className="px-4 py-2 rounded-full bg-[#D4AF37] text-white shadow hover:bg-[#C9A227] transition text-sm cursor-pointer"
                                             >
                                                 View Details
                                             </button>

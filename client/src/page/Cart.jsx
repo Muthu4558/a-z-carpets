@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
 
-const BRAND = "#57b957";
+const BRAND = "#D4AF37";
 
 const ConfirmDeleteModal = ({ open, productName, onCancel, onConfirm }) => {
   if (!open) return null;
@@ -23,7 +23,7 @@ const ConfirmDeleteModal = ({ open, productName, onCancel, onConfirm }) => {
       >
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Remove item</h3>
         <p className="text-gray-600 mb-6">
-          Are you sure you want to remove <span className="font-semibold text-[#3f6c4b]">{productName}</span> from your cart?
+          Are you sure you want to remove <span className="font-semibold text-[#D4AF37]">{productName}</span> from your cart?
         </p>
 
         <div className="flex gap-3 justify-end">
@@ -57,7 +57,7 @@ const EmptyState = () => (
     </div>
     <h3 className="mt-6 text-2xl font-semibold text-gray-700">Your cart is empty</h3>
     <p className="mt-2 text-gray-500">Browse products and add your favourites to the cart.</p>
-    <a href="/products/all-products" className="mt-4 inline-block px-4 py-2 bg-[#57b957] text-white rounded-lg">
+    <a href="/products/all-products" className="mt-4 inline-block px-4 py-2 bg-[#D4AF37] text-white rounded-lg">
       Continue Shopping
     </a>
   </div>
@@ -134,7 +134,7 @@ const Cart = () => {
         onConfirm={handleConfirmDelete}
       />
 
-      <div className="min-h-screen py-35 px-4">
+      <div className="min-h-screen py-35 px-4 bg-white text-black">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main column */}
           <div className="lg:col-span-8">
@@ -144,13 +144,13 @@ const Cart = () => {
                   <FaShoppingCart className="text-2xl" style={{ color: BRAND }} />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-extrabold text-gray-900">Your <span className="text-[#57b957]">Cart</span></h1>
-                  <p className="text-sm text-gray-500">Review items, update quantities, or proceed to checkout.</p>
+                  <h1 className="text-3xl font-extrabold text-[#D4AF37]">Your Cart</h1>
+                  <p className="text-sm text-black">Review items, update quantities, or proceed to checkout.</p>
                 </div>
               </div>
 
               <div className="hidden md:flex items-center gap-3">
-                <div className="text-sm text-gray-600">Secure checkout</div>
+                <div className="text-sm text-black">Secure checkout</div>
                 <div className="h-8 w-[1px] bg-gray-200" />
                 <div className="text-sm font-semibold" style={{ color: BRAND }}>
                   {cartItems.length} items
@@ -169,7 +169,7 @@ const Cart = () => {
                       key={item.product._id}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-2xl p-4 shadow-sm border border-[#57b957] flex flex-col md:flex-row items-center gap-4"
+                      className="bg-white rounded-2xl p-4 shadow-sm border border-[#D4AF37] flex flex-col md:flex-row items-center gap-4"
                     >
                       <div className="flex items-center gap-4 flex-1">
                         <div className="w-28 h-28 flex items-center justify-center rounded-xl overflow-hidden bg-gray-50 border">
@@ -181,13 +181,13 @@ const Cart = () => {
                         </div>
 
                         <div className="min-w-0">
-                          <h3 className="text-lg font-semibold text-gray-900 truncate">{item.product.name}</h3>
-                          <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.product.shortDescription ?? ""}</p>
+                          <h3 className="text-lg font-semibold text-[#D4AF37] truncate">{item.product.name}</h3>
+                          <p className="text-sm text-gray-400 mt-1 line-clamp-2">{item.product.shortDescription ?? ""}</p>
 
                           <div className="mt-3 flex items-center gap-3">
                             {item.product.offerPrice ? (
                               <>
-                                <div className="text-sm text-gray-400 line-through">₹{item.product.price}</div>
+                                <div className="text-sm text-black line-through">₹{item.product.price}</div>
                                 <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.offerPrice}</div>
                               </>
                             ) : (
@@ -195,13 +195,13 @@ const Cart = () => {
                             )}
                           </div>
 
-                          <div className="mt-2 text-sm text-gray-600">Subtotal: ₹{price * item.quantity}</div>
+                          <div className="mt-2 text-sm text-black">Subtotal: ₹{price * item.quantity}</div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-4 justify-between w-full md:w-auto">
                         {/* Quantity controls */}
-                        <div className="flex items-center bg-white border border-green-50 rounded-full px-2 shadow-sm">
+                        <div className="flex items-center bg-white border border-[#D4AF37] rounded-full px-2 shadow-sm">
                           <button
                             onClick={() => handleDecrease(item.product._id, item.quantity)}
                             disabled={item.quantity === 1}
@@ -210,7 +210,7 @@ const Cart = () => {
                           >
                             <FaMinus />
                           </button>
-                          <div className="px-4 text-sm font-medium">{item.quantity}</div>
+                          <div className="px-4 text-sm font-medium text-black">{item.quantity}</div>
                           <button
                             onClick={() => handleIncrease(item.product._id, item.quantity)}
                             className="p-2 rounded-full hover:bg-gray-100 transition text-gray-600"
@@ -222,7 +222,7 @@ const Cart = () => {
 
                         {/* Remove */}
                         <button
-                          className="p-2 rounded-lg bg-white border hover:bg-red-50 text-red-600 cursor-pointer"
+                          className="p-2 rounded-lg border text-red-600 hover:text-red-400 cursor-pointer"
                           title="Remove"
                           onClick={() => askDelete(item.product._id, item.product.name)}
                           aria-label="Remove item"
@@ -240,21 +240,21 @@ const Cart = () => {
           {/* Checkout panel */}
           <aside className="lg:col-span-4">
             <div className="sticky top-20">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-[#57b957]">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-[#D4AF37]">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <div className="text-sm text-gray-500">Order summary</div>
+                    <div className="text-sm text-black">Order summary</div>
                     <div className="text-2xl font-bold mt-1" style={{ color: BRAND }}>₹{total}</div>
                   </div>
-                  <div className="text-sm text-gray-400">incl. taxes</div>
+                  <div className="text-sm text-black">incl. taxes</div>
                 </div>
 
                 <div className="space-y-3 mb-4">
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-black">
                     <span>Items</span>
                     <span>{cartItems.length}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-black">
                     <span>Estimated delivery</span>
                     <span>5–7 days</span>
                   </div>
@@ -274,7 +274,7 @@ const Cart = () => {
                   <FaShoppingCart /> Proceed to Checkout
                 </button>
 
-                <div className="mt-4 text-xs text-gray-500">
+                <div className="mt-4 text-xs text-black">
                   Secure payments • Easy returns • 24/7 support
                 </div>
               </div>

@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLoading } from "../context/LoadingContext";
 import indiaStates from "../data/indiaStates.json";
 
-const BRAND = "#57b957";
+const BRAND = "#D4AF37";
 
 
 const Profile = () => {
@@ -98,27 +98,27 @@ const Profile = () => {
     <>
       <Navbar />
 
-      <div className="min-h-screen py-16 px-4 mt-14">
+      <div className="min-h-screen py-16 px-4 mt-14 bg-white">
         <div className="max-w-4xl mx-auto">
 
           {/* TITLE */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-extrabold">
-              My <span className="text-[#57b957]">Profile</span>
+            <h1 className="text-3xl font-extrabold text-black">
+              My <span className="text-[#D4AF37]">Profile</span>
             </h1>
           </div>
 
           {/* MAIN CARD */}
-          <div className="bg-white shadow-lg rounded-2xl border overflow-hidden">
+          <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-[#D4AF37] text-black">
             <div className="md:flex">
 
               {/* LEFT */}
-              <div className="md:w-1/3 p-6 bg-[#f6fbf6] flex flex-col items-center">
+              <div className="md:w-1/3 p-6 bg-white flex flex-col items-center">
                 <FaUserCircle size={80} color={BRAND} />
                 <h3 className="mt-3 font-semibold">{profile.name}</h3>
                 <p className="text-sm text-gray-500">{profile.email}</p>
 
-                <button onClick={() => setIsModalOpen(true)} className="mt-4 w-full bg-[#57b957] text-white py-2 rounded cursor-pointer">
+                <button onClick={() => setIsModalOpen(true)} className="mt-4 w-full bg-[#D4AF37] text-white py-2 rounded cursor-pointer">
                   <FaEdit className="inline mr-2" /> Edit Profile
                 </button>
 
@@ -129,7 +129,7 @@ const Profile = () => {
 
               {/* RIGHT */}
               <div className="md:w-2/3 p-6">
-                <h2 className="font-semibold mb-4">Account Information</h2>
+                <h2 className="font-semibold mb-4 text-[#D4AF37]">Account Information</h2>
                 <p><b>Name:</b> {profile.name}</p>
                 <p><b>Phone:</b> {profile.number}</p>
                 <p><b>Email:</b> {profile.email}</p>
@@ -137,8 +137,8 @@ const Profile = () => {
                 {/* ADDRESS SECTION */}
                 <div className="mt-6">
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-semibold">Addresses</h3>
-                    <button onClick={() => setIsAddressModalOpen(true)} className="px-3 py-1 bg-[#57b957] text-white rounded text-sm cursor-pointer">
+                    <h3 className="font-semibold text-[#D4AF37]">Addresses</h3>
+                    <button onClick={() => setIsAddressModalOpen(true)} className="px-3 py-1 bg-[#D4AF37] text-white rounded text-sm cursor-pointer">
                       <FaPlus className="inline mr-1" /> Add
                     </button>
                   </div>
@@ -174,7 +174,7 @@ const Profile = () => {
             <input name="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full mb-2 px-3 py-2 border rounded" placeholder="Email" />
             <input name="number" value={formData.number} onChange={(e) => setFormData({ ...formData, number: e.target.value })} className="w-full mb-3 px-3 py-2 border rounded" placeholder="Phone" />
 
-            <button onClick={handleSave} className="w-full bg-[#57b957] text-white py-2 rounded cursor-pointer">
+            <button onClick={handleSave} className="w-full bg-[#D4AF37] text-white py-2 rounded cursor-pointer">
               <FaSave className="inline mr-2" /> Save
             </button>
           </div>
@@ -194,39 +194,39 @@ const Profile = () => {
 
             {/* State Dropdown */}
             <select
-  value={addressForm.state}
-  onChange={(e) =>
-    setAddressForm({ ...addressForm, state: e.target.value, district: "" })
-  }
-  className="w-full mb-2 px-3 py-2 border rounded"
->
-  <option value="">Select State</option>
-  {Object.keys(indiaStates).map((state) => (
-    <option key={state} value={state}>
-      {state}
-    </option>
-  ))}
-</select>
+              value={addressForm.state}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, state: e.target.value, district: "" })
+              }
+              className="w-full mb-2 px-3 py-2 border rounded"
+            >
+              <option value="">Select State</option>
+              {Object.keys(indiaStates).map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
 
             {/* District Dropdown */}
             <select
-  value={addressForm.district}
-  onChange={(e) => setAddressForm({ ...addressForm, district: e.target.value })}
-  className="w-full mb-2 px-3 py-2 border rounded"
-  disabled={!addressForm.state}
->
-  <option value="">Select District</option>
-  {addressForm.state &&
-    indiaStates[addressForm.state].map((district) => (
-      <option key={district} value={district}>
-        {district}
-      </option>
-    ))}
-</select>
+              value={addressForm.district}
+              onChange={(e) => setAddressForm({ ...addressForm, district: e.target.value })}
+              className="w-full mb-2 px-3 py-2 border rounded"
+              disabled={!addressForm.state}
+            >
+              <option value="">Select District</option>
+              {addressForm.state &&
+                indiaStates[addressForm.state].map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+            </select>
 
             <input placeholder="Pincode" value={addressForm.pincode} onChange={(e) => setAddressForm({ ...addressForm, pincode: e.target.value })} className="w-full mb-2 px-3 py-2 border rounded" />
 
-            <button onClick={handleAddAddress} className="w-full bg-[#57b957] text-white py-2 rounded cursor-pointer">Save Address</button>
+            <button onClick={handleAddAddress} className="w-full bg-[#D4AF37] text-white py-2 rounded cursor-pointer">Save Address</button>
           </div>
         </div>
       )}

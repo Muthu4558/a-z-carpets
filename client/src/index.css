@@ -3,7 +3,7 @@
 
 /* Background color for entire page */
 body {
-  background-color: #e9f7eb; /* soft off-white green tone */
+  /* background-color: #e9f7eb; soft off-white green tone */
   color: #1a1a1a;
   overflow-x: hidden;
   font-family: "Poppins", sans-serif;
@@ -12,4 +12,37 @@ body {
 /* Optional: smooth scroll effect */
 html {
   scroll-behavior: smooth;
+}
+
+/* Toast background */
+.custom-toast {
+  background: #121212 !important;
+  color: #ffffff !important;
+  border: 1px solid #D4AF37 !important;
+  border-radius: 12px !important;
+}
+
+/* Toast body text */
+.custom-toast-body {
+  font-size: 14px;
+}
+
+/* Progress bar */
+.custom-toast-progress {
+  background: #D4AF37 !important;
+}
+
+/* Success Toast */
+.Toastify__toast--success {
+  border-left: 4px solid #D4AF37 !important;
+}
+
+/* Error Toast */
+.Toastify__toast--error {
+  border-left: 4px solid #ff4d4d !important;
+}
+
+/* Info Toast */
+.Toastify__toast--info {
+  border-left: 4px solid #C9A227 !important;
 }

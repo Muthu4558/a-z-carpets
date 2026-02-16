@@ -212,7 +212,7 @@ const shippingTotal = useMemo(() => {
 
   /* ---------------- ADDRESS FORM ---------------- */
   const renderAddressForm = (data, setData, onSave) => (
-    <div className="mt-4 bg-gray-50 border rounded-xl p-4">
+    <div className="mt-4 bg-white border border-[#D4AF37] rounded-xl p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           placeholder="Street"
@@ -244,7 +244,7 @@ const shippingTotal = useMemo(() => {
           onChange={(e) =>
             setData({ ...data, state: e.target.value, district: "" })
           }
-          className="border rounded-lg px-3 py-2"
+          className="border rounded-lg px-3 py-2 bg-white text-black"
         >
           <option value="">Select State</option>
           {Object.keys(indiaStates).map((s) => (
@@ -256,7 +256,7 @@ const shippingTotal = useMemo(() => {
           value={data.district}
           disabled={!data.state}
           onChange={(e) => setData({ ...data, district: e.target.value })}
-          className="border rounded-lg px-3 py-2"
+          className="border rounded-lg px-3 py-2 bg-white text-black"
         >
           <option value="">Select District</option>
           {data.state &&
@@ -268,7 +268,7 @@ const shippingTotal = useMemo(() => {
 
       <button
         onClick={onSave}
-        className="mt-4 w-full bg-[#57b957] text-white py-2 rounded-lg font-semibold"
+        className="mt-4 w-full bg-[#D4AF37] text-white py-2 rounded-lg font-semibold"
       >
         Save Address
       </button>
@@ -280,13 +280,13 @@ const shippingTotal = useMemo(() => {
       <Navbar />
       {loading && <Loader />}
 
-      <div className="min-h-screen pt-28 pb-12 px-3 sm:px-4">
+      <div className="min-h-screen pt-28 pb-12 px-3 sm:px-4 bg-white]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* LEFT */}
           <div className="lg:col-span-2 space-y-6">
             {profile && (
-              <div className="bg-white rounded-xl shadow p-4 border border-[#57b957]">
-                <h2 className="font-semibold mb-2">Customer Details</h2>
+              <div className=" rounded-xl shadow p-4 border border-[#D4AF37] text-black">
+                <h2 className="font-semibold mb-2 text-[#D4AF37]">Customer Details</h2>
                 <p className="text-sm">
                   {profile.name} | {profile.email} | {profile.number}
                 </p>
@@ -294,16 +294,16 @@ const shippingTotal = useMemo(() => {
             )}
 
             {/* ADDRESS */}
-            <div className="bg-white rounded-xl shadow p-4 border border-[#57b957]">
+            <div className="rounded-xl shadow p-4 border border-[#D4AF37] text-black">
               <div className="flex justify-between mb-4">
-                <h2 className="font-semibold">Delivery Address</h2>
+                <h2 className="font-semibold text-[#D4AF37]">Delivery Address</h2>
 
                 <button
                   onClick={() => {
                     setShowNewAddress(!showNewAddress);
                     setEditingAddressId(null);
                   }}
-                  className="flex items-center gap-2 text-[#57b957]"
+                  className="flex items-center gap-2 text-[#D4AF37]"
                 >
                   <FaPlus /> Add Address
                 </button>
@@ -315,7 +315,7 @@ const shippingTotal = useMemo(() => {
                   onClick={() => setSelectedAddress(a)}
                   className={`flex gap-3 p-4 border rounded-lg cursor-pointer mb-2 ${
                     selectedAddress?._id === a._id
-                      ? "bg-green-50 border-[#57b957]"
+                      ? "bg-white border-[#D4AF37]"
                       : ""
                   }`}
                 >
@@ -353,8 +353,8 @@ const shippingTotal = useMemo(() => {
           </div>
 
           {/* RIGHT */}
-          <div className="bg-white rounded-xl shadow p-4 border border-[#57b957] h-fit">
-            <h2 className="font-semibold mb-4">Order Summary</h2>
+          <div className="bg-white rounded-xl shadow p-4 border border-[#D4AF37] h-fit text-black">
+            <h2 className="font-semibold mb-4 text-[#D4AF37]">Order Summary</h2>
 
             {cartItems.map((item) => (
               <div
@@ -379,10 +379,10 @@ const shippingTotal = useMemo(() => {
 
             <div className="border-t mt-4 pt-4 flex justify-between font-semibold">
               <span>Grand Total</span>
-              <span className="text-[#57b957]">₹{total}</span>
+              <span className="text-[#D4AF37]">₹{total}</span>
             </div>
 
-            <div className="flex justify-between text-sm text-gray-600 mt-3">
+            <div className="flex justify-between text-sm text-gray-400 mt-3">
               <span>Estimated delivery</span>
               <span className="font-medium">{estimatedDeliveryDate}</span>
             </div>
@@ -390,7 +390,7 @@ const shippingTotal = useMemo(() => {
             <button
               onClick={placeOrder}
               disabled={loading}
-              className="mt-5 w-full py-3 rounded-lg font-semibold text-white bg-[#57b957]"
+              className="mt-5 w-full py-3 rounded-lg font-semibold text-white bg-[#D4AF37]"
             >
               {loading ? "Redirecting..." : "Pay & Place Order"}
             </button>

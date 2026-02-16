@@ -10,7 +10,7 @@ import { useCart } from "../context/CartContext";
 import { useLoading } from "../context/LoadingContext";
 import { toast } from "react-toastify";
 
-const BRAND = "#57b957";
+const BRAND = "#D4AF37";
 
 const resolveUnit = (product) => {
   if (product?.unit) return product.unit;
@@ -195,7 +195,7 @@ const ProductDetail = () => {
 
     return (
       <div className="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden">
-        <div className="bg-gradient-to-r from-[#57b957] to-[#7bd389] px-5 py-3">
+        <div className="bg-[#D4AF37] px-5 py-3">
           <h3 className="text-white font-semibold text-lg">Write a Review</h3>
           <p className="text-white/80 text-sm">Share your experience with this product</p>
         </div>
@@ -227,7 +227,7 @@ const ProductDetail = () => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="What did you like or dislike? Would you recommend it?"
-              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#57b957] focus:border-[#57b957] min-h-[100px]"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] min-h-[100px]"
             />
           </div>
 
@@ -235,7 +235,7 @@ const ProductDetail = () => {
             <button
               onClick={submitReview}
               disabled={submitting}
-              className={`inline-flex items-center gap-2 bg-[#57b957] hover:bg-[#4da84d] text-white px-6 py-2.5 rounded-full font-semibold shadow-md transition ${submitting ? "opacity-80 cursor-wait" : ""}`}
+              className={`inline-flex items-center gap-2 bg-[#D4AF37] hover:bg-[#C9A227] text-white px-6 py-2.5 rounded-full font-semibold shadow-md transition ${submitting ? "opacity-80 cursor-wait" : ""}`}
             >
               {submitting ? "Submitting…" : "Submit Review"}
             </button>
@@ -398,7 +398,7 @@ const ProductDetail = () => {
                           <button
                             key={i}
                             onClick={() => setGalleryIndex(i)}
-                            className={`min-w-[88px] h-20 rounded-lg overflow-hidden border ${galleryIndex === i ? "border-[#57b957]" : "border-gray-200"} transform hover:scale-105`}
+                            className={`min-w-[88px] h-20 rounded-lg overflow-hidden border ${galleryIndex === i ? "border-[#D4AF37]" : "border-gray-200"} transform hover:scale-105`}
                           >
                             <img src={`${import.meta.env.VITE_APP_BASE_URL}/uploads/${img}`} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
                           </button>
@@ -419,7 +419,7 @@ const ProductDetail = () => {
                         <button
                           title="Share product"
                           aria-label="Share product"
-                          className="bg-[#57b957] p-2 rounded-md text-white cursor-pointer"
+                          className="bg-[#D4AF37] p-2 rounded-md text-white cursor-pointer"
                           onClick={() => navigator.share ? navigator.share({ title: product.name, text: product.description, url: window.location.href }).catch(() => { toast.info("Share not supported"); }) : toast.info("Share not supported")}
                         >
                           <FaShareAlt />
@@ -439,7 +439,7 @@ const ProductDetail = () => {
                     {canReview && (
                       <button
                         onClick={() => setShowReviews(true)}
-                        className="text-sm bg-[#57b957] text-white px-4 py-1.5 rounded-full font-semibold hover:brightness-95"
+                        className="text-sm bg-[#D4AF37] text-white px-4 py-1.5 rounded-full font-semibold hover:brightness-95"
                       >
                         Add Review
                       </button>
@@ -482,10 +482,10 @@ const ProductDetail = () => {
                         {offerPrice ? (
                           <>
                             <div className="text-sm text-gray-400 line-through">₹{price.toLocaleString()} </div>
-                            <div className="text-3xl font-extrabold text-[#57b957]">₹{offerPrice.toLocaleString()} <span className="text-sm text-gray-500">/ {displaySize}</span></div>
+                            <div className="text-3xl font-extrabold text-[#D4AF37]">₹{offerPrice.toLocaleString()} <span className="text-sm text-gray-500">/ {displaySize}</span></div>
                           </>
                         ) : (
-                          <div className="text-3xl font-extrabold text-[#57b957]">₹{price.toLocaleString()} <span>/ {displaySize}</span></div>
+                          <div className="text-3xl font-extrabold text-[#D4AF37]">₹{price.toLocaleString()} <span>/ {displaySize}</span></div>
                         )}
                       </div>
 
@@ -560,7 +560,7 @@ const ProductDetail = () => {
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between">
                     <div className="flex gap-2">
-                      <button onClick={() => setActiveTab('specs')} className={`py-2 px-3 rounded ${activeTab === 'specs' ? 'bg-[#f0fcf4] text-[#057a3b] font-semibold' : 'text-gray-600'} cursor-pointer`}>Specifications</button>
+                      <button onClick={() => setActiveTab('specs')} className={`py-2 px-3 rounded ${activeTab === 'specs' ? 'bg-[#D4AF37] text-white font-semibold' : 'text-gray-600'} cursor-pointer`}>Specifications</button>
                       <button onClick={() => setActiveTab('shipping')} className={`py-2 px-3 rounded ${activeTab === 'shipping' ? 'bg-[#fff7ed] text-[#a65b00] font-semibold' : 'text-gray-600'} cursor-pointer`}>Shipping</button>
                     </div>
                     <div className="text-xs text-gray-500">Info</div>
@@ -594,9 +594,9 @@ const ProductDetail = () => {
 
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-sm">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#eaf6ea] text-[#57b957] flex items-center justify-center font-bold">O</div>
+                    <div className="w-10 h-10 rounded-full bg-[#D4AF37] text-white flex items-center justify-center font-bold">O</div>
                     <div>
-                      <div className="font-semibold text-gray-800">Origin Organic</div>
+                      <div className="font-semibold text-gray-800">COimbatore A-Z Carpets</div>
                       <div className="text-gray-500 text-xs">Trusted seller • 99% positive feedback</div>
                     </div>
                   </div>
@@ -643,7 +643,7 @@ const Review = ({ author = "Anonymous", rating = 4, comment = "" }) => {
   return (
     <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-full bg-[#eaf6ea] text-[#57b957] flex items-center justify-center font-bold">
+        <div className="w-10 h-10 rounded-full bg-[#eaf6ea] text-[#D4AF37] flex items-center justify-center font-bold">
           {author?.[0] ?? "A"}
         </div>
         <div className="flex-1">

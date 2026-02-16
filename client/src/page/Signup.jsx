@@ -16,10 +16,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import LeftImg from "../assets/Login.png";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/a-z-logo.jpeg";
 import { GoogleLogin } from "@react-oauth/google";
 
-const BRAND = "#57b957";
+const BRAND = "#D4AF37";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f0f6f0] via-white to-[#fffaf6] px-4 py-12 flex items-center justify-center overflow-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#f0f6f0] via-white to-[#F5F5F5] px-4 py-12 flex items-center justify-center overflow-auto">
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,11 +61,11 @@ const Signup = () => {
         className="w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl bg-transparent flex flex-col lg:flex-row min-h-[600px]"
       >
         {/* Left Side (Illustration + Info) */}
-        <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[linear-gradient(135deg,#eef8ef,#ffffff)] p-4">
+        <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[linear-gradient(135deg,#F5F5F5,#ffffff)] p-4">
           <div className="max-w-xs text-center">
-            <img src={Logo} alt="illustration" className="w-64 mx-auto mb-6" />
+            <img src={Logo} alt="illustration" className="w-64 mx-auto mb-6 rounded-2xl" />
             <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-              Join <span className="text-[#57b957]">Origin Organic</span>
+              Join <span className="text-[#D4AF37]">Coimbatore A-Z Carpets</span>
             </h2>
             <p className="text-sm text-gray-600 mb-6">
               Create an account to save favorites, track orders, and enjoy exclusive offers!
@@ -113,7 +113,7 @@ const Signup = () => {
 
         {/* Right Side (Signup Form) */}
         <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 sm:p-10 overflow-auto">
-          <div className="inline-flex items-center justify-center mb-3 w-14 h-14 rounded-full bg-[#f2f7f2] mx-auto lg:hidden">
+          <div className="inline-flex items-center justify-center mb-3 w-14 h-14 rounded-full bg-[#F5F5F5] mx-auto lg:hidden">
             <img src={Logo} alt="logo" className="w-20" />
           </div>
           <div className="max-w-md mx-auto w-full">
@@ -142,7 +142,7 @@ const Signup = () => {
                     onChange={handleChange}
                     type="text"
                     placeholder="Your full name"
-                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#dfeee0] transition"
+                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F5F5F5] transition"
                   />
                 </div>
               </label>
@@ -161,7 +161,7 @@ const Signup = () => {
                     onChange={handleChange}
                     type="tel"
                     placeholder="10 digit mobile number"
-                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#dfeee0] transition"
+                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F5F5F5] transition"
                   />
                 </div>
               </label>
@@ -180,7 +180,7 @@ const Signup = () => {
                     onChange={handleChange}
                     type="email"
                     placeholder="you@domain.com"
-                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#dfeee0] transition"
+                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F5F5F5] transition"
                   />
                 </div>
               </label>
@@ -199,7 +199,7 @@ const Signup = () => {
                     onChange={handleChange}
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
-                    className="w-full pl-11 pr-12 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#dfeee0] transition"
+                    className="w-full pl-11 pr-12 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F5F5F5] transition"
                   />
                   <button
                     type="button"
@@ -284,7 +284,7 @@ const Signup = () => {
 
               <p className="mt-6 text-center text-sm text-gray-500">
                 Already have an account?{" "}
-                <a href="/login" className="text-[#57b957] font-semibold hover:underline">
+                <a href="/login" className="text-[#D4AF37] font-semibold hover:underline">
                   Login
                 </a>
               </p>

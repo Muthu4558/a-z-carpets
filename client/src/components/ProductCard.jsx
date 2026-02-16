@@ -12,21 +12,15 @@ const resolveUnit = (product) => {
   return "litre";
 };
 
-/* ✅ NEW – pack size formatter */
+/* pack size formatter */
 const formatPackSize = (product) => {
   const unit = resolveUnit(product);
   const size = product?.packSize;
 
-  // for old products where packSize not available
   if (!size) return unit;
 
-  if (unit === "kg") {
-    return size === "0.5" ? "500 g" : "1 kg";
-  }
-
-  if (unit === "litre") {
-    return size === "0.5" ? "500 ml" : "1 l";
-  }
+  if (unit === "kg") return size === "0.5" ? "500 g" : "1 kg";
+  if (unit === "litre") return size === "0.5" ? "500 ml" : "1 l";
 
   return unit;
 };
@@ -44,8 +38,7 @@ const ProductCard = ({ product }) => {
   const price = product?.offerPrice ?? product?.price ?? 0;
   const rating = Math.max(0, Math.min(5, product?.rating ?? 4));
 
-  const unit = resolveUnit(product);
-  const displaySize = formatPackSize(product); // ✅ use this
+  const displaySize = formatPackSize(product);
 
   const discount =
     msrp && msrp > price
@@ -67,7 +60,7 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.3 }}
       className="w-full max-w-[340px] mx-auto"
     >
-      <div className="relative rounded-3xl overflow-hidden bg-black group">
+      <div className="relative rounded-3xl overflow-hidden bg-[#121212] group">
 
         {/* IMAGE */}
         <img
@@ -77,13 +70,13 @@ const ProductCard = ({ product }) => {
         />
 
         {/* DARK GRADIENT */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F]/90 via-black/20 to-transparent" />
 
         {/* TOP ACTIONS */}
         <div className="absolute top-4 right-4 flex gap-2">
           <button
             onClick={() => navigate(`/products/${product?._id}`)}
-            className="w-10 h-10 rounded-full bg-[#57b957] text-white flex items-center justify-center cursor-pointer"
+            className="w-10 h-10 rounded-full bg-[#D4AF37] text-black flex items-center justify-center cursor-pointer hover:bg-[#C9A227] transition"
           >
             <FaEye />
           </button>
@@ -91,15 +84,15 @@ const ProductCard = ({ product }) => {
 
         {/* DISCOUNT */}
         {discount > 0 && !isOutOfStock && (
-          <span className="absolute top-4 left-4 bg-[#57b957] text-white text-xs font-bold px-3 py-1 rounded-full">
+          <span className="absolute top-4 left-4 bg-[#D4AF37] text-black text-xs font-bold px-3 py-1 rounded-full">
             {discount}% OFF
           </span>
         )}
 
         {/* OUT OF STOCK */}
         {isOutOfStock && (
-          <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-            <span className="text-red-600 font-bold text-xl">
+          <div className="absolute inset-0 bg-[#0F0F0F]/80 flex items-center justify-center">
+            <span className="text-[#D4AF37] font-bold text-xl">
               Out of Stock
             </span>
           </div>
@@ -107,14 +100,14 @@ const ProductCard = ({ product }) => {
 
         {/* CONTENT OVER IMAGE */}
         <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-          
+
           {/* NAME */}
           <h3 className="text-xl font-bold leading-tight truncate">
             {product?.name}
           </h3>
 
           {/* RATING */}
-          <div className="flex items-center gap-1 mt-1 text-yellow-400 text-sm">
+          <div className="flex items-center gap-1 mt-1 text-[#D4AF37] text-sm">
             {Array.from({ length: 5 }).map((_, i) => (
               <FaStar
                 key={i}
@@ -127,13 +120,13 @@ const ProductCard = ({ product }) => {
           <div className="mt-4 flex items-center justify-between gap-3">
             <div>
               {msrp > price && (
-                <span className="text-xs line-through text-[#57b957]">
+                <span className="text-xs line-through text-[#C9A227]">
                   ₹{msrp}
                 </span>
               )}
               <div className="text-2xl font-extrabold">
                 ₹{price}
-                <span className="text-sm font-medium text-[#57b957]">
+                <span className="text-sm font-medium text-[#D4AF37]">
                   {" "} / {displaySize}
                 </span>
               </div>
@@ -146,15 +139,15 @@ const ProductCard = ({ product }) => {
               className={`relative flex items-center gap-2 px-5 py-3 rounded-full text-sm font-bold
                 ${
                   isOutOfStock
-                    ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-[#57b957] text-white cursor-pointer hover:bg-green-600 transition"
+                    ? "bg-gray-600 cursor-not-allowed"
+                    : "bg-[#D4AF37] text-black cursor-pointer hover:bg-[#C9A227] transition"
                 }`}
             >
               <FaShoppingCart />
               Add
 
               {justAdded && (
-                <span className="absolute -top-2 -right-2 bg-black text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-xs font-bold px-2 py-0.5 rounded-full">
                   +1
                 </span>
               )}

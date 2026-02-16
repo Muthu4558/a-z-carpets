@@ -9,7 +9,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
-    <>
+  <>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       {/* SINGLE ToastContainer at app root — never unmounts */}
       <ToastContainer
@@ -17,10 +17,14 @@ createRoot(document.getElementById("root")).render(
         autoClose={1500}
         pauseOnFocusLoss={false}
         pauseOnHover={false}
+        theme="dark"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"
+        progressClassName="custom-toast-progress"
       />
 
       <App />
-      </GoogleOAuthProvider>
-    </>
+    </GoogleOAuthProvider>
+  </>
   // </StrictMode>
 );

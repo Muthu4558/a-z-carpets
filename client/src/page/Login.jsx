@@ -9,9 +9,9 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useCart } from "../context/CartContext";
 
 import LeftImg from "../assets/Login.png";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/a-z-logo.jpeg";
 
-const BRAND = "#57b957";
+const BRAND = "#D4AF37";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -101,7 +101,7 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f6f0] via-white to-[#fffaf6] px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f6f0] via-white to-[#F5F5F5] px-4 py-10">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
@@ -109,14 +109,14 @@ const Login = () => {
         className="w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl bg-transparent max-h-[95vh] flex"
       >
         {/* LEFT PANEL */}
-        <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[linear-gradient(135deg,#eef8ef,#ffffff)] p-18 h-full">
+        <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[linear-gradient(135deg,#F5F5F5,#ffffff)] p-18 h-full">
           <div className="max-w-xs text-center">
             <div className="flex justify-center mb-10">
-              <img width={200} src={Logo} alt="Origin Organic" />
+              <img width={200} src={Logo} alt="Origin Organic" className="rounded-2xl" />
             </div>
 
             <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-              Welcome <span className="text-[#57b957]">back!</span>
+              Welcome <span className="text-[#D4AF37]">back!</span>
             </h2>
             <p className="text-sm text-gray-600">
               Sign in to continue — fast checkout, order tracking and personalised recommendations.
@@ -140,7 +140,7 @@ const Login = () => {
               </div>
 
               <h1 className="text-2xl font-extrabold text-gray-900">
-                Login in to <span className="text-[#57b957]">your account</span>
+                Login in to <span className="text-[#D4AF37]">your account</span>
               </h1>
               <p className="text-sm text-gray-500 mt-1">
                 Use your registered email to continue.
@@ -158,7 +158,7 @@ const Login = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#dfeee0]"
+                    className="w-full pl-11 pr-3 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F5F5F5]"
                     placeholder="you@domain.com"
                   />
                 </div>
@@ -174,7 +174,7 @@ const Login = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-12 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#dfeee0]"
+                    className="w-full pl-11 pr-12 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F5F5F5]"
                     placeholder="Enter your password"
                   />
                   <button
@@ -201,7 +201,7 @@ const Login = () => {
 
                 <button
                   type="button"
-                  className="text-[#57b957] hover:underline"
+                  className="text-[#D4AF37] hover:underline"
                 >
                   Forgot password?
                 </button>
@@ -238,7 +238,7 @@ const Login = () => {
 
             <p className="mt-6 text-center text-sm text-gray-500">
               Don’t have an account?{" "}
-              <a href="/register" className="text-[#57b957] font-semibold hover:underline">
+              <a href="/register" className="text-[#D4AF37] font-semibold hover:underline">
                 Create one
               </a>
             </p>

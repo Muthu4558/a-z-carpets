@@ -8,6 +8,7 @@ import ProductCard from "./ProductCard";
 
 const getSlidesPerView = () => {
   const w = window.innerWidth;
+  if (w >= 1280) return 4;
   if (w >= 1024) return 3;
   if (w >= 640) return 2;
   return 1;
@@ -28,7 +29,6 @@ const FeaturedProducts = () => {
       .catch(() => setProducts([]));
   }, []);
 
-  /** Update slidesPerView on resize */
   useEffect(() => {
     const onResize = () => setSlidesPerView(getSlidesPerView());
     window.addEventListener("resize", onResize);
@@ -36,13 +36,12 @@ const FeaturedProducts = () => {
   }, []);
 
   const groupedProducts = products.reduce((acc, p) => {
-    const cat = p.category || "Others";
+    const cat = p.category || "Collection";
     acc[cat] = acc[cat] || [];
     acc[cat].push(p);
     return acc;
   }, {});
 
-  /** Attach navigation safely */
   const initNavigation = (key) => {
     const swiper = swipers.current[key];
     const prevEl = prevRefs.current[key];
@@ -59,35 +58,41 @@ const FeaturedProducts = () => {
   };
 
   return (
-    <section className="py-20">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
 
         {Object.entries(groupedProducts).map(([category, items], idx) => {
           const key = `swiper-${idx}`;
-
-          /** ✅ RESPONSIVE RULE */
           const showNav = items.length > slidesPerView;
 
           return (
-            <div key={category} className="mb-24 relative">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-                <span className="px-1 py-0 bg-[#57b957] mr-2 rounded-full"></span>
-                {category}
-              </h2>
+            <div key={category} className="mb-28 relative">
 
+              {/* Section Heading */}
+              <div className="flex items-center justify-between mb-10">
+                <h2 className="text-3xl md:text-4xl font-semibold text-[#D4AF37] tracking-wide">
+                  <span className="text-[#333] mr-3">—</span>
+                  {category}
+                </h2>
+
+                <div className="hidden md:block w-20 h-[2px] bg-[#333]" />
+              </div>
+
+              {/* Swiper */}
               <Swiper
                 modules={[Navigation, Autoplay]}
-                spaceBetween={20}
+                spaceBetween={30}
                 slidesPerView={slidesPerView}
                 autoplay={{
-                  delay: 3500,
+                  delay: 4000,
                   disableOnInteraction: false,
                 }}
+                speed={900}
                 onSwiper={(swiper) => {
                   swipers.current[key] = swiper;
                   setTimeout(() => initNavigation(key));
                 }}
-                className="pb-14"
+                className="pb-16"
               >
                 {items.map((product) => (
                   <SwiperSlide key={product._id}>
@@ -96,18 +101,19 @@ const FeaturedProducts = () => {
                 ))}
               </Swiper>
 
-              {/* ✅ Responsive navigation */}
+              {/* Navigation */}
               {showNav && (
-                <div className="absolute right-4 -bottom-15 z-20 flex gap-3">
+                <div className="absolute right-6 -bottom-6 z-20 flex gap-4">
+
                   <button
                     ref={(el) => {
                       prevRefs.current[key] = el;
                       initNavigation(key);
                     }}
                     aria-label="Previous"
-                    className="p-3 rounded-full bg-white shadow hover:shadow-md cursor-pointer"
+                    className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center transition hover:bg-[#D4AF37] hover:text-black"
                   >
-                    <IoIosArrowBack size={18} />
+                    <IoIosArrowBack size={20} />
                   </button>
 
                   <button
@@ -116,12 +122,14 @@ const FeaturedProducts = () => {
                       initNavigation(key);
                     }}
                     aria-label="Next"
-                    className="p-3 rounded-full bg-white shadow hover:shadow-md cursor-pointer"
+                    className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center transition hover:bg-[#D4AF37] hover:text-black"
                   >
-                    <IoIosArrowForward size={18} />
+                    <IoIosArrowForward size={20} />
                   </button>
+
                 </div>
               )}
+
             </div>
           );
         })}

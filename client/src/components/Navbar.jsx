@@ -2,19 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3, HiX, HiChevronDown } from "react-icons/hi";
-import { FaCartPlus } from "react-icons/fa";
+import { FaShoppingBag, FaUser } from "react-icons/fa";
 import axios from "axios";
-import { toast } from "react-toastify";
-import Logo from "../assets/logo.png";
 import { useCart } from "../context/CartContext";
+import Logo from "../assets/a-z-logo.jpeg";
+import AnnouncementBar from "./AnnouncementBar";
+import {
+  FaThLarge,
+  FaCrown,
+  FaGem,
+  FaLeaf,
+  FaShapes,
+  FaChild,
+  FaRegSquare,
+} from "react-icons/fa";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showNavbar, setShowNavbar] = useState(true);
-  const lastScrollY = useRef(0);
   const [desktopDropdown, setDesktopDropdown] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState(false);
+  const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [isAuthed, setIsAuthed] = useState(false);
+
+  const lastScrollY = useRef(0);
+  const dropdownRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,40 +37,40 @@ const Navbar = () => {
   const isActive = (path) => pathname === path;
   const isProducts = pathname.startsWith("/products");
 
-  const activeClass = "text-[#57b957] font-bold";
-  const inactiveClass = "font-semibold hover:text-[#57b957] transition";
+  const activeClass = "text-[#D4AF37]";
+  const inactiveClass =
+    "text-black hover:text-[#D4AF37] transition duration-300";
 
-  useEffect(() => {
-    setMenuOpen(false);
-    setDesktopDropdown(false);
-    setMobileDropdown(false);
-  }, [location]);
-
+  /* ---------------- SCROLL CONTROL ---------------- */
   useEffect(() => {
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      if (currentY < 50) setShowNavbar(true);
-      else if (currentY > lastScrollY.current) setShowNavbar(false);
-      else setShowNavbar(true);
-      lastScrollY.current = currentY;
+      const current = window.scrollY;
+
+      if (current < 10) setShowAnnouncement(true);
+      else if (current > lastScrollY.current) setShowAnnouncement(false);
+      else setShowAnnouncement(true);
+
+      lastScrollY.current = current;
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const dropdownRef = useRef(null);
+  /* ---------------- CLOSE DESKTOP DROPDOWN ---------------- */
   useEffect(() => {
-    const onDocClick = (e) => {
+    const handleClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDesktopDropdown(false);
       }
     };
-    document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
   }, []);
 
+  /* ---------------- AUTH CHECK ---------------- */
   useEffect(() => {
-    const checkAuth = async () => {
+    const verify = async () => {
       try {
         await axios.get(
           `${import.meta.env.VITE_APP_BASE_URL}/api/auth/verify`,
@@ -70,10 +81,8 @@ const Navbar = () => {
         setIsAuthed(false);
       }
     };
-
-    checkAuth();
-  }, [location.pathname]);
-
+    verify();
+  }, [pathname]);
 
   const handleLogout = async () => {
     try {
@@ -83,123 +92,123 @@ const Navbar = () => {
         { withCredentials: true }
       );
     } catch { }
-    finally {
-      setIsAuthed(false);
-      toast.success("Logged out successfully");
-      navigate("/login", { replace: true });
-    }
+    setIsAuthed(false);
+    navigate("/login");
   };
 
+  const productsMenu = [
+    { label: "All Carpets & Rugs", path: "/products/all", icon: <FaThLarge /> },
+    { label: "Hand Tufted Rugs", path: "/products/hand-tufted", icon: <FaGem /> },
+    { label: "Shaggy Carpets", path: "/products/shaggy", icon: <FaRegSquare /> },
+    { label: "Persian Silk Carpets", path: "/products/persian-silk", icon: <FaCrown /> },
+    { label: "Designer Carpets", path: "/products/designer", icon: <FaShapes /> },
+    { label: "Luxury Viscose Rugs", path: "/products/viscose", icon: <FaGem /> },
+    { label: "Iranian Imported Rugs", path: "/products/iranian", icon: <FaCrown /> },
+    { label: "Irregular Shaped Rugs", path: "/products/irregular", icon: <FaShapes /> },
+    { label: "Traditional Persian Rugs", path: "/products/traditional", icon: <FaLeaf /> },
+    { label: "Round Shaggy Carpets", path: "/products/round-shaggy", icon: <FaRegSquare /> },
+    { label: "Round Tufted Carpets", path: "/products/round-tufted", icon: <FaGem /> },
+    { label: "Children Rugs", path: "/products/children", icon: <FaChild /> },
+  ];
+
   return (
-    <nav
-      className={`fixed left-0 right-0 top-4 z-50 transition-transform duration-300 px-4 ${showNavbar ? "translate-y-0" : "-translate-y-28"
-        }`}
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="backdrop-blur-sm bg-white/60 border border-[#57b957] rounded-2xl shadow-lg flex items-center justify-between gap-4 px-4 py-3">
+    <>
+      {/* ANNOUNCEMENT */}
+      <AnimatePresence>
+        {showAnnouncement && (
+          <motion.div
+            initial={{ y: 0 }}
+            animate={{ y: 0 }}
+            exit={{ y: -60 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-0 left-0 right-0 z-50"
+          >
+            <AnnouncementBar />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* NAVBAR */}
+      <nav
+        className={`fixed left-0 right-0 z-40 bg-[#F5F5F5] shadow-xl transition-all duration-300 ${showAnnouncement ? "top-[40px]" : "top-0"
+          }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
 
           {/* LOGO */}
-          <Link to="/" className="flex items-center gap-3">
-            <img src={Logo} alt="logo" width={110} />
+          <Link to="/">
+            <img src={Logo} alt="logo" className="w-24 md:w-28 rounded-xl" />
           </Link>
 
           {/* DESKTOP MENU */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className={isActive("/") ? activeClass : inactiveClass}>
-              Home
-            </Link>
+          <div className="hidden md:flex items-center gap-8 font-medium">
 
-            <Link to="/about" className={isActive("/about") ? activeClass : inactiveClass}>
-              About
-            </Link>
+            <Link to="/" className={isActive("/") ? activeClass : inactiveClass}>Home</Link>
+            <Link to="/about" className={isActive("/about") ? activeClass : inactiveClass}>About</Link>
 
-            {/* PRODUCTS DROPDOWN */}
+            {/* DESKTOP DROPDOWN */}
             <div ref={dropdownRef} className="relative">
               <button
-                onClick={() => setDesktopDropdown((s) => !s)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md ${isProducts ? activeClass : inactiveClass
-                  }`}
+                onClick={() => setDesktopDropdown(!desktopDropdown)}
+                className={`flex items-center gap-2 ${isProducts ? activeClass : inactiveClass}`}
               >
                 Products
-                <HiChevronDown className={`transition ${desktopDropdown ? "rotate-180" : ""}`} />
+                <HiChevronDown className={`transition ${desktopDropdown ? "rotate-180 text-[#D4AF37]" : ""}`} />
               </button>
 
               <AnimatePresence>
                 {desktopDropdown && (
-                  <motion.ul
-                    initial={{ opacity: 0, y: -6 }}
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    className="absolute left-0 mt-2 w-44 bg-white rounded-xl shadow-lg border overflow-hidden z-30"
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute top-12 left-0 w-[520px] bg-[#111111] border border-[#222] shadow-2xl"
                   >
-                    {[["All Products", "/products/all-products"],
-                    ["Masala Items", "/products/masala"],
-                    ["Milk Products", "/products/milk"],
-                    ["Nuts", "/products/nuts"],
-                    ["Oils", "/products/oils"],
-                    ["Diabetics Mix", "/products/diabetics-mix"]].map(([label, path]) => (
-                      <li key={path}>
+                    <div className="grid grid-cols-2">
+                      {productsMenu.map((item) => (
                         <Link
-                          to={path}
-                          className={`block px-4 py-2 hover:bg-green-200 ${isActive(path) ? "bg-green-100 font-semibold" : ""
-                            }`}
+                          key={item.path}
+                          to={item.path}
+                          className="flex items-center gap-3 px-6 py-4 text-sm text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition border-b border-[#1f1f1f]"
                         >
-                          {label}
+                          <span>
+                            {item.icon}
+                          </span>
+                          {item.label}
                         </Link>
-                      </li>
-                    ))}
-                  </motion.ul>
+                      ))}
+                    </div>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            <Link to="/profile" className={isActive("/profile") ? activeClass : inactiveClass}>
-              Profile
-            </Link>
-
-            <Link to="/order" className={isActive("/order") ? activeClass : inactiveClass}>
-              My Order
-            </Link>
+            <Link to="/order" className={isActive("/order") ? activeClass : inactiveClass}>My Orders</Link>
+            <Link to="/blog" className={isActive("/blog") ? activeClass : inactiveClass}>Blog</Link>
+            <Link to="/contact" className={isActive("/contact") ? activeClass : inactiveClass}>Contact</Link>
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT SIDE */}
           <div className="flex items-center gap-3">
-            {/* CART BUTTON WITH BADGE */}
-            <Link
-              to="/cart"
-              className="relative flex items-center gap-2 px-3 py-2 rounded-lg bg-[#57b957] text-white"
-            >
-              <FaCartPlus size={16} /> Cart
+
+            <Link to="/profile" className="bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
+              <FaUser /> <span className="hidden sm:inline">Profile</span>
+            </Link>
+
+            <Link to="/cart" className="relative bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
+              <FaShoppingBag /> <span className="hidden sm:inline">Cart</span>
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
+                <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                   {cartCount}
                 </span>
               )}
             </Link>
 
-            {/* DESKTOP LOGIN / LOGOUT */}
-            {isAuthed ? (
-              <button
-                onClick={handleLogout}
-                className="hidden lg:inline-block px-4 py-2 rounded-md bg-white border text-gray-800 hover:bg-gray-100 transition cursor-pointer"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link
-                to="/login"
-                className="hidden lg:inline-block px-4 py-2 border rounded-md hover:bg-green-50 transition"
-              >
-                Login
-              </Link>
-            )}
-
-            {/* MOBILE MENU TOGGLE */}
             <button
-              onClick={() => setMenuOpen((s) => !s)}
-              className="md:hidden p-2 rounded-md bg-white"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-[#D4AF37]"
             >
-              {menuOpen ? <HiX size={22} /> : <HiMenuAlt3 size={22} />}
+              {menuOpen ? <HiX size={26} /> : <HiMenuAlt3 size={26} />}
             </button>
           </div>
         </div>
@@ -208,107 +217,53 @@ const Navbar = () => {
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className="mt-3 md:hidden rounded-xl bg-white shadow-lg border border-gray-100 overflow-hidden"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "80vh", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden bg-[#111111] border-t border-[#1A1A1A] overflow-y-auto"
             >
-              <div className="px-4 py-3 space-y-3">
-                <Link
-                  to="/"
-                  className={`block font-medium ${isActive("/") ? "text-[#57b957]" : ""}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Home
-                </Link>
+              <div className="px-6 py-4 space-y-4">
 
-                <Link
-                  to="/about"
-                  className={`block font-medium ${isActive("/about") ? "text-[#57b957]" : ""}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  About
-                </Link>
+                <Link to="/" className="block text-gray-300">Home</Link>
+                <Link to="/about" className="block text-gray-300">About</Link>
 
-                {/* MOBILE PRODUCTS DROPDOWN */}
                 <div>
                   <button
-                    onClick={() => setMobileDropdown((s) => !s)}
-                    className={`w-full flex items-center justify-between font-medium ${isProducts ? "text-[#57b957]" : ""
-                      }`}
+                    onClick={() => setMobileDropdown(!mobileDropdown)}
+                    className="w-full flex justify-between items-center text-gray-300"
                   >
                     Products
-                    <HiChevronDown className={`${mobileDropdown ? "rotate-180" : ""} transition`} />
+                    <HiChevronDown className={`transition ${mobileDropdown ? "rotate-180 text-[#D4AF37]" : ""}`} />
                   </button>
 
-                  <AnimatePresence>
-                    {mobileDropdown && (
-                      <motion.ul
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="pl-4 mt-2 space-y-2"
-                      >
-                        {[["All Products", "/products/all-products"],
-                        ["Masala Items", "/products/masala"],
-                        ["Milk Products", "/products/milk"],
-                        ["Nuts", "/products/nuts"],
-                        ["Oils", "/products/oils"],
-                        ["Diabetics Mix", "/products/diabetics-mix"]].map(([label, path]) => (
-                          <li key={path}>
-                            <Link
-                              to={path}
-                              className={isActive(path) ? "text-[#57b957] font-semibold" : ""}
-                              onClick={() => setMenuOpen(false)}
-                            >
-                              {label}
-                            </Link>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    )}
-                  </AnimatePresence>
+                  {mobileDropdown && (
+                    <div className="mt-3 bg-[#111111] border border-[#222] max-h-[50vh] overflow-y-auto">
+                      {productsMenu.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black transition border-b border-[#1f1f1f]"
+                        >
+                          <span className="text-[#D4AF37]">
+                            {item.icon}
+                          </span>
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <Link
-                  to="/profile"
-                  className={`block font-medium ${isActive("/profile") ? "text-[#57b957]" : ""}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Profile
-                </Link>
-
-                <Link
-                  to="/order"
-                  className={`block font-medium ${isActive("/order") ? "text-[#57b957]" : ""}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  My Order
-                </Link>
-
-                {/* MOBILE LOGIN / LOGOUT */}
-                {isAuthed ? (
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full px-4 py-2 rounded-md bg-gray-100 text-gray-800 text-center"
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <Link
-                    to="/login"
-                    className="block w-full px-4 py-2 rounded-md border text-center hover:bg-green-50"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                )}
+                <Link to="/blog" className="block text-gray-300">Blog</Link>
+                <Link to="/contact" className="block text-gray-300">Contact</Link>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </nav>
+      </nav>
+
+      <div className={`${showAnnouncement ? "h-[120px]" : "h-[80px]"}`} />
+    </>
   );
 };
 
