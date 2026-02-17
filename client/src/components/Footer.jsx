@@ -37,18 +37,18 @@ const Footer = () => {
                 Collections
               </h3>
               <ul className="space-y-2 text-gray-600 text-sm">
-                <li><a href="#" className="hover:text-[#D4AF37] transition">All Carpets & Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Hand Tufted Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Shaggy Carpets</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Persian Silk Carpets</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Designer Carpets</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Luxury Viscose Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Iranian Imported Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Irregular Shaped Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Traditional Persian Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Round Shaggy Carpets</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Round Tufted Carpets</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Children Rugs</a></li>
+                <li><a href="/products/all" className="hover:text-[#D4AF37] transition">All Carpets & Rugs</a></li>
+                <li><a href="/products/hand-tufted" className="hover:text-[#D4AF37] transition">Hand Tufted Rugs</a></li>
+                <li><a href="/products/shaggy" className="hover:text-[#D4AF37] transition">Shaggy Carpets</a></li>
+                <li><a href="/products/persian-silk" className="hover:text-[#D4AF37] transition">Persian Silk Carpets</a></li>
+                <li><a href="/products/designer" className="hover:text-[#D4AF37] transition">Designer Carpets</a></li>
+                <li><a href="/products/luxury-viscose" className="hover:text-[#D4AF37] transition">Luxury Viscose Rugs</a></li>
+                <li><a href="/products/iranian-imported" className="hover:text-[#D4AF37] transition">Iranian Imported Rugs</a></li>
+                <li><a href="/products/irregular-shaped" className="hover:text-[#D4AF37] transition">Irregular Shaped Rugs</a></li>
+                <li><a href="/products/traditional-persian" className="hover:text-[#D4AF37] transition">Traditional Persian Rugs</a></li>
+                <li><a href="/products/round-shaggy" className="hover:text-[#D4AF37] transition">Round Shaggy Carpets</a></li>
+                <li><a href="/products/round-tufted" className="hover:text-[#D4AF37] transition">Round Tufted Carpets</a></li>
+                <li><a href="/products/children-rugs" className="hover:text-[#D4AF37] transition">Children Rugs</a></li>
               </ul>
             </div>
 
@@ -60,8 +60,10 @@ const Footer = () => {
               <ul className="space-y-2 text-gray-600 text-sm">
                 <li><a href="/profile" className="hover:text-[#D4AF37] transition">Profile</a></li>
                 <li><a href="/order" className="hover:text-[#D4AF37] transition">Orders</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Shipping Policy</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Privacy Policy</a></li>
+                <li><a href="/shipping" className="hover:text-[#D4AF37] transition">Shipping Policy</a></li>
+                <li><a href="/privacy" className="hover:text-[#D4AF37] transition">Privacy Policy</a></li>
+                <li><a href="/terms" className="hover:text-[#D4AF37] transition">Terms & Conditions</a></li>
+                <li><a href="/refund" className="hover:text-[#D4AF37] transition">Refund and Return Policy</a></li>
               </ul>
             </div>
 
@@ -116,6 +118,21 @@ const Footer = () => {
                   </a>
                 ))}
               </div>
+
+              {/* GOOGLE MAP EMBED */}
+<div className="mt-6">
+  <iframe
+    src="https://www.google.com/maps?q=SF+45,+Coimbatore+A+to+Z+Carpets+%26+Wallpaper,+Mettupalayam+Rd,+Thudiyalur,+Tamil+Nadu+641017&output=embed"
+    width="100%"
+    height="180"
+    style={{ border: 0 }}
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+    className="rounded-xl shadow-sm"
+  ></iframe>
+</div>
+
             </div>
 
           </div>

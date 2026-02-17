@@ -1,145 +1,157 @@
 import React from "react";
 import {
-    FaShieldAlt,
-    FaUserLock,
-    FaShoppingCart,
-    FaCookieBite,
-    FaChartBar,
-    FaServer,
-    FaUsers,
-    FaExclamationTriangle,
-    FaSyncAlt,
+  FaShieldAlt,
+  FaUserLock,
+  FaShoppingCart,
+  FaCookieBite,
+  FaShareAlt,
+  FaLock,
+  FaUserCheck,
+  FaExternalLinkAlt,
+  FaSyncAlt,
 } from "react-icons/fa";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
+const BRAND = "#D4AF37";
+
 const Section = ({ icon, title, children }) => (
-    <div className="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
-        <div className="flex items-center gap-3 mb-3">
-            <div className="text-green-600 text-xl">{icon}</div>
-            <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-        </div>
-        <div className="text-gray-600 leading-relaxed text-sm">{children}</div>
+  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+    <div className="flex items-center gap-3 mb-4">
+      <div className="text-[#D4AF37] text-xl">{icon}</div>
+      <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+        {title}
+      </h2>
     </div>
+    <div className="text-gray-600 leading-relaxed text-sm space-y-3">
+      {children}
+    </div>
+  </div>
 );
 
 const PrivacyPolicy = () => {
-    return (
-        <div className="min-h-screen">
-            <Navbar />
-            <div className="max-w-5xl mx-auto mt-30">
-                {/* Header */}
-                <div className="text-center mb-10">
-                    <div className="flex justify-center mb-3">
-                        <FaShieldAlt className="text-green-600 text-5xl" />
-                    </div>
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Privacy Policy
-                    </h1>
-                    <p className="text-gray-600 mt-2 text-sm max-w-2xl mx-auto">
-                        Originorganic.in values your privacy and is committed to protecting
-                        your personal, payment, and order information with the highest
-                        security standards.
-                    </p>
-                </div>
+  return (
+    <div className="min-h-screen bg-[#F9F9F9] pt-16 flex flex-col">
+      <Navbar />
 
-                {/* Sections */}
-                <Section
-                    icon={<FaUserLock />}
-                    title="User Information & Privacy"
-                >
-                    Originorganic.in is committed to safeguarding the information you
-                    share with us. We follow strict procedures to ensure confidentiality,
-                    security, and integrity of all stored data. All payment details such
-                    as credit/debit card numbers, net banking, and wallet information are
-                    encrypted using Secure Socket Layer (SSL) technology. Access to your
-                    data is limited only to authorized employees who require it to perform
-                    their duties. Any violation of privacy policies may result in strict
-                    disciplinary action.
-                </Section>
+      <main className="flex-grow py-12 px-4">
+        <div className="max-w-5xl mx-auto">
 
-                <Section
-                    icon={<FaShoppingCart />}
-                    title="Registration & Orders"
-                >
-                    When registering, we collect basic details such as your email ID and
-                    password. During purchase, we may collect your name, phone number,
-                    email, billing and shipping address, and payment details strictly for
-                    order fulfillment. These details may be shared with trusted third
-                    parties like payment processors and delivery partners on a need-to-
-                    know basis. We may contact you regarding order-related queries and send
-                    promotional updates only if you have opted in.
-                </Section>
+          {/* HEADER */}
+          <div className="text-center mb-12">
+            <FaShieldAlt className="text-[#D4AF37] text-5xl mx-auto mb-4" />
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+              Privacy Policy
+            </h1>
+            <p className="text-gray-600 mt-4 text-sm max-w-2xl mx-auto">
+              Welcome to Jewel Carpets. We respect your privacy and are dedicated
+              to safeguarding your personal information.
+            </p>
+          </div>
 
-                <Section
-                    icon={<FaCookieBite />}
-                    title="Use of Cookies"
-                >
-                    We use cookies to enhance your shopping experience and save your time.
-                    Cookies help us recognize you during future visits and personalize
-                    your experience. These cookies do not store any personally
-                    identifiable or financial information.
-                </Section>
+          {/* 1. INTRODUCTION */}
+          <Section icon={<FaShieldAlt />} title="1. Introduction">
+            <p>
+              This Privacy Policy outlines the types of data we collect, how we
+              use it, and the measures we take to protect it. By accessing or
+              using our website, you agree to the practices described in this policy.
+            </p>
+          </Section>
 
-                <Section
-                    icon={<FaChartBar />}
-                    title="Analytics & Report Generation"
-                >
-                    Originorganic.in uses analytics tools to understand website traffic
-                    and improve user experience. The data collected is aggregated and
-                    anonymous, ensuring that no personal or identifiable information is
-                    tracked or shared.
-                </Section>
+          {/* 2. INFORMATION WE COLLECT */}
+          <Section icon={<FaUserLock />} title="2. Information We Collect">
+            <p><strong>Personal Information:</strong> Name, email address, phone number, and mailing address when placing orders or contacting us.</p>
+            <p><strong>Payment Information:</strong> Payment details are processed securely via third-party providers. We do not store your payment details.</p>
+            <p><strong>Usage Data:</strong> IP address, browser type, browsing history, and pages visited.</p>
+            <p><strong>Cookies:</strong> Used to enhance user experience and analyze website usage patterns.</p>
+          </Section>
 
-                <Section
-                    icon={<FaServer />}
-                    title="Server Logs"
-                >
-                    Our servers automatically record non-personal data such as IP
-                    address, browser type, operating system, referring website, visit
-                    duration, and timestamps. This information is used only for internal
-                    analysis to improve website performance and user experience.
-                </Section>
+          {/* 3. HOW WE USE INFORMATION */}
+          <Section icon={<FaShoppingCart />} title="3. How We Use Your Information">
+            <ul className="list-disc list-inside space-y-1">
+              <li>To process and fulfill your orders.</li>
+              <li>To communicate about orders and inquiries.</li>
+              <li>To improve our website and services.</li>
+              <li>To send promotional offers (you may opt out).</li>
+              <li>To detect and prevent fraud.</li>
+            </ul>
+          </Section>
 
-                <Section
-                    icon={<FaUsers />}
-                    title="Third-Party Service Providers"
-                >
-                    We may engage trusted third-party service providers to host our
-                    website, process payments, deliver orders, or analyze data. These
-                    providers are granted limited access to your information strictly to
-                    perform their services and are bound by confidentiality obligations.
-                </Section>
+          {/* 4. HOW WE SHARE */}
+          <Section icon={<FaShareAlt />} title="4. How We Share Your Information">
+            <p>
+              We do not sell your personal information.
+            </p>
+            <p>
+              <strong>Service Providers:</strong> We may share data with trusted partners
+              like DHL or courier services to fulfill orders.
+            </p>
+            <p>
+              <strong>Legal Compliance:</strong> Information may be disclosed if required by law.
+            </p>
+          </Section>
 
-                <Section
-                    icon={<FaExclamationTriangle />}
-                    title="Legal Exceptions"
-                >
-                    We may disclose information if required by law, court orders, or
-                    governmental authorities, or to protect our rights, prevent fraud,
-                    and ensure user safety. Personal data may also be transferred during
-                    mergers, acquisitions, or corporate restructuring.
-                </Section>
+          {/* 5. DATA SECURITY */}
+          <Section icon={<FaLock />} title="5. Data Security">
+            <p>
+              Our website uses SSL encryption for secure data transmission.
+            </p>
+            <p>
+              While we follow strict security practices, no internet transmission
+              is completely secure.
+            </p>
+          </Section>
 
-                <Section
-                    icon={<FaSyncAlt />}
-                    title="Changes to This Policy"
-                >
-                    This Privacy Policy is part of our Terms of Use. By using our website,
-                    you agree to this policy. Originorganic.in reserves the right to update
-                    this Privacy Policy at any time. Any changes will be communicated via
-                    website updates. Our commitment to protecting your past data will
-                    never be compromised without your consent.
-                </Section>
+          {/* 6. YOUR RIGHTS */}
+          <Section icon={<FaUserCheck />} title="6. Your Rights">
+            <ul className="list-disc list-inside space-y-1">
+              <li>Access and update your personal information.</li>
+              <li>Request deletion (subject to legal obligations).</li>
+              <li>Opt out of promotional communications.</li>
+            </ul>
+          </Section>
 
-                {/* Footer Note */}
-                {/* <div className="text-center text-xs text-gray-500 mt-10">
-                    © {new Date().getFullYear()} Originorganic.in — All Rights Reserved
-                </div> */}
-            </div>
-            <Footer />
+          {/* 7. THIRD PARTY LINKS */}
+          <Section icon={<FaExternalLinkAlt />} title="7. Third-Party Links">
+            <p>
+              Our website may contain links to third-party sites. We are not
+              responsible for their privacy practices.
+            </p>
+          </Section>
+
+          {/* 8. POLICY CHANGES */}
+          <Section icon={<FaSyncAlt />} title="8. Changes to This Privacy Policy">
+            <p>
+              We may update this policy from time to time. Changes will be
+              posted on this page with updated effective dates.
+            </p>
+          </Section>
+
+          {/* 9. CONTACT */}
+          <Section icon={<FaShieldAlt />} title="9. Contact Us">
+            <p>
+              Email:{" "}
+              <span className="text-[#D4AF37] font-medium">
+                jewelcarpetskol@gmail.com
+              </span>
+            </p>
+            <p>
+              Phone:{" "}
+              <span className="text-[#D4AF37] font-medium">
+                +91 96268 46646
+              </span>
+            </p>
+            <p>
+              Address:  SF 45, Mettupalayam Rd, Dhandapani Nagar, Thudiyalur, Tamil Nadu 641017
+            </p>
+          </Section>
+
         </div>
-    );
+      </main>
+
+      <Footer />
+    </div>
+  );
 };
 
 export default PrivacyPolicy;

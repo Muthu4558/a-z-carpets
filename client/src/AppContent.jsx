@@ -31,6 +31,7 @@ import Contact from "./page/ContactUs";
 import Blog from "./page/Blog";
 import AdminBlog from "./page/AdminBlog";
 import BlogDetail from "./page/BlogDetail";
+import Refund from "./components/Refund";
 
 const AppContent = () => {
     const { loading } = useLoading();
@@ -48,6 +49,7 @@ const AppContent = () => {
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/shipping" element={<Shipping />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/refund" element={<Refund />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogDetail />} />
