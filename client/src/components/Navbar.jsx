@@ -136,8 +136,18 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
 
           {/* LOGO */}
-          <Link to="/">
-            <img src={Logo} alt="logo" className="w-24 md:w-28 rounded-xl" />
+          {/* LOGO + BRAND NAME */}
+          <Link to="/" className="flex items-center gap-3">
+            <img src={Logo} alt="logo" className="w-20 md:w-24 rounded-xl" />
+
+            <div className="flex flex-col leading-tight">
+              <span className="text-lg md:text-xl font-bold text-black tracking-wide">
+                Coimbatore
+              </span>
+              <span className="text-sm md:text-base font-semibold text-[#D4AF37]">
+                A-Z Carpets
+              </span>
+            </div>
           </Link>
 
           {/* DESKTOP MENU */}
@@ -191,9 +201,14 @@ const Navbar = () => {
           {/* RIGHT SIDE */}
           <div className="flex items-center gap-3">
 
-            <Link to="/profile" className="bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
-              <FaUser /> <span className="hidden sm:inline">Profile</span>
+            {/* PROFILE (Desktop Only) */}
+            <Link
+              to="/profile"
+              className="hidden md:flex bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold items-center gap-2 hover:bg-[#C9A227]"
+            >
+              <FaUser /> <span>Profile</span>
             </Link>
+
 
             <Link to="/cart" className="relative bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
               <FaShoppingBag /> <span className="hidden sm:inline">Cart</span>
@@ -226,7 +241,13 @@ const Navbar = () => {
 
                 <Link to="/" className="block text-gray-300">Home</Link>
                 <Link to="/about" className="block text-gray-300">About</Link>
-
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-3 text-gray-300 hover:text-[#D4AF37] transition"
+                >
+                  {/* <FaUser className="text-[#D4AF37]" /> */}
+                  Profile
+                </Link>
                 <div>
                   <button
                     onClick={() => setMobileDropdown(!mobileDropdown)}
