@@ -25,6 +25,7 @@ const Navbar = () => {
   const [isAuthed, setIsAuthed] = useState(false);
 
   const lastScrollY = useRef(0);
+  const ticking = useRef(false);
   const dropdownRef = useRef(null);
 
   const location = useLocation();
@@ -41,19 +42,33 @@ const Navbar = () => {
   const inactiveClass =
     "text-black hover:text-[#D4AF37] transition duration-300";
 
-  /* ---------------- SCROLL CONTROL ---------------- */
+  /* ---------------- ULTRA SMOOTH SCROLL CONTROL ---------------- */
   useEffect(() => {
     const handleScroll = () => {
-      const current = window.scrollY;
+      const currentScrollY = window.scrollY;
 
-      if (current < 10) setShowAnnouncement(true);
-      else if (current > lastScrollY.current) setShowAnnouncement(false);
-      else setShowAnnouncement(true);
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const difference = currentScrollY - lastScrollY.current;
 
-      lastScrollY.current = current;
+          // Add threshold to prevent micro flicker
+          if (Math.abs(difference) > 10) {
+            if (difference > 0 && currentScrollY > 60) {
+              setShowAnnouncement(false);
+            } else {
+              setShowAnnouncement(true);
+            }
+            lastScrollY.current = currentScrollY;
+          }
+
+          ticking.current = false;
+        });
+
+        ticking.current = true;
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -91,7 +106,7 @@ const Navbar = () => {
         {},
         { withCredentials: true }
       );
-    } catch { }
+    } catch {}
     setIsAuthed(false);
     navigate("/login");
   };
@@ -113,122 +128,110 @@ const Navbar = () => {
 
   return (
     <>
-      {/* ANNOUNCEMENT */}
-      <AnimatePresence>
-        {showAnnouncement && (
-          <motion.div
-            initial={{ y: 0 }}
-            animate={{ y: 0 }}
-            exit={{ y: -60 }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-0 left-0 right-0 z-50"
-          >
-            <AnnouncementBar />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* FIXED WRAPPER */}
+      <div className="fixed top-0 left-0 right-0 z-50 will-change-transform">
 
-      {/* NAVBAR */}
-      <nav
-        className={`fixed left-0 right-0 z-40 bg-[#F5F5F5] shadow-xl transition-all duration-300 ${showAnnouncement ? "top-[40px]" : "top-0"
-          }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
+        {/* ANNOUNCEMENT */}
+        <motion.div
+          animate={{ y: showAnnouncement ? 0 : -40 }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+        >
+          <AnnouncementBar />
+        </motion.div>
 
-          {/* LOGO */}
-          {/* LOGO + BRAND NAME */}
-          <Link to="/" className="flex items-center gap-3">
-            <img src={Logo} alt="logo" className="w-20 md:w-24 rounded-xl" />
+        {/* NAVBAR */}
+        <motion.nav
+          animate={{ y: showAnnouncement ? 0 : -40 }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+          className="bg-[#F5F5F5] shadow-xl"
+        >
+          <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
 
-            <div className="flex flex-col leading-tight">
-              <span className="text-lg md:text-xl font-bold text-black tracking-wide">
-                Coimbatore
-              </span>
-              <span className="text-sm md:text-base font-semibold text-[#D4AF37]">
-                A-Z Carpets
-              </span>
-            </div>
-          </Link>
-
-          {/* DESKTOP MENU */}
-          <div className="hidden md:flex items-center gap-8 font-medium">
-
-            <Link to="/" className={isActive("/") ? activeClass : inactiveClass}>Home</Link>
-            <Link to="/about" className={isActive("/about") ? activeClass : inactiveClass}>About</Link>
-
-            {/* DESKTOP DROPDOWN */}
-            <div ref={dropdownRef} className="relative">
-              <button
-                onClick={() => setDesktopDropdown(!desktopDropdown)}
-                className={`flex items-center gap-2 ${isProducts ? activeClass : inactiveClass}`}
-              >
-                Products
-                <HiChevronDown className={`transition ${desktopDropdown ? "rotate-180 text-[#D4AF37]" : ""}`} />
-              </button>
-
-              <AnimatePresence>
-                {desktopDropdown && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-12 left-0 w-[520px] bg-[#111111] border border-[#222] shadow-2xl"
-                  >
-                    <div className="grid grid-cols-2">
-                      {productsMenu.map((item) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          className="flex items-center gap-3 px-6 py-4 text-sm text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition border-b border-[#1f1f1f]"
-                        >
-                          <span>
-                            {item.icon}
-                          </span>
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <Link to="/order" className={isActive("/order") ? activeClass : inactiveClass}>My Orders</Link>
-            <Link to="/blog" className={isActive("/blog") ? activeClass : inactiveClass}>Blog</Link>
-            <Link to="/contact" className={isActive("/contact") ? activeClass : inactiveClass}>Contact</Link>
-          </div>
-
-          {/* RIGHT SIDE */}
-          <div className="flex items-center gap-3">
-
-            {/* PROFILE (Desktop Only) */}
-            <Link
-              to="/profile"
-              className="hidden md:flex bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold items-center gap-2 hover:bg-[#C9A227]"
-            >
-              <FaUser /> <span>Profile</span>
-            </Link>
-
-
-            <Link to="/cart" className="relative bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
-              <FaShoppingBag /> <span className="hidden sm:inline">Cart</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                  {cartCount}
+            {/* LOGO */}
+            <Link to="/" className="flex items-center gap-3">
+              <img src={Logo} alt="logo" className="w-20 md:w-24 rounded-xl" />
+              <div className="flex flex-col leading-tight">
+                <span className="text-lg md:text-xl font-bold text-black tracking-wide">
+                  Coimbatore
                 </span>
-              )}
+                <span className="text-sm md:text-base font-semibold text-[#D4AF37]">
+                  A-Z Carpets
+                </span>
+              </div>
             </Link>
 
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-[#D4AF37]"
-            >
-              {menuOpen ? <HiX size={26} /> : <HiMenuAlt3 size={26} />}
-            </button>
-          </div>
-        </div>
+            {/* DESKTOP MENU */}
+            <div className="hidden md:flex items-center gap-8 font-medium">
+              <Link to="/" className={isActive("/") ? activeClass : inactiveClass}>Home</Link>
+              <Link to="/about" className={isActive("/about") ? activeClass : inactiveClass}>About</Link>
 
-        {/* MOBILE MENU */}
+              <div ref={dropdownRef} className="relative">
+                <button
+                  onClick={() => setDesktopDropdown(!desktopDropdown)}
+                  className={`flex items-center gap-2 ${isProducts ? activeClass : inactiveClass}`}
+                >
+                  Products
+                  <HiChevronDown className={`transition ${desktopDropdown ? "rotate-180 text-[#D4AF37]" : ""}`} />
+                </button>
+
+                <AnimatePresence>
+                  {desktopDropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-12 left-0 w-[520px] bg-[#111111] border border-[#222] shadow-2xl"
+                    >
+                      <div className="grid grid-cols-2">
+                        {productsMenu.map((item) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className="flex items-center gap-3 px-6 py-4 text-sm text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition border-b border-[#1f1f1f]"
+                          >
+                            {item.icon}
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link to="/order" className={isActive("/order") ? activeClass : inactiveClass}>My Orders</Link>
+              <Link to="/blog" className={isActive("/blog") ? activeClass : inactiveClass}>Blog</Link>
+              <Link to="/contact" className={isActive("/contact") ? activeClass : inactiveClass}>Contact</Link>
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="flex items-center gap-3">
+              <Link
+                to="/profile"
+                className="hidden md:flex bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold items-center gap-2 hover:bg-[#C9A227]"
+              >
+                <FaUser /> Profile
+              </Link>
+
+              <Link to="/cart" className="relative bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
+                <FaShoppingBag />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="md:hidden text-[#D4AF37]"
+              >
+                {menuOpen ? <HiX size={26} /> : <HiMenuAlt3 size={26} />}
+              </button>
+            </div>
+          </div>
+
+          {/* MOBILE MENU */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
@@ -281,9 +284,11 @@ const Navbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+        </motion.nav>
+      </div>
 
-      <div className={`${showAnnouncement ? "h-[120px]" : "h-[80px]"}`} />
+      {/* SPACER */}
+      <div className="h-[120px]" />
     </>
   );
 };
