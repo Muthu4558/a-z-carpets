@@ -28,7 +28,7 @@ const AdminEnquiry = () => {
       setEnquiries(res.data);
 
       if (res.data.length > 0) {
-        toast.success("Enquiries loaded successfully");
+        // toast.success("Enquiries loaded successfully");
       } else {
         toast.info("No enquiries found");
       }
