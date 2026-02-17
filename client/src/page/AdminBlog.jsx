@@ -3,6 +3,8 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { FaEdit, FaTrash, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { MdArrowRightAlt } from "react-icons/md";
+import { useNavigate, Link } from "react-router-dom";
 
 const categories = [
   "Hand Tufted Rugs",
@@ -25,6 +27,8 @@ const AdminBlog = () => {
   const [editingId, setEditingId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
 
   const [formData, setFormData] = useState({
     category: "",
@@ -154,9 +158,30 @@ const AdminBlog = () => {
 
         {/* HEADER */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-semibold text-[#111]">
-            Blog Management
-          </h1>
+          <div>
+            <h1 className="text-3xl font-semibold text-[#111] mb-6">
+              Blog <span className="text-[#D4AF37]">Management</span>
+            </h1>
+
+            {/* BREADCRUMB */}
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
+                <Link
+                  to="/admin"
+                  className="text-sm font-medium text-gray-600 hover:text-[#D4AF37] transition"
+                >
+                  Home
+                </Link>
+                <MdArrowRightAlt className="text-gray-400 text-lg" />
+                <Link
+                  to="/admin/orders"
+                  className="text-sm font-semibold text-[#D4AF37]"
+                >
+                  Orders
+                </Link>
+              </div>
+            </div>
+          </div>
 
           <button
             onClick={() => {
