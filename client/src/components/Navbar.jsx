@@ -106,7 +106,7 @@ const Navbar = () => {
         {},
         { withCredentials: true }
       );
-    } catch {}
+    } catch { }
     setIsAuthed(false);
     navigate("/login");
   };
@@ -213,8 +213,15 @@ const Navbar = () => {
                 <FaUser /> Profile
               </Link>
 
-              <Link to="/cart" className="relative bg-[#D4AF37] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227]">
-                <FaShoppingBag /> Cart
+              <Link
+                to="/cart"
+                className="relative bg-[#D4AF37] text-black px-3 md:px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-[#C9A227] transition"
+              >
+                <FaShoppingBag />
+
+                {/* Hide text on mobile, show from small screens upward */}
+                <span className="hidden sm:inline">Cart</span>
+
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                     {cartCount}
@@ -232,58 +239,58 @@ const Navbar = () => {
           </div>
 
           {/* MOBILE MENU */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "80vh", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="md:hidden bg-[#111111] border-t border-[#1A1A1A] overflow-y-auto"
-            >
-              <div className="px-6 py-4 space-y-4">
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "80vh", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="md:hidden bg-[#111111] border-t border-[#1A1A1A] overflow-y-auto"
+              >
+                <div className="px-6 py-4 space-y-4">
 
-                <Link to="/" className="block text-gray-300">Home</Link>
-                <Link to="/about" className="block text-gray-300">About</Link>
-                <Link
-                  to="/profile"
-                  className="flex items-center gap-3 text-gray-300 hover:text-[#D4AF37] transition"
-                >
-                  {/* <FaUser className="text-[#D4AF37]" /> */}
-                  Profile
-                </Link>
-                <div>
-                  <button
-                    onClick={() => setMobileDropdown(!mobileDropdown)}
-                    className="w-full flex justify-between items-center text-gray-300"
+                  <Link to="/" className="block text-gray-300">Home</Link>
+                  <Link to="/about" className="block text-gray-300">About</Link>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 text-gray-300 hover:text-[#D4AF37] transition"
                   >
-                    Products
-                    <HiChevronDown className={`transition ${mobileDropdown ? "rotate-180 text-[#D4AF37]" : ""}`} />
-                  </button>
+                    {/* <FaUser className="text-[#D4AF37]" /> */}
+                    Profile
+                  </Link>
+                  <div>
+                    <button
+                      onClick={() => setMobileDropdown(!mobileDropdown)}
+                      className="w-full flex justify-between items-center text-gray-300"
+                    >
+                      Products
+                      <HiChevronDown className={`transition ${mobileDropdown ? "rotate-180 text-[#D4AF37]" : ""}`} />
+                    </button>
 
-                  {mobileDropdown && (
-                    <div className="mt-3 bg-[#111111] border border-[#222] max-h-[50vh] overflow-y-auto">
-                      {productsMenu.map((item) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black transition border-b border-[#1f1f1f]"
-                        >
-                          <span className="text-[#D4AF37]">
-                            {item.icon}
-                          </span>
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                    {mobileDropdown && (
+                      <div className="mt-3 bg-[#111111] border border-[#222] max-h-[50vh] overflow-y-auto">
+                        {productsMenu.map((item) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black transition border-b border-[#1f1f1f]"
+                          >
+                            <span className="text-[#D4AF37]">
+                              {item.icon}
+                            </span>
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <Link to="/blog" className="block text-gray-300">Blog</Link>
+                  <Link to="/contact" className="block text-gray-300">Contact</Link>
                 </div>
-
-                <Link to="/blog" className="block text-gray-300">Blog</Link>
-                <Link to="/contact" className="block text-gray-300">Contact</Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.nav>
       </div>
 
