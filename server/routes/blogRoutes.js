@@ -54,5 +54,38 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.put("/:id", upload.single("image"), async (req, res) => {
+  try {
+    const updateData = {
+      category: req.body.category,
+      title: req.body.title,
+      subtitle: req.body.subtitle,
+      content: req.body.content,
+      date: req.body.date,
+    };
+
+    if (req.file) {
+      updateData.image = req.file.filename;
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+
+    res.json(updatedBlog);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+router.delete("/:id", async (req, res) => {
+  await Blog.findByIdAndDelete(req.params.id);
+  res.json({ message: "Blog deleted" });
+});
+
+
 
 export default router;

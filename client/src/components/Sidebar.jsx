@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdDashboard, MdMenu, MdClose } from "react-icons/md";
-import { FaShippingFast, FaFirstOrder, FaSignOutAlt } from "react-icons/fa";
-import Logo from "../assets/logo.png";
+import { FaShippingFast, FaFirstOrder, FaSignOutAlt, FaBlog } from "react-icons/fa";
+import Logo from "../assets/a-z-logo.jpeg";
 
-const BRAND = "#57b957";
+const BRAND = "#D4AF37";
 
 const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
         { label: "Home", icon: <MdDashboard />, page: "home", path: "/admin" },
         { label: "Shipping Amount", icon: <FaShippingFast />, page: "shipping", path: "/admin/shipping" },
         { label: "Customer Orders", icon: <FaFirstOrder />, page: "orders", path: "/admin/orders" },
-        { label: "Blog", icon: <FaFirstOrder />, page: "blog", path: "/admin/blog" },
+        { label: "Blog", icon: <FaBlog />, page: "blog", path: "/admin/blog" },
         // Add more pages here
     ];
 
@@ -41,10 +41,10 @@ const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
             >
                 {/* Top: Logo & Menu */}
                 <div className="flex flex-col h-full">
-                    <div className="flex items-center px-12 py-1">
-                        <img width={140} src={Logo} alt="logo" />
+                    <div className="flex items-center px-16 py-1">
+                        <img width={120} src={Logo} alt="logo" />
                     </div>
-                    <div className="h-16 flex items-center justify-center font-bold text-xl text-[#57b957] border-b border-gray-200">
+                    <div className="h-16 flex items-center justify-center font-bold text-xl text-[#D4AF37] border-b border-gray-200">
                         Admin Panel
                     </div>
 
@@ -54,8 +54,8 @@ const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
                             <button
                                 key={item.page}
                                 onClick={() => handleNavigate(item)}
-                                className={`w-full flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-[#57b957] hover:text-white transition cursor-pointer
-                  ${activePage === item.page ? "bg-[#57b957] text-white" : ""}`}
+                                className={`w-full flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-[#D4AF37] hover:text-white transition cursor-pointer
+                  ${activePage === item.page ? "bg-[#D4AF37] text-white" : ""}`}
                             >
                                 {item.icon} {item.label}
                             </button>

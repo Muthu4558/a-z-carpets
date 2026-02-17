@@ -244,7 +244,7 @@ const Admin = () => {
           <h1 className="text-3xl font-bold">Home</h1>
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-[#57b957] text-white px-4 py-2 rounded-lg"
+            className="flex items-center gap-2 bg-[#D4AF37] text-white px-4 py-2 rounded-lg"
           >
             <FaPlus /> Add Product
           </button>
@@ -268,7 +268,7 @@ const Admin = () => {
                 <h3 className="text-lg font-semibold truncate">{product.name}</h3>
                 <p className="text-sm text-gray-500">{product.companyName}</p>
 
-                <div className="text-lg font-bold text-[#57b957] mt-2">
+                <div className="text-lg font-bold text-[#D4AF37] mt-2">
                   ₹{product.offerPrice || product.price}
                 </div>
 
@@ -394,7 +394,7 @@ const Admin = () => {
                 <input type="file" name="image" onChange={handleChange} />
 
                 <button type="submit"
-                  className="bg-[#57b957] text-white px-4 py-2 rounded-lg w-full">
+                  className="bg-[#D4AF37] text-white px-4 py-2 rounded-lg w-full">
                   {editingProductId ? "Update Product" : "Add Product"}
                 </button>
 
