@@ -4,33 +4,67 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
 
+    companyName: { type: String, required: true },
+
     category: {
       type: String,
-      enum: ["Masala Items", "Milk Products", "Nuts", "Oils", "Diabetics Mix"],
-      required: true,
-    },
-
-    unit: {
-      type: String,
-      enum: ["kg", "litre"],
-      required: true,
-    },
-
-    // ✅ NEW FIELD
-    packSize: {
-      type: String,
-      enum: ["0.5", "1"],
+      enum: [
+        "All Carpets & Rugs",
+        "Hand Tufted Rugs",
+        "Shaggy Carpets",
+        "Persian Silk Carpets",
+        "Designer Carpets",
+        "Luxury Viscose Rugs",
+        "Iranian Imported Rugs",
+        "Irregular Shaped Rugs",
+        "Traditional Persian Rugs",
+        "Round Shaggy Carpets",
+        "Round Tufted Carpets",
+        "Children Rugs",
+      ],
       required: true,
     },
 
     price: { type: Number, required: true },
     offerPrice: { type: Number },
 
-    description: { type: String, required: true },
+    warranty: { type: String },
 
-    stock: { type: Number, required: true, min: 0 },
+    type: {
+      type: String,
+      enum: ["Hand Made", "Machine Made"],
+      required: true,
+    },
 
-    brand: { type: String, default: "N/A" },
+    sizes: [
+      {
+        type: String,
+        enum: [
+          "4x6ft",
+          "5x7ft",
+          "5x8ft",
+          "6x9ft",
+          "7x10ft",
+          "8x10ft",
+          "8x11ft",
+          "9x12ft",
+          "10x13ft",
+          "10x14ft",
+          "12x14ft",
+          "12x15ft",
+          "12x18ft",
+        ],
+      },
+    ],
+
+    productDetails: { type: String, required: true },
+
+    stock: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0,
+    },
 
     image: { type: String },
 

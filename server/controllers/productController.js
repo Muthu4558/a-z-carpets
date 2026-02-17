@@ -6,29 +6,31 @@ export const createProduct = async (req, res) => {
   try {
     const {
       name,
+      companyName,
+      category,
       price,
       offerPrice,
-      description,
+      warranty,
+      type,
+      sizes,
+      productDetails,
       stock,
-      brand,
-      category,
       featured,
-      unit,        // ✅ NEW
-      packSize,    // ✅ NEW
     } = req.body;
 
     const image = req.file?.filename;
 
     const product = await Product.create({
       name,
+      companyName,
+      category,
       price,
       offerPrice,
-      description,
-      stock,
-      brand,
-      category,
-      unit,
-      packSize,
+      warranty,
+      type,
+      sizes: sizes ? JSON.parse(sizes) : [],
+      productDetails,
+      stock: Number(stock) || 0,
       image,
       featured: featured === "true",
     });
@@ -39,6 +41,7 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 /* ================= GET BY CATEGORY ================= */
 export const getProductsByCategory = async (req, res) => {
@@ -76,27 +79,29 @@ export const updateProduct = async (req, res) => {
   try {
     const {
       name,
+      companyName,
+      category,
       price,
       offerPrice,
-      category,
-      featured,
+      warranty,
+      type,
+      sizes,
+      productDetails,
       stock,
-      unit,        // ✅ NEW
-      packSize,    // ✅ NEW
-      description,
-      brand,
+      featured,
     } = req.body;
 
     const updateData = {
       name,
+      companyName,
+      category,
       price,
       offerPrice,
-      category,
-      stock,
-      unit,
-      packSize,
-      description,
-      brand,
+      warranty,
+      type,
+      sizes: sizes ? JSON.parse(sizes) : [],
+      productDetails,
+      stock: Number(stock) || 0,
       featured: featured === "true",
     };
 
@@ -114,6 +119,7 @@ export const updateProduct = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 /* ================= DELETE ================= */
 export const deleteProduct = async (req, res) => {

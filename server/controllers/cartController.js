@@ -9,21 +9,85 @@ export const getCart = async (req, res) => {
 };
 
 // ADD to cart
+
 export const addToCart = async (req, res) => {
-  const { productId, quantity } = req.body;
-  let cart = await Cart.findOne({ user: req.user._id });
-  if (!cart) {
-    cart = await Cart.create({ user: req.user._id, items: [] });
+  try {
+    const { productId, quantity = 1, selectedSize = null } = req.body;
+
+    let cart = await Cart.findOne({ user: req.user._id });
+
+    if (!cart) {
+      cart = await Cart.create({
+        user: req.user._id,
+        items: [],
+      });
+    }
+
+    const qty = Number(quantity);
+
+    // 1️⃣ Exact match (same product + same size)
+    const exactItem = cart.items.find(
+      (item) =>
+        item.product.toString() === productId &&
+        (item.selectedSize || null) === (selectedSize || null)
+    );
+
+    if (exactItem) {
+      // Normal increase
+      exactItem.quantity += qty;
+    } else {
+      // 2️⃣ If selecting size for an existing no-size product
+      if (selectedSize) {
+        const nullSizeItem = cart.items.find(
+          (item) =>
+            item.product.toString() === productId &&
+            (!item.selectedSize || item.selectedSize === null)
+        );
+
+        if (nullSizeItem) {
+          // ✅ UPDATE SIZE ONLY
+          nullSizeItem.selectedSize = selectedSize;
+
+          // ❌ DO NOT increase quantity
+          nullSizeItem.quantity = qty;  // keep as 1
+        } else {
+          // New sized item
+          cart.items.push({
+            product: productId,
+            quantity: qty,
+            selectedSize,
+          });
+        }
+      } else {
+        // No size product
+        const existingNull = cart.items.find(
+          (item) =>
+            item.product.toString() === productId &&
+            (!item.selectedSize || item.selectedSize === null)
+        );
+
+        if (existingNull) {
+          existingNull.quantity += qty;
+        } else {
+          cart.items.push({
+            product: productId,
+            quantity: qty,
+            selectedSize: null,
+          });
+        }
+      }
+    }
+
+    await cart.save();
+
+    const updatedCart = await Cart.findById(cart._id).populate("items.product");
+
+    res.json(updatedCart);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to add to cart" });
   }
-  // Check if item exists
-  const idx = cart.items.findIndex(item => item.product.toString() === productId);
-  if (idx > -1) {
-    cart.items[idx].quantity += quantity;
-  } else {
-    cart.items.push({ product: productId, quantity });
-  }
-  await cart.save();
-  res.json(cart);
 };
 
 // UPDATE quantity

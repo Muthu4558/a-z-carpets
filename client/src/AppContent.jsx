@@ -8,7 +8,7 @@ import Signup from "./page/Signup";
 import Profile from "./page/Profile";
 import Cart from "./page/Cart";
 import Milk from "./page/Milk";
-import Masala from "./page/Masala";
+import HandRugs from "./page/HandRugs";
 import Nuts from "./page/Nuts";
 import Oils from "./page/Oils";
 import AllProduct from "./page/AllProduct";
@@ -53,9 +53,9 @@ const AppContent = () => {
                 <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
                 <Route path="/order" element={<PrivateRoute><Order /></PrivateRoute>} />
                 {/* product routes */}
-                <Route path="/products/all-products" element={<AllProduct />} />
+                <Route path="/products/all" element={<AllProduct />} />
                 <Route path="/products/milk" element={<Milk />} />
-                <Route path="/products/masala" element={<Masala />} />
+                <Route path="/products/hand-tufted" element={<HandRugs />} />
                 <Route path="/products/nuts" element={<Nuts />} />
                 <Route path="/products/oils" element={<Oils />} />
                 <Route path="/products/diabetics-mix" element={<DiabeticsMix />} />

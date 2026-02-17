@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 import Footer from "../components/Footer";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BRAND = "#D4AF37";
 
@@ -65,6 +65,7 @@ const EmptyState = () => (
 
 const Cart = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { cartItems, removeFromCart, updateQuantity, checkoutCart, fetchCart } = useCart();
 
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -86,12 +87,17 @@ const Cart = () => {
 
   const total = useMemo(
     () =>
-      cartItems.reduce(
-        (acc, item) => acc + (item.product.offerPrice || item.product.price) * item.quantity,
-        0
-      ),
+      cartItems.reduce((acc, item) => {
+        if (!item.product) return acc; // 🛑 skip null product
+
+        const price =
+          item.product.offerPrice ?? item.product.price ?? 0;
+
+        return acc + price * item.quantity;
+      }, 0),
     [cartItems]
   );
+
 
   const askDelete = (productId, productName) => {
     setConfirmProductId(productId);
@@ -162,77 +168,96 @@ const Cart = () => {
               <EmptyState />
             ) : (
               <div className="space-y-5">
-                {cartItems.map((item) => {
-                  const price = item.product.offerPrice ?? item.product.price;
-                  return (
-                    <motion.div
-                      key={item.product._id}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-2xl p-4 shadow-sm border border-[#D4AF37] flex flex-col md:flex-row items-center gap-4"
-                    >
-                      <div className="flex items-center gap-4 flex-1">
-                        <div className="w-28 h-28 flex items-center justify-center rounded-xl overflow-hidden bg-gray-50 border">
-                          <img
-                            src={`${import.meta.env.VITE_APP_BASE_URL}/uploads/${item.product.image}`}
-                            alt={item.product.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
+                {cartItems
+                  .filter(item => item.product)   // 🛑 remove null products
+                  .map((item) => {
 
-                        <div className="min-w-0">
-                          <h3 className="text-lg font-semibold text-[#D4AF37] truncate">{item.product.name}</h3>
-                          <p className="text-sm text-gray-400 mt-1 line-clamp-2">{item.product.shortDescription ?? ""}</p>
-
-                          <div className="mt-3 flex items-center gap-3">
-                            {item.product.offerPrice ? (
-                              <>
-                                <div className="text-sm text-black line-through">₹{item.product.price}</div>
-                                <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.offerPrice}</div>
-                              </>
-                            ) : (
-                              <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.price}</div>
-                            )}
+                    const price = item.product.offerPrice ?? item.product.price;
+                    return (
+                      <motion.div
+                        key={item.product._id}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white rounded-2xl p-4 shadow-sm border border-[#D4AF37] flex flex-col md:flex-row items-center gap-4"
+                      >
+                        <div className="flex items-center gap-4 flex-1 cursor-pointer"
+                          onClick={() => navigate(`/products/${item.product._id}`)}>
+                          <div className="w-28 h-28 flex items-center justify-center rounded-xl overflow-hidden bg-gray-50 border">
+                            <img
+                              src={`${import.meta.env.VITE_APP_BASE_URL}/uploads/${item.product.image}`}
+                              alt={item.product.name}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
 
-                          <div className="mt-2 text-sm text-black">Subtotal: ₹{price * item.quantity}</div>
-                        </div>
-                      </div>
+                          <div className="min-w-0">
+                            <h3 className="text-lg font-semibold text-[#D4AF37] truncate">{item.product.name}</h3>
+                            {/* SIZE DISPLAY */}
+                            {item.product?.sizes?.length > 0 && (
+                              <div className="mt-1 text-sm">
+                                {item.selectedSize ? (
+                                  <span className="px-3 py-1 rounded-full bg-[#fff7ed] text-[#a65b00] text-xs font-medium">
+                                    Size: {item.selectedSize}
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500 text-xs font-medium">
+                                    Please select size to confirm checkout
+                                  </span>
+                                )}
+                              </div>
+                            )}
 
-                      <div className="flex items-center gap-4 justify-between w-full md:w-auto">
-                        {/* Quantity controls */}
-                        <div className="flex items-center bg-white border border-[#D4AF37] rounded-full px-2 shadow-sm">
-                          <button
-                            onClick={() => handleDecrease(item.product._id, item.quantity)}
-                            disabled={item.quantity === 1}
-                            className="p-2 rounded-full hover:bg-gray-100 transition text-gray-600"
-                            aria-label="Decrease quantity"
-                          >
-                            <FaMinus />
-                          </button>
-                          <div className="px-4 text-sm font-medium text-black">{item.quantity}</div>
-                          <button
-                            onClick={() => handleIncrease(item.product._id, item.quantity)}
-                            className="p-2 rounded-full hover:bg-gray-100 transition text-gray-600"
-                            aria-label="Increase quantity"
-                          >
-                            <FaPlus />
-                          </button>
+                            <p className="text-sm text-gray-400 mt-1 line-clamp-2">{item.product.shortDescription ?? ""}</p>
+
+                            <div className="mt-3 flex items-center gap-3">
+                              {item.product.offerPrice ? (
+                                <>
+                                  <div className="text-sm text-black line-through">₹{item.product.price}</div>
+                                  <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.offerPrice}</div>
+                                </>
+                              ) : (
+                                <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.price}</div>
+                              )}
+                            </div>
+
+                            <div className="mt-2 text-sm text-black">Subtotal: ₹{price * item.quantity}</div>
+                          </div>
                         </div>
 
-                        {/* Remove */}
-                        <button
-                          className="p-2 rounded-lg border text-red-600 hover:text-red-400 cursor-pointer"
-                          title="Remove"
-                          onClick={() => askDelete(item.product._id, item.product.name)}
-                          aria-label="Remove item"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                        <div className="flex items-center gap-4 justify-between w-full md:w-auto">
+                          {/* Quantity controls */}
+                          <div className="flex items-center bg-white border border-[#D4AF37] rounded-full px-2 shadow-sm">
+                            <button
+                              onClick={() => handleDecrease(item.product._id, item.quantity)}
+                              disabled={item.quantity === 1}
+                              className="p-2 rounded-full hover:bg-gray-100 transition text-gray-600"
+                              aria-label="Decrease quantity"
+                            >
+                              <FaMinus />
+                            </button>
+                            <div className="px-4 text-sm font-medium text-black">{item.quantity}</div>
+                            <button
+                              onClick={() => handleIncrease(item.product._id, item.quantity)}
+                              className="p-2 rounded-full hover:bg-gray-100 transition text-gray-600"
+                              aria-label="Increase quantity"
+                            >
+                              <FaPlus />
+                            </button>
+                          </div>
+
+                          {/* Remove */}
+                          <button
+                            className="p-2 rounded-lg border text-red-600 hover:text-red-400 cursor-pointer"
+                            title="Remove"
+                            onClick={() => askDelete(item.product._id, item.product.name)}
+                            aria-label="Remove item"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
               </div>
             )}
           </div>

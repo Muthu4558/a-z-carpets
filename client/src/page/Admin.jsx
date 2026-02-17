@@ -21,52 +21,58 @@ import {
 
 const BRAND = "#57b957";
 
+/* ================= CARPET CATEGORIES ================= */
+const categories = [
+  "All Carpets & Rugs",
+  "Hand Tufted Rugs",
+  "Shaggy Carpets",
+  "Persian Silk Carpets",
+  "Designer Carpets",
+  "Luxury Viscose Rugs",
+  "Iranian Imported Rugs",
+  "Irregular Shaped Rugs",
+  "Traditional Persian Rugs",
+  "Round Shaggy Carpets",
+  "Round Tufted Carpets",
+  "Children Rugs",
+];
+
+/* ================= AVAILABLE SIZES ================= */
+const carpetSizes = [
+  "4x6ft", "5x7ft", "5x8ft", "6x9ft", "7x10ft", "8x10ft",
+  "8x11ft", "9x12ft", "10x13ft", "10x14ft",
+  "12x14ft", "12x15ft", "12x18ft"
+];
+
 const Admin = () => {
-  const { loading, startLoading, stopLoading } = useLoading();
+  const { startLoading, stopLoading } = useLoading();
   const [activePage, setActivePage] = useState("home");
 
-  // Product state
+  /* ================= PRODUCT STATE ================= */
   const [formData, setFormData] = useState({
     name: "",
+    companyName: "",
+    category: "",
     price: "",
     offerPrice: "",
-    description: "",
+    warranty: "",
+    type: "",
+    sizes: [],
+    productDetails: "",
     stock: "",
-    brand: "",
-    category: "",
-    unit: "",
-    packSize: "",
     image: null,
     featured: false,
   });
+
   const [preview, setPreview] = useState(null);
   const [products, setProducts] = useState([]);
   const [editingProductId, setEditingProductId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
-  // Toolbar state
   const [q, setQ] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
-
-  const categories = ["All", "Masala Items", "Milk Products", "Nuts", "Oils", "Diabetics Mix"];
-  const isKgCategory = ["Masala Items", "Nuts", "Diabetics Mix"].includes(formData.category);
-
-  /* 🔥 dynamic size text */
-  const getDisplaySize = () => {
-    if (!formData.packSize) {
-      return isKgCategory ? "kg" : "litre";
-    }
-
-    if (isKgCategory) {
-      return formData.packSize === "0.5" ? "500 g" : "1 kg";
-    }
-
-    return formData.packSize === "0.5" ? "500 ml" : "1 l";
-  };
-
-  const displaySize = getDisplaySize();
 
   useEffect(() => {
     startLoading();
@@ -78,34 +84,54 @@ const Admin = () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}/api/products`);
       setProducts(res.data || []);
-    } catch (err) {
-      toast.error("❌ Failed to load products");
+    } catch {
+      toast.error("Failed to load products");
     }
   };
 
+  /* ================= HANDLE INPUT ================= */
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
-    if (name === "image" && files && files[0]) {
-      setFormData((prev) => ({ ...prev, image: files[0] }));
+
+    if (name === "image" && files?.[0]) {
+      setFormData(prev => ({ ...prev, image: files[0] }));
       setPreview(URL.createObjectURL(files[0]));
     } else if (type === "checkbox") {
-      setFormData((prev) => ({ ...prev, [name]: checked }));
+      setFormData(prev => ({ ...prev, [name]: checked }));
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
+  /* ================= MULTIPLE SIZE ================= */
+  const handleSizeChange = (size) => {
+    setFormData(prev => {
+      if (prev.sizes.includes(size)) {
+        return { ...prev, sizes: prev.sizes.filter(s => s !== size) };
+      }
+      return { ...prev, sizes: [...prev.sizes, size] };
+    });
+  };
+
+  /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.price) {
-      toast.error("Please provide name and price");
+
+    if (!formData.name || !formData.category || !formData.price) {
+      toast.error("Please fill required fields");
       return;
     }
 
     const data = new FormData();
+
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === "featured") data.append(key, value ? "true" : "false");
-      else if (value !== null && value !== undefined) data.append(key, value);
+      if (key === "sizes") {
+        data.append("sizes", JSON.stringify(value));
+      } else if (key === "featured") {
+        data.append("featured", value ? "true" : "false");
+      } else if (value !== null && value !== undefined) {
+        data.append(key, value);
+      }
     });
 
     try {
@@ -115,33 +141,35 @@ const Admin = () => {
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
-        toast.success("✅ Product updated successfully");
+        toast.success("Product updated successfully");
       } else {
         await axios.post(
           `${import.meta.env.VITE_APP_BASE_URL}/api/products/add`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
-        toast.success("🎉 Product added successfully");
+        toast.success("Product added successfully");
       }
+
       resetForm();
       fetchProducts();
-    } catch (err) {
-      toast.error("❌ Failed to submit");
+    } catch {
+      toast.error("Submission failed");
     }
   };
 
   const resetForm = () => {
     setFormData({
       name: "",
+      companyName: "",
+      category: "",
       price: "",
       offerPrice: "",
-      description: "",
+      warranty: "",
+      type: "",
+      sizes: [],
+      productDetails: "",
       stock: "",
-      brand: "",
-      category: "",
-      unit: "",
-      packSize: "",
       image: null,
       featured: false,
     });
@@ -152,36 +180,47 @@ const Admin = () => {
 
   const handleEdit = (product) => {
     setFormData({
-      name: product.name || "",
-      price: product.price || "",
-      offerPrice: product.offerPrice || "",
-      description: product.description || "",
-      stock: product.stock ?? "",
-      brand: product.brand || "",
-      category: product.category || "",
-      unit: product.unit || "",
-      packSize: product.packSize || "",
-      image: product.image || null,
-      featured: !!product.featured,
+      ...product,
+      sizes: product.sizes || [],
+      image: null,
     });
+
     setEditingProductId(product._id);
     setPreview(`${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}`);
     setShowModal(true);
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 80);
   };
 
-  const handleDelete = (id) => setProductToDelete(id);
   const confirmDelete = async () => {
+    if (!productToDelete) return;
+
     try {
-      await axios.delete(`${import.meta.env.VITE_APP_BASE_URL}/api/products/delete/${productToDelete}`);
-      toast.success("🗑️ Product deleted");
-      fetchProducts();
+      await axios.delete(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/products/delete/${productToDelete}`
+      );
+
+      toast.success("Product deleted successfully");
+
+      fetchProducts(); // refresh list
     } catch (err) {
-      toast.error("❌ Delete failed");
+      toast.error("Delete failed");
     } finally {
-      setProductToDelete(null);
+      setProductToDelete(null); // close modal
     }
   };
+
+
+  /* ================= FILTER ================= */
+  const filtered = products
+    .filter(p => filterCategory === "All" ? true : p.category === filterCategory)
+    .filter(p => showFeaturedOnly ? p.featured : true)
+    .filter(p => {
+      if (!q) return true;
+      const s = q.toLowerCase();
+      return (
+        p.name?.toLowerCase().includes(s) ||
+        p.companyName?.toLowerCase().includes(s)
+      );
+    });
 
   const handleLogout = async () => {
     try {
@@ -189,235 +228,209 @@ const Admin = () => {
       localStorage.removeItem("token");
       toast.success("Logged out");
       window.location.href = "/login";
-    } catch (err) {
+    } catch {
       toast.error("Logout failed");
     }
   };
 
-  // Filtered products
-  const filtered = products
-    .filter((p) => (filterCategory === "All" ? true : p.category === filterCategory))
-    .filter((p) => (showFeaturedOnly ? p.featured : true))
-    .filter((p) => {
-      if (!q) return true;
-      const s = q.toLowerCase();
-      return (
-        (p.name || "").toLowerCase().includes(s) ||
-        (p.brand || "").toLowerCase().includes(s) ||
-        (p.category || "").toLowerCase().includes(s)
-      );
-    });
-
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <Sidebar activePage={activePage} setActivePage={setActivePage} handleLogout={handleLogout} />
 
-      {/* Main content */}
       <main className="flex-1 md:ml-64 p-4 sm:p-6 lg:p-8">
+
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h1 className="text-3xl font-bold text-gray-900">Home</h1>
-          {activePage === "home" && (
-            <button
-              onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 bg-[#57b957] text-white px-4 py-2 rounded-lg hover:scale-[1.02] transition cursor-pointer"
-            >
-              <FaPlus /> Add Product
-            </button>
-          )}
+        <div className="flex justify-between mb-6">
+          <h1 className="text-3xl font-bold">Home</h1>
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 bg-[#57b957] text-white px-4 py-2 rounded-lg"
+          >
+            <FaPlus /> Add Product
+          </button>
         </div>
 
-        {/* Toolbar & Filters */}
-        {activePage === "home" && (
-          <div className="bg-white rounded-xl p-4 shadow-sm mb-6 flex flex-col md:flex-row md:items-center gap-3 justify-between">
-            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 flex-1">
-              <div className="relative flex items-center w-full md:w-auto">
-                <MdSearch className="absolute left-3 text-gray-400" />
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search by name, brand or category"
-                  className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 w-full md:w-[320px] focus:outline-none focus:ring-2 focus:ring-[#e6f2e6]"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <MdFilterList className="text-gray-500" />
-                <select
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                  className="px-3 py-2 rounded-lg border border-gray-200 focus:outline-none cursor-pointer"
-                >
-                  {categories.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 justify-between md:justify-end w-full md:w-auto">
-              <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={showFeaturedOnly}
-                  onChange={(e) => setShowFeaturedOnly(e.target.checked)}
-                  className="h-4 w-4 cursor-pointer"
-                />
-                <span className="text-sm text-gray-700">Show featured</span>
-              </label>
-              <div className="text-sm text-gray-500">{filtered.length} items</div>
-            </div>
-          </div>
-        )}
-
         {/* Product Grid */}
-        {activePage === "home" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((product) => (
-              <motion.div
-                key={product._id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition"
-              >
-                <div className="relative">
-                  <img
-                    src={`${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}`}
-                    alt={product.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  {product.featured && (
-                    <span className="absolute top-3 right-3 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">Featured</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map(product => (
+            <motion.div
+              key={product._id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition"
+            >
+              <img
+                src={`${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}`}
+                className="w-full h-48 object-cover"
+              />
+
+              <div className="p-4">
+                <h3 className="text-lg font-semibold truncate">{product.name}</h3>
+                <p className="text-sm text-gray-500">{product.companyName}</p>
+
+                <div className="text-lg font-bold text-[#57b957] mt-2">
+                  ₹{product.offerPrice || product.price}
+                </div>
+
+                <div className="text-sm mt-1">
+                  {product.stock > 0 ? (
+                    <span className="text-green-600">Stock: {product.stock}</span>
+                  ) : (
+                    <span className="text-red-600">Out of Stock</span>
                   )}
                 </div>
-                <div className="p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">{product.name}</h3>
-                      <p className="text-sm text-gray-500 mt-1 line-clamp-2">{product.description || "No description"}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-gray-400 line-through">{product.price ? `₹${product.price}` : "-"}</div>
-                      <div className="text-lg font-bold text-[#57b957]">{product.offerPrice ? `₹${product.offerPrice}` : product.price ? `₹${product.price}` : "-"}</div>
-                    </div>
-                  </div>
-                  <div className="mt-2 text-sm">
-                    {product.stock > 0 ? (
-                      <span className="text-green-600 font-medium">Stock: {product.stock}</span>
-                    ) : (
-                      <span className="text-red-600 font-semibold">Out of Stock</span>
-                    )}
-                  </div>
-                  <div className="mt-4 flex items-center justify-between gap-3">
-                    <div className="text-sm text-gray-500">{product.brand || "-"}</div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => handleEdit(product)} className="p-2 rounded-lg bg-yellow-50 hover:bg-yellow-100 text-yellow-600 transition cursor-pointer"><MdEdit /></button>
-                      <button onClick={() => handleDelete(product._id)} className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer"><MdDelete /></button>
-                    </div>
-                  </div>
+
+                <div className="flex gap-2 mt-3">
+                  <button onClick={() => handleEdit(product)} className="text-yellow-600">
+                    <MdEdit />
+                  </button>
+                  <button onClick={() => setProductToDelete(product._id)} className="text-red-600">
+                    <MdDelete />
+                  </button>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-        {/* Empty state */}
-        {activePage === "home" && filtered.length === 0 && (
-          <div className="mt-8 bg-white rounded-xl p-8 shadow text-center">
-            <FaCloud className="mx-auto text-4xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800">No products found</h3>
-            <p className="text-sm text-gray-500 mt-2">Try changing filters or add a new product.</p>
-          </div>
-        )}
-
-        {/* Add/Edit Modal */}
-        {showModal && activePage === "home" && (
+        {/* ADD / EDIT MODAL (UI SAME) */}
+        {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm p-4">
-            <motion.div initial={{ scale: 0.98, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl p-4 sm:p-8 relative">
-              <button onClick={resetForm} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">×</button>
-              <h2 className="text-2xl font-extrabold text-gray-900 text-center mb-2">{editingProductId ? "Update Product" : "Add New Product"}</h2>
-              <p className="text-sm text-gray-500 text-center mb-4">Fill details below. Images supported (jpg, png).</p>
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl p-4 sm:p-8 relative"
+            >
+              <button onClick={resetForm} className="absolute top-4 right-4 text-2xl">×</button>
+
+              <h2 className="text-2xl font-bold text-center mb-4">
+                {editingProductId ? "Update Product" : "Add New Product"}
+              </h2>
+
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input name="name" value={formData.name} onChange={handleChange} placeholder="Product name" required className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#eaf6ea]" />
-                  <input name="brand" value={formData.brand} onChange={handleChange} placeholder="Brand" className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#eaf6ea]" />
-                  <select name="category" value={formData.category} onChange={handleChange} required className="w-full px-4 py-3 border rounded-xl">
-                    <option value="">Select Category</option>
-                    {categories.slice(1).map(c => <option key={c}>{c}</option>)}
-                  </select>
-                  <select
-                    name="unit"
-                    value={formData.unit}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border rounded-xl"
-                  >
-                    <option value="">Select Unit</option>
-                    <option value="kg">Kg</option>
-                    <option value="litre">Litre</option>
-                  </select>
 
-                  <select
-                    name="packSize"
-                    value={formData.packSize}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border rounded-xl"
-                  >
-                    <option value="">Select Size</option>
-                    <option value="0.5">
-                      {isKgCategory ? "500 g" : "500 ml"}
-                    </option>
-                    <option value="1">
-                      {isKgCategory ? "1 kg" : "1 l"}
-                    </option>
+                <input name="name" value={formData.name} onChange={handleChange}
+                  placeholder="Product Name" required
+                  className="w-full px-4 py-3 border rounded-xl" />
 
-                  </select>
+                <input name="companyName" value={formData.companyName} onChange={handleChange}
+                  placeholder="Company Name"
+                  className="w-full px-4 py-3 border rounded-xl" />
 
-                  <input name="price" type="number" value={formData.price} onChange={handleChange} placeholder={`Price per ${displaySize} (₹)`} required className="w-full px-4 py-3 border rounded-xl" />
-                  <input name="offerPrice" type="number" value={formData.offerPrice} onChange={handleChange} placeholder={`Offer price per ${displaySize} (₹)`} className="w-full px-4 py-3 border rounded-xl" />
-                </div>
-                <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Short description" className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#eaf6ea] min-h-[100px]" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
-                  <div className="flex items-center gap-3">
-                    <label className="flex items-center justify-center w-32 h-32 bg-gray-50 hover:bg-gray-100 text-gray-500 border border-dashed border-gray-200 rounded-2xl cursor-pointer">
-                      <div className="flex flex-col items-center gap-1">
-                        <MdAddPhotoAlternate size={28} />
-                        <span className="text-xs">Upload</span>
-                        <input type="file" name="image" accept="image/*" onChange={handleChange} className="hidden" />
-                      </div>
-                    </label>
-                    {preview && <img src={preview} alt="Preview" className="w-32 h-32 object-cover rounded-2xl border" />}
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <input name="stock" type="number" min="0" value={formData.stock} onChange={handleChange} placeholder="Stock count" className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#eaf6ea]" />
-                    <label className="inline-flex items-center gap-2">
-                      <input type="checkbox" name="featured" checked={!!formData.featured} onChange={handleChange} className="h-4 w-4" />
-                      <span className="text-sm text-gray-700">Show on Home (Featured)</span>
-                    </label>
+                <select name="category" value={formData.category} onChange={handleChange}
+                  required className="w-full px-4 py-3 border rounded-xl">
+                  <option value="">Select Category</option>
+                  {categories.map(c => <option key={c}>{c}</option>)}
+                </select>
+
+                <select name="type" value={formData.type} onChange={handleChange}
+                  required className="w-full px-4 py-3 border rounded-xl">
+                  <option value="">Hand / Machine</option>
+                  <option value="Hand Made">Hand Made</option>
+                  <option value="Machine Made">Machine Made</option>
+                </select>
+
+                <input name="warranty" value={formData.warranty} onChange={handleChange}
+                  placeholder="Warranty (e.g. 2 Years)"
+                  className="w-full px-4 py-3 border rounded-xl" />
+
+                <div>
+                  <label className="font-semibold">Available Sizes</label>
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {carpetSizes.map(size => (
+                      <label key={size} className="flex gap-2 text-sm">
+                        <input type="checkbox"
+                          checked={formData.sizes.includes(size)}
+                          onChange={() => handleSizeChange(size)} />
+                        {size}
+                      </label>
+                    ))}
                   </div>
                 </div>
-                <div className="flex gap-3 mt-4 flex-col sm:flex-row">
-                  <button type="button" onClick={resetForm} className="px-4 py-2 rounded-lg border w-full sm:w-auto cursor-pointer">Cancel</button>
-                  <button type="submit" className="flex items-center justify-center gap-2 bg-[#57b957] text-white px-4 py-2 rounded-lg w-full sm:w-auto cursor-pointer"><FaCloudUploadAlt /> {editingProductId ? "Update Product" : "Add Product"}</button>
-                </div>
+
+                <textarea name="productDetails"
+                  value={formData.productDetails}
+                  onChange={handleChange}
+                  placeholder="Product Details"
+                  className="w-full px-4 py-3 border rounded-xl" />
+
+                <input type="number" name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="Price"
+                  className="w-full px-4 py-3 border rounded-xl" required />
+
+                <input type="number" name="offerPrice"
+                  value={formData.offerPrice}
+                  onChange={handleChange}
+                  placeholder="Offer Price"
+                  className="w-full px-4 py-3 border rounded-xl" />
+
+                <input type="number" name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  placeholder="Stock"
+                  className="w-full px-4 py-3 border rounded-xl" required />
+
+                <label className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={!!formData.featured}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        featured: e.target.checked,
+                      }))
+                    }
+                    className="h-4 w-4"
+                  />
+                  <span className="text-sm text-gray-700">
+                    Show on Featured Products
+                  </span>
+                </label>
+
+
+                <input type="file" name="image" onChange={handleChange} />
+
+                <button type="submit"
+                  className="bg-[#57b957] text-white px-4 py-2 rounded-lg w-full">
+                  {editingProductId ? "Update Product" : "Add Product"}
+                </button>
+
               </form>
             </motion.div>
           </div>
         )}
 
-        {/* Delete Confirmation */}
+
         {productToDelete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm p-4">
-            <div className="bg-white rounded-2xl p-6 max-w-md w-full text-center shadow-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Confirm delete</h3>
-              <p className="text-sm text-gray-600 mb-6">This action cannot be undone. Are you sure?</p>
-              <div className="flex items-center justify-center gap-4 flex-col sm:flex-row">
-                <button onClick={() => setProductToDelete(null)} className="px-4 py-2 rounded-lg border w-full sm:w-auto cursor-pointer">Cancel</button>
-                <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-red-500 text-white w-full sm:w-auto cursor-pointer">Yes, delete</button>
+          <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+            <div className="bg-white p-6 rounded-xl w-80 text-center">
+              <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
+              <p className="text-sm mb-6">
+                Are you sure you want to delete this product?
+              </p>
+
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setProductToDelete(null)}
+                  className="px-4 py-2 border rounded-lg"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>
         )}
+
       </main>
     </div>
   );

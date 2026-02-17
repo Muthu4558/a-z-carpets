@@ -79,8 +79,8 @@ const AllProduct = () => {
       <Navbar />
 
       {/* HERO HEADER */}
-      <section className="bg-[#0F0F0F] pt-28 pb-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-white">
+      <section className="bg-white pt-28 pb-16 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold text-black">
           Explore Our <span className="text-[#D4AF37]">Collection</span>
         </h1>
         <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
@@ -90,7 +90,7 @@ const AllProduct = () => {
       </section>
 
       {/* FILTER PANEL */}
-      <section className="bg-[#121212] py-10">
+      <section className="bg-white py-10">
         <div className="max-w-7xl mx-auto px-6">
 
           <div className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-2xl p-6 shadow-lg">
@@ -146,7 +146,7 @@ const AllProduct = () => {
       </section>
 
       {/* PRODUCT GRID */}
-      <section className="bg-[#0F0F0F] py-16">
+      <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-6">
 
           {loading ? (

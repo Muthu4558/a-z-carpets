@@ -61,13 +61,20 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // context/CartContext.jsx (only the addToCart function part shown)
   const addToCart = async (product, quantity = 1) => {
     try {
+      const selectedSize = product.selectedSize ?? null;
+
       const res = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/api/cart/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ productId: product._id, quantity }),
+        body: JSON.stringify({
+          productId: product._id,
+          quantity,
+          selectedSize,
+        }),
       });
 
       if (res.status === 401) {

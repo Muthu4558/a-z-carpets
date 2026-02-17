@@ -4,27 +4,6 @@ import { motion } from "framer-motion";
 import { FaShoppingCart, FaEye, FaStar } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 
-/* unit resolver */
-const resolveUnit = (product) => {
-  if (product?.unit) return product.unit;
-  if (["Masala Items", "Nuts", "Diabetics Mix"].includes(product?.category))
-    return "kg";
-  return "litre";
-};
-
-/* pack size formatter */
-const formatPackSize = (product) => {
-  const unit = resolveUnit(product);
-  const size = product?.packSize;
-
-  if (!size) return unit;
-
-  if (unit === "kg") return size === "0.5" ? "500 g" : "1 kg";
-  if (unit === "litre") return size === "0.5" ? "500 ml" : "1 l";
-
-  return unit;
-};
-
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -37,8 +16,6 @@ const ProductCard = ({ product }) => {
   const msrp = product?.price ?? 0;
   const price = product?.offerPrice ?? product?.price ?? 0;
   const rating = Math.max(0, Math.min(5, product?.rating ?? 4));
-
-  const displaySize = formatPackSize(product);
 
   const discount =
     msrp && msrp > price
@@ -72,7 +49,7 @@ const ProductCard = ({ product }) => {
         {/* DARK GRADIENT */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F]/90 via-black/20 to-transparent" />
 
-        {/* TOP ACTIONS */}
+        {/* VIEW BUTTON */}
         <div className="absolute top-4 right-4 flex gap-2">
           <button
             onClick={() => navigate(`/products/${product?._id}`)}
@@ -82,7 +59,7 @@ const ProductCard = ({ product }) => {
           </button>
         </div>
 
-        {/* DISCOUNT */}
+        {/* DISCOUNT BADGE */}
         {discount > 0 && !isOutOfStock && (
           <span className="absolute top-4 left-4 bg-[#D4AF37] text-black text-xs font-bold px-3 py-1 rounded-full">
             {discount}% OFF
@@ -98,7 +75,7 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {/* CONTENT OVER IMAGE */}
+        {/* CONTENT */}
         <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
 
           {/* NAME */}
@@ -126,9 +103,6 @@ const ProductCard = ({ product }) => {
               )}
               <div className="text-2xl font-extrabold">
                 ₹{price}
-                <span className="text-sm font-medium text-[#D4AF37]">
-                  {" "} / {displaySize}
-                </span>
               </div>
             </div>
 
@@ -137,10 +111,9 @@ const ProductCard = ({ product }) => {
               disabled={isOutOfStock}
               whileTap={{ scale: 0.92 }}
               className={`relative flex items-center gap-2 px-5 py-3 rounded-full text-sm font-bold
-                ${
-                  isOutOfStock
-                    ? "bg-gray-600 cursor-not-allowed"
-                    : "bg-[#D4AF37] text-black cursor-pointer hover:bg-[#C9A227] transition"
+                ${isOutOfStock
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-[#D4AF37] text-black cursor-pointer hover:bg-[#C9A227] transition"
                 }`}
             >
               <FaShoppingCart />
