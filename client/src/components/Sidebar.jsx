@@ -14,6 +14,7 @@ const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
         { label: "Home", icon: <MdDashboard />, page: "home", path: "/admin" },
         { label: "Shipping Amount", icon: <FaShippingFast />, page: "shipping", path: "/admin/shipping" },
         { label: "Customer Orders", icon: <FaFirstOrder />, page: "orders", path: "/admin/orders" },
+        { label: "Blog", icon: <FaFirstOrder />, page: "blog", path: "/admin/blog" },
         // Add more pages here
     ];
 

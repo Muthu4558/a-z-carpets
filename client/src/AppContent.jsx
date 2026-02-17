@@ -29,6 +29,8 @@ import VerifyEmail from "./page/VerifyEmail";
 import AdminShipping from "./page/AdminShipping";
 import Contact from "./page/ContactUs";
 import Blog from "./page/Blog";
+import AdminBlog from "./page/AdminBlog";
+import BlogDetail from "./page/BlogDetail";
 
 const AppContent = () => {
     const { loading } = useLoading();
@@ -48,6 +50,7 @@ const AppContent = () => {
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogDetail />} />
                 {/* protected routes */}
                 <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
                 <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
@@ -67,6 +70,7 @@ const AppContent = () => {
                 <Route path="/admin" element={<PrivateRoute adminOnly={true}><Admin /></PrivateRoute>} />
                 <Route path="/admin/shipping" element={<PrivateRoute adminOnly={true}><AdminShipping /></PrivateRoute>} />
                 <Route path="/admin/orders" element={<PrivateRoute adminOnly={true}><AdminOrders /></PrivateRoute>} />
+                <Route path="/admin/blog" element={<PrivateRoute adminOnly={true}><AdminBlog /></PrivateRoute>} />
             </Routes>
         </>
     );

@@ -10,21 +10,7 @@ import Logo from "../assets/a-z-logo.jpeg";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#F5F5F5] text-[#1A1A1A]">
-
-      {/* CURVE TOP */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180">
-        <svg
-          viewBox="0 0 1440 120"
-          className="relative block w-full h-[80px]"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,96L80,90.7C160,85,320,75,480,64C640,53,800,43,960,48C1120,53,1280,75,1360,85.3L1440,96L1440,0L0,0Z"
-            fill="#F5F5F5"
-          ></path>
-        </svg>
-      </div>
+    <footer className="relative bg-[#F5F5F5] text-[#1A1A1A] shadow-2xl border-t border-gray-300">
 
       <div className="relative pt-28 pb-14 px-6">
         <div className="max-w-7xl mx-auto">
@@ -77,7 +63,7 @@ const Footer = () => {
               </h3>
 
               <p className="flex justify-center md:justify-start items-start gap-2 text-gray-600 text-sm mb-3">
-                <MdLocationPin className="text-[#D4AF37] mt-1" />
+                <MdLocationPin size={50} className="text-[#D4AF37] mt-1" />
                 <span>
                   SF 45, Mettupalayam Rd, Dhandapani Nagar, NGGO Colony,
                   K. Vadamadurai, Thudiyalur, Kurudampalayam,

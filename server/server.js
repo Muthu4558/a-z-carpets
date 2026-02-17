@@ -9,6 +9,7 @@ import cartRoutes from './routes/cartRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import shippingRoutes from "./routes/shippingRoutes.js";
+import blogRoutes from "./routes/blogRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -29,6 +30,8 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/shipping", shippingRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/api/blog", blogRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
