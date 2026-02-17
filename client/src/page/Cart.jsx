@@ -306,7 +306,7 @@ const Cart = () => {
 
               {/* Mobile sticky checkout bottom */}
               <div className="fixed left-0 right-0 bottom-0 z-40 px-4 pb-4 sm:hidden">
-                <div className="bg-white rounded-2xl p-3 shadow-xl border border-[#57b957] flex items-center justify-between">
+                <div className="bg-white rounded-2xl p-3 shadow-xl border border-[#D4AF37] flex items-center justify-between">
                   <div>
                     <div className="text-xs text-gray-500">Total</div>
                     <div className="text-lg font-bold" style={{ color: BRAND }}>₹{total}</div>
