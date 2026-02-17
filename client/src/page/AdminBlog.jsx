@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
-import { FaEdit, FaTrash, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrash, FaTimes, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { MdArrowRightAlt } from "react-icons/md";
 import { useNavigate, Link } from "react-router-dom";
@@ -181,10 +181,10 @@ const AdminBlog = () => {
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
                 <Link
-                  to="/admin"
+                  to="/admin/dashboard"
                   className="text-sm font-medium text-gray-600 hover:text-[#D4AF37] transition"
                 >
-                  Home
+                  Dashboard
                 </Link>
                 <MdArrowRightAlt className="text-gray-400 text-lg" />
                 <Link
@@ -202,8 +202,9 @@ const AdminBlog = () => {
               resetForm();
               setShowModal(true);
             }}
-            className="bg-[#D4AF37] hover:bg-[#c7a32e] text-black px-6 py-2 rounded-lg font-semibold transition cursor-pointer"
+            className="flex items-center gap-2 bg-[#D4AF37] hover:bg-[#c29f2f] transition text-white px-5 py-2.5 rounded-lg shadow-sm font-medium"
           >
+            <FaPlus className="text-sm" />
             Add New Blog
           </button>
         </div>
@@ -251,109 +252,171 @@ const AdminBlog = () => {
 
       {/* ADD / EDIT MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 z-50 overflow-y-auto">
-          <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
 
-            <div className="relative bg-white rounded-2xl w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="relative bg-white rounded-3xl w-full max-w-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
 
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-4 text-gray-500 hover:text-black cursor-pointer"
-              >
-                <FaTimes />
-              </button>
+            {/* CLOSE BUTTON */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-black transition text-xl"
+            >
+              <FaTimes />
+            </button>
 
-              <div className="p-8">
-                <h2 className="text-2xl font-semibold mb-6">
-                  {editingId ? "Edit Blog" : "Add Blog"}
-                </h2>
+            <div className="p-6 sm:p-8">
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+              {/* HEADER */}
+              <h2 className="text-2xl sm:text-3xl font-bold mb-8">
+                {editingId ? "Edit Blog" : "Add Blog"}
+              </h2>
 
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    required
-                    className="w-full border rounded-lg px-4 py-3"
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((cat) => (
-                      <option key={cat}>{cat}</option>
-                    ))}
-                  </select>
+              <form onSubmit={handleSubmit} className="space-y-6">
 
-                  <input
-                    type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-4 py-3"
-                  />
+                {/* CATEGORY + DATE */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Category
+                    </label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      required
+                      className="input-style"
+                    >
+                      <option value="">Select Category</option>
+                      {categories.map((cat) => (
+                        <option key={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      className="input-style"
+                    />
+                  </div>
+
+                </div>
+
+                {/* TITLE */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Title
+                  </label>
                   <input
                     type="text"
                     name="title"
-                    placeholder="Title"
+                    placeholder="Enter blog title"
                     value={formData.title}
                     onChange={handleChange}
                     required
-                    className="w-full border rounded-lg px-4 py-3"
+                    className="input-style"
                   />
+                </div>
 
+                {/* SUBTITLE */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Subtitle
+                  </label>
                   <input
                     type="text"
                     name="subtitle"
-                    placeholder="Subtitle"
+                    placeholder="Enter subtitle"
                     value={formData.subtitle}
                     onChange={handleChange}
-                    className="w-full border rounded-lg px-4 py-3"
+                    className="input-style"
                   />
+                </div>
 
+                {/* CONTENT */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Content
+                  </label>
                   <textarea
                     name="content"
-                    placeholder="Content"
+                    placeholder="Write blog content here..."
                     value={formData.content}
                     onChange={handleChange}
                     required
-                    className="w-full border rounded-lg px-4 py-3 h-32"
+                    rows={5}
+                    className="input-style resize-none"
                   />
+                </div>
 
-                  <input
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleChange}
-                  />
+                {/* IMAGE UPLOAD */}
+                <div>
+                  <label className="block text-sm font-medium mb-3">
+                    Blog Image
+                  </label>
+
+                  <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-2xl p-6 cursor-pointer hover:border-[#D4AF37] transition">
+                    <span className="text-sm text-gray-500">
+                      Click to upload image
+                    </span>
+
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      onChange={(e) => {
+                        handleChange(e);
+
+                        if (e.target.files[0]) {
+                          setPreview(
+                            URL.createObjectURL(e.target.files[0])
+                          );
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
 
                   {preview && (
-                    <img
-                      src={preview}
-                      alt="preview"
-                      className="w-40 rounded-lg mt-2"
-                    />
+                    <div className="mt-4">
+                      <img
+                        src={preview}
+                        alt="preview"
+                        className="w-48 h-32 object-cover rounded-xl border shadow-sm"
+                      />
+                    </div>
                   )}
+                </div>
 
-                  <div className="flex justify-end gap-4 mt-6">
-                    <button
-                      type="button"
-                      onClick={() => setShowModal(false)}
-                      className="px-5 py-2 border rounded-lg cursor-pointer"
-                    >
-                      Cancel
-                    </button>
+                {/* ACTION BUTTONS */}
+                <div className="flex flex-col sm:flex-row justify-end gap-4 pt-4">
 
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="bg-[#111] text-white px-6 py-2 rounded-lg cursor-pointer"
-                    >
-                      {loading ? "Saving..." : "Save"}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="px-6 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 transition w-full sm:w-auto"
+                  >
+                    Cancel
+                  </button>
 
-                </form>
-              </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-6 py-2 rounded-xl bg-black text-white hover:bg-gray-800 transition w-full sm:w-auto"
+                  >
+                    {loading ? "Saving..." : editingId ? "Update Blog" : "Publish Blog"}
+                  </button>
+
+                </div>
+
+              </form>
             </div>
           </div>
         </div>

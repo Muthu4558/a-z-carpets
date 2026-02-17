@@ -46,3 +46,9 @@ html {
 .Toastify__toast--info {
   border-left: 4px solid #C9A227 !important;
 }
+
+
+
+.input-style {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37];
+}

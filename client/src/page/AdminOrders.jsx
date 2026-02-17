@@ -74,10 +74,10 @@ const AdminOrders = () => {
                 <div className="mb-6">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
                         <Link
-                            to="/admin"
+                            to="/admin/dashboard"
                             className="text-sm font-medium text-gray-600 hover:text-[#D4AF37] transition"
                         >
-                            Home
+                            Dashboard
                         </Link>
                         <MdArrowRightAlt className="text-gray-400 text-lg" />
                         <Link

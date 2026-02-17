@@ -93,13 +93,92 @@ export const updateOrderStatus = async (req, res) => {
       order.statusTimeline.delivered.status = true;
       order.statusTimeline.delivered.date = new Date();
       order.currentStatus = "DELIVERED";
+
+      // 🔥 VERY IMPORTANT FIX
+      if (order.paymentMethod === "COD") {
+        order.paymentStatus = "PAID";
+      }
     }
 
     await order.save();
 
     res.json({ message: "Order updated successfully" });
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+export const getOrderStats = async (req, res) => {
+  try {
+    res.set("Cache-Control", "no-store");
+
+    const { startDate, endDate } = req.query;
+
+    let dateFilter = {};
+
+    if (startDate && endDate) {
+      dateFilter = {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate + "T23:59:59.999Z"),
+        },
+      };
+    }
+
+    const statusStats = await Order.aggregate([
+      { $match: dateFilter },
+      {
+        $group: {
+          _id: "$currentStatus",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const totalOrders = await Order.countDocuments(dateFilter);
+
+    const revenueResult = await Order.aggregate([
+      { $match: { ...dateFilter, currentStatus: "DELIVERED" } },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" },
+        },
+      },
+    ]);
+
+    const totalRevenue =
+      revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
+
+    const recentTransactions = await Order.find({
+      ...dateFilter,
+      currentStatus: "DELIVERED",
+    })
+      .populate("user", "name email")
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    const formatted = {
+      totalOrders,
+      totalRevenue,
+      PREPARING: 0,
+      DISPATCHED: 0,
+      DELIVERED: 0,
+      recentTransactions,
+    };
+
+    statusStats.forEach((item) => {
+      formatted[item._id] = item.count;
+    });
+
+    res.json(formatted);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch dashboard stats" });
+  }
+};
+
 

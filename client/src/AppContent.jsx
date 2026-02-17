@@ -27,6 +27,8 @@ import Admin from "./page/Admin";
 import AdminOrders from "./page/AdminOrders";
 import AdminShipping from "./page/AdminShipping";
 import AdminBlog from "./page/AdminBlog";
+import AdminDashboard from "./page/AdminDashboard";
+import AdminEnquiry from "./page/AdminEnquiry";
 // products
 import AllProduct from "./page/AllProduct";
 import HandRugs from "./page/HandRugs";
@@ -83,10 +85,12 @@ const AppContent = () => {
                 <Route path="/order/:id" element={<OrderDetails />} />
                 <Route path="/thankyou" element={<ThankYou />} />
                 {/* admin */}
-                <Route path="/admin" element={<PrivateRoute adminOnly={true}><Admin /></PrivateRoute>} />
+                <Route path="/admin/products" element={<PrivateRoute adminOnly={true}><Admin /></PrivateRoute>} />
+                <Route path="/admin/dashboard" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />
                 <Route path="/admin/shipping" element={<PrivateRoute adminOnly={true}><AdminShipping /></PrivateRoute>} />
                 <Route path="/admin/orders" element={<PrivateRoute adminOnly={true}><AdminOrders /></PrivateRoute>} />
                 <Route path="/admin/blog" element={<PrivateRoute adminOnly={true}><AdminBlog /></PrivateRoute>} />
+                <Route path="/admin/enquiry" element={<PrivateRoute adminOnly={true}><AdminEnquiry /></PrivateRoute>} />
             </Routes>
         </>
     );

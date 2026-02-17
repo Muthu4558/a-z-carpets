@@ -126,8 +126,8 @@ const OrderDetails = () => {
             </div>
 
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
-              <Link to="/admin" className="text-sm text-gray-600 hover:text-[#D4AF37]">
-                Home
+              <Link to="/admin/dashboard" className="text-sm text-gray-600 hover:text-[#D4AF37]">
+                Dashboard
               </Link>
               <MdArrowRightAlt />
               <Link to="/admin/orders" className="text-sm font-semibold text-gray-600 hover:text-[#D4AF37]">

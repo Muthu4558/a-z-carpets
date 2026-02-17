@@ -1,11 +1,12 @@
 import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
 import Order from "../models/Order.js";
-import { placeOrder } from "../controllers/orderController.js";
+import { placeOrder, getOrderStats } from "../controllers/orderController.js";
 
 const router = express.Router();
 
 router.post("/place", protect, placeOrder);
+router.get("/admin/stats", getOrderStats);
 
 /* ✅ GET MY ORDERS */
 router.get("/my", protect, async (req, res) => {

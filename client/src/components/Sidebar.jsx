@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdDashboard, MdMenu, MdClose } from "react-icons/md";
-import { FaShippingFast, FaFirstOrder, FaSignOutAlt, FaBlog } from "react-icons/fa";
+import { MdDashboard, MdMenu, MdClose, MdProductionQuantityLimits } from "react-icons/md";
+import { FaShippingFast, FaFirstOrder, FaSignOutAlt, FaBlog, FaDatabase } from "react-icons/fa";
 import Logo from "../assets/a-z-logo.jpeg";
 
 const BRAND = "#D4AF37";
@@ -11,11 +11,12 @@ const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const menuItems = [
-        { label: "Home", icon: <MdDashboard />, page: "home", path: "/admin" },
-        { label: "Shipping Amount", icon: <FaShippingFast />, page: "shipping", path: "/admin/shipping" },
+        { label: "Dashboard", icon: <MdDashboard />, page: "dashboard", path: "/admin/dashboard" },
+        { label: "Products", icon: <MdProductionQuantityLimits />, page: "products", path: "/admin/products" },
+        // { label: "Shipping Amount", icon: <FaShippingFast />, page: "shipping", path: "/admin/shipping" },
         { label: "Customer Orders", icon: <FaFirstOrder />, page: "orders", path: "/admin/orders" },
         { label: "Blog", icon: <FaBlog />, page: "blog", path: "/admin/blog" },
-        // Add more pages here
+        { label: "Enquiry Data", icon: <FaDatabase />, page: "enquiry", path: "/admin/enquiry" },
     ];
 
     const handleNavigate = (item) => {

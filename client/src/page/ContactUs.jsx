@@ -4,7 +4,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import { MdLocationPin } from "react-icons/md";
-import { FiMail } from "react-icons/fi";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const GOLD = "#D4AF37";
 
@@ -16,16 +17,30 @@ const ContactUs = () => {
         comment: "",
     });
 
+    const [loading, setLoading] = useState(false);
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(form);
-        alert("Message submitted successfully!");
-        setForm({ name: "", email: "", phone: "", comment: "" });
-    };
+    const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    await axios.post(
+      `${import.meta.env.VITE_APP_BASE_URL}/api/enquiries`,
+      form
+    );
+
+    toast.success("Message sent successfully!");
+    setForm({ name: "", email: "", phone: "", comment: "" });
+  } catch (error) {
+    toast.error("Failed to send message. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
     return (
         <>

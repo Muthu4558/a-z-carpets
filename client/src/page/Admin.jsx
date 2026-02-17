@@ -2,21 +2,20 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { useNavigate, Link } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
 import { useLoading } from "../context/LoadingContext";
 
 import {
-  MdAddPhotoAlternate,
   MdDelete,
   MdEdit,
-  MdSearch,
-  MdFilterList,
 } from "react-icons/md";
+import { MdArrowRightAlt } from "react-icons/md";
 import {
+  FaEdit,
   FaPlus,
-  FaCloudUploadAlt,
-  FaCloud,
+  FaTrash,
 } from "react-icons/fa";
 
 const BRAND = "#57b957";
@@ -45,7 +44,8 @@ const carpetSizes = [
 
 const Admin = () => {
   const { startLoading, stopLoading } = useLoading();
-  const [activePage, setActivePage] = useState("home");
+  const [activePage, setActivePage] = useState("products");
+  const navigate = useNavigate();
 
   /* ================= PRODUCT STATE ================= */
   const [formData, setFormData] = useState({
@@ -239,15 +239,46 @@ const Admin = () => {
       <main className="flex-1 md:ml-64 p-4 sm:p-6 lg:p-8">
 
         {/* Header */}
-        <div className="flex justify-between mb-6">
-          <h1 className="text-3xl font-bold">Home</h1>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-[#D4AF37] text-white px-4 py-2 rounded-lg"
-          >
-            <FaPlus /> Add Product
-          </button>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+
+          {/* LEFT SIDE */}
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Products
+            </h1>
+
+            {/* BREADCRUMB */}
+            <div className="mt-3">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
+                <Link
+                  to="/admin/dashboard"
+                  className="text-sm font-medium text-gray-600 hover:text-[#D4AF37] transition"
+                >
+                  Dashboard
+                </Link>
+
+                <MdArrowRightAlt className="text-gray-400 text-lg" />
+
+                <span className="text-sm font-semibold text-[#D4AF37]">
+                  Products
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE BUTTON */}
+          <div className="flex justify-start md:justify-end">
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex items-center gap-2 bg-[#D4AF37] hover:bg-[#c29f2f] transition text-white px-5 py-2.5 rounded-lg shadow-sm font-medium"
+            >
+              <FaPlus className="text-sm" />
+              Add Product
+            </button>
+          </div>
+
         </div>
+
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -279,12 +310,12 @@ const Admin = () => {
                   )}
                 </div>
 
-                <div className="flex gap-2 mt-3">
-                  <button onClick={() => handleEdit(product)} className="text-yellow-600">
-                    <MdEdit />
+                <div className="flex justify-between gap-2 mt-3">
+                  <button onClick={() => handleEdit(product)} className="flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer">
+                    <FaEdit /> Edit
                   </button>
-                  <button onClick={() => setProductToDelete(product._id)} className="text-red-600">
-                    <MdDelete />
+                  <button onClick={() => setProductToDelete(product._id)} className="flex items-center gap-2 text-red-600 hover:text-red-800 cursor-pointer">
+                    <FaTrash /> Delete
                   </button>
                 </div>
               </div>
@@ -294,84 +325,149 @@ const Admin = () => {
 
         {/* ADD / EDIT MODAL (UI SAME) */}
         {showModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm p-4">
-            <motion.div
-              initial={{ scale: 0.98, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl p-4 sm:p-8 relative"
-            >
-              <button onClick={resetForm} className="absolute top-4 right-4 text-2xl">×</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">
 
-              <h2 className="text-2xl font-bold text-center mb-4">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              className="bg-white rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative"
+            >
+
+              {/* CLOSE BUTTON */}
+              <button
+                onClick={resetForm}
+                className="absolute top-5 right-5 text-gray-400 hover:text-black text-2xl"
+              >
+                ×
+              </button>
+
+              {/* HEADER */}
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
                 {editingProductId ? "Update Product" : "Add New Product"}
               </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-6">
 
-                <input name="name" value={formData.name} onChange={handleChange}
-                  placeholder="Product Name" required
-                  className="w-full px-4 py-3 border rounded-xl" />
+                {/* BASIC INFO */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                <input name="companyName" value={formData.companyName} onChange={handleChange}
-                  placeholder="Company Name"
-                  className="w-full px-4 py-3 border rounded-xl" />
+                  <input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Product Name"
+                    required
+                    className="input-style"
+                  />
 
-                <select name="category" value={formData.category} onChange={handleChange}
-                  required className="w-full px-4 py-3 border rounded-xl">
-                  <option value="">Select Category</option>
-                  {categories.map(c => <option key={c}>{c}</option>)}
-                </select>
+                  <input
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    placeholder="Company Name"
+                    className="input-style"
+                  />
 
-                <select name="type" value={formData.type} onChange={handleChange}
-                  required className="w-full px-4 py-3 border rounded-xl">
-                  <option value="">Hand / Machine</option>
-                  <option value="Hand Made">Hand Made</option>
-                  <option value="Machine Made">Machine Made</option>
-                </select>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    required
+                    className="input-style"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((c) => (
+                      <option key={c}>{c}</option>
+                    ))}
+                  </select>
 
-                <input name="warranty" value={formData.warranty} onChange={handleChange}
-                  placeholder="Warranty (e.g. 2 Years)"
-                  className="w-full px-4 py-3 border rounded-xl" />
+                  <select
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                    required
+                    className="input-style"
+                  >
+                    <option value="">Hand / Machine</option>
+                    <option value="Hand Made">Hand Made</option>
+                    <option value="Machine Made">Machine Made</option>
+                  </select>
 
+                  <input
+                    name="warranty"
+                    value={formData.warranty}
+                    onChange={handleChange}
+                    placeholder="Warranty (e.g. 2 Years)"
+                    className="input-style"
+                  />
+
+                  <input
+                    type="number"
+                    name="stock"
+                    value={formData.stock}
+                    onChange={handleChange}
+                    placeholder="Stock"
+                    required
+                    className="input-style"
+                  />
+
+                  <input
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    placeholder="Price"
+                    required
+                    className="input-style"
+                  />
+
+                  <input
+                    type="number"
+                    name="offerPrice"
+                    value={formData.offerPrice}
+                    onChange={handleChange}
+                    placeholder="Offer Price"
+                    className="input-style"
+                  />
+
+                </div>
+
+                {/* SIZES */}
                 <div>
-                  <label className="font-semibold">Available Sizes</label>
-                  <div className="grid grid-cols-3 gap-2 mt-2">
-                    {carpetSizes.map(size => (
-                      <label key={size} className="flex gap-2 text-sm">
-                        <input type="checkbox"
+                  <label className="block font-semibold mb-3">
+                    Available Sizes
+                  </label>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {carpetSizes.map((size) => (
+                      <label
+                        key={size}
+                        className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border cursor-pointer hover:border-[#D4AF37]"
+                      >
+                        <input
+                          type="checkbox"
                           checked={formData.sizes.includes(size)}
-                          onChange={() => handleSizeChange(size)} />
-                        {size}
+                          onChange={() => handleSizeChange(size)}
+                        />
+                        <span className="text-sm">{size}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
-                <textarea name="productDetails"
+                {/* DESCRIPTION */}
+                <textarea
+                  name="productDetails"
                   value={formData.productDetails}
                   onChange={handleChange}
                   placeholder="Product Details"
-                  className="w-full px-4 py-3 border rounded-xl" />
+                  rows={4}
+                  className="input-style resize-none"
+                />
 
-                <input type="number" name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  placeholder="Price"
-                  className="w-full px-4 py-3 border rounded-xl" required />
-
-                <input type="number" name="offerPrice"
-                  value={formData.offerPrice}
-                  onChange={handleChange}
-                  placeholder="Offer Price"
-                  className="w-full px-4 py-3 border rounded-xl" />
-
-                <input type="number" name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                  placeholder="Stock"
-                  className="w-full px-4 py-3 border rounded-xl" required />
-
-                <label className="inline-flex items-center gap-2">
+                {/* FEATURED */}
+                <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
                     name="featured"
@@ -384,16 +480,56 @@ const Admin = () => {
                     }
                     className="h-4 w-4"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm">
                     Show on Featured Products
                   </span>
-                </label>
+                </div>
 
+                {/* IMAGE UPLOAD */}
+                <div>
+                  <label className="block font-semibold mb-2">
+                    Product Image
+                  </label>
 
-                <input type="file" name="image" onChange={handleChange} />
+                  <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 cursor-pointer hover:border-[#D4AF37] transition">
+                    <span className="text-sm text-gray-500">
+                      Click to upload image
+                    </span>
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      onChange={(e) => {
+                        handleChange(e);
 
-                <button type="submit"
-                  className="bg-[#D4AF37] text-white px-4 py-2 rounded-lg w-full">
+                        if (e.target.files[0]) {
+                          setFormData((prev) => ({
+                            ...prev,
+                            imagePreview: URL.createObjectURL(e.target.files[0]),
+                          }));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+
+                  {/* IMAGE PREVIEW */}
+                  {formData.imagePreview && (
+                    <div className="mt-4">
+                      <img
+                        src={formData.imagePreview}
+                        alt="Preview"
+                        className="w-40 h-40 object-cover rounded-xl border"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* SUBMIT BUTTON */}
+                <button
+                  type="submit"
+                  className="bg-[#D4AF37] hover:bg-[#c29f2f] transition text-white px-6 py-3 rounded-xl w-full font-semibold"
+                >
                   {editingProductId ? "Update Product" : "Add Product"}
                 </button>
 
@@ -401,6 +537,7 @@ const Admin = () => {
             </motion.div>
           </div>
         )}
+
 
 
         {productToDelete && (
