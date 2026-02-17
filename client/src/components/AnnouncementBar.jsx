@@ -7,7 +7,7 @@ const AnnouncementBar = () => {
     "Additional 10% Off On Prepaid Orders",
     "International Shipping Available",
     "Customisation Available",
-    "Get In Touch With Our Sales Agent : +91 7003680958",
+    "Get In Touch With Our Sales Agent : +91 96268 46646",
   ];
 
   return (

@@ -150,9 +150,23 @@ const AdminBlog = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      navigate("/login");
+    }
+    catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   return (
     <>
-      <Sidebar activePage={activePage} setActivePage={setActivePage} />
+      <Sidebar activePage={activePage} setActivePage={setActivePage} handleLogout={handleLogout} />
 
       <div className="md:ml-64 min-h-screen bg-[#F5F5F5] p-6 md:p-10">
 
