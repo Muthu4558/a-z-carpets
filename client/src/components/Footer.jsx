@@ -120,18 +120,18 @@ const Footer = () => {
               </div>
 
               {/* GOOGLE MAP EMBED */}
-<div className="mt-6">
-  <iframe
-    src="https://www.google.com/maps?q=SF+45,+Coimbatore+A+to+Z+Carpets+%26+Wallpaper,+Mettupalayam+Rd,+Thudiyalur,+Tamil+Nadu+641017&output=embed"
-    width="100%"
-    height="180"
-    style={{ border: 0 }}
-    allowFullScreen=""
-    loading="lazy"
-    referrerPolicy="no-referrer-when-downgrade"
-    className="rounded-xl shadow-sm"
-  ></iframe>
-</div>
+              <div className="mt-6">
+                <iframe
+                  src="https://www.google.com/maps?q=SF+45,+Coimbatore+A+to+Z+Carpets+%26+Wallpaper,+Mettupalayam+Rd,+Thudiyalur,+Tamil+Nadu+641017&output=embed"
+                  width="100%"
+                  height="180"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="rounded-xl shadow-sm"
+                ></iframe>
+              </div>
 
             </div>
 
