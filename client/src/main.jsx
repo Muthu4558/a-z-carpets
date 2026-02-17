@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")).render(
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       {/* SINGLE ToastContainer at app root — never unmounts */}
       <ToastContainer
-        position="top-right"
+        position="bottom-right"
         autoClose={1500}
         pauseOnFocusLoss={false}
         pauseOnHover={false}

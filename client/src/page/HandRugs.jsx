@@ -146,6 +146,7 @@ const HandRugs = () => {
       </section>
 
       {/* PRODUCT GRID */}
+      {/* PRODUCT GRID */}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-6">
 
@@ -155,7 +156,39 @@ const HandRugs = () => {
                 <div key={i} className="h-80 bg-[#1A1A1A] rounded-2xl animate-pulse" />
               ))}
             </div>
-          ) : filteredProducts.length > 0 ? (
+
+          ) : products.length === 0 ? (
+
+            // 🔴 CASE 1: No products in DB
+            <div className="text-center py-24">
+              <h3 className="text-3xl font-semibold text-black mb-4">
+                No Products Available
+              </h3>
+              <p className="text-gray-500">
+                Products for this category have not been added yet.
+              </p>
+            </div>
+
+          ) : filteredProducts.length === 0 ? (
+
+            // 🟡 CASE 2: Filters removed results
+            <div className="text-center py-24">
+              <h3 className="text-3xl font-semibold text-black mb-4">
+                No Carpets Match Your Filters
+              </h3>
+              <p className="text-gray-500 mb-6">
+                Try adjusting your search or price range.
+              </p>
+              <button
+                onClick={clearFilters}
+                className="px-6 py-2 bg-[#D4AF37] text-black rounded-full font-medium hover:opacity-90"
+              >
+                Reset Filters
+              </button>
+            </div>
+
+          ) : (
+
             <motion.div
               initial="hidden"
               animate="visible"
@@ -174,22 +207,11 @@ const HandRugs = () => {
                 </motion.div>
               ))}
             </motion.div>
-          ) : (
-            <div className="text-center py-20">
-              <h3 className="text-2xl text-white mb-4">
-                No Carpets Found
-              </h3>
-              <button
-                onClick={clearFilters}
-                className="px-6 py-2 bg-[#D4AF37] text-black rounded-full font-medium"
-              >
-                Reset Filters
-              </button>
-            </div>
           )}
 
         </div>
       </section>
+
 
       <Footer />
     </>

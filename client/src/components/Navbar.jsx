@@ -117,13 +117,13 @@ const Navbar = () => {
     { label: "Shaggy Carpets", path: "/products/shaggy", icon: <FaRegSquare /> },
     { label: "Persian Silk Carpets", path: "/products/persian-silk", icon: <FaCrown /> },
     { label: "Designer Carpets", path: "/products/designer", icon: <FaShapes /> },
-    { label: "Luxury Viscose Rugs", path: "/products/viscose", icon: <FaGem /> },
-    { label: "Iranian Imported Rugs", path: "/products/iranian", icon: <FaCrown /> },
-    { label: "Irregular Shaped Rugs", path: "/products/irregular", icon: <FaShapes /> },
-    { label: "Traditional Persian Rugs", path: "/products/traditional", icon: <FaLeaf /> },
+    { label: "Luxury Viscose Rugs", path: "/products/luxury-viscose", icon: <FaGem /> },
+    { label: "Iranian Imported Rugs", path: "/products/iranian-imported", icon: <FaCrown /> },
+    { label: "Irregular Shaped Rugs", path: "/products/irregular-shaped", icon: <FaShapes /> },
+    { label: "Traditional Persian Rugs", path: "/products/traditional-persian", icon: <FaLeaf /> },
     { label: "Round Shaggy Carpets", path: "/products/round-shaggy", icon: <FaRegSquare /> },
     { label: "Round Tufted Carpets", path: "/products/round-tufted", icon: <FaGem /> },
-    { label: "Children Rugs", path: "/products/children", icon: <FaChild /> },
+    { label: "Children Rugs", path: "/products/children-rugs", icon: <FaChild /> },
   ];
 
   return (
