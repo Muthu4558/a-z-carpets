@@ -23,7 +23,6 @@ const BRAND = "#57b957";
 
 /* ================= CARPET CATEGORIES ================= */
 const categories = [
-  "All Carpets & Rugs",
   "Hand Tufted Rugs",
   "Shaggy Carpets",
   "Persian Silk Carpets",

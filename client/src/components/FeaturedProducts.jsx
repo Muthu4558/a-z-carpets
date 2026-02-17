@@ -103,7 +103,7 @@ const FeaturedProducts = () => {
 
               {/* Navigation */}
               {showNav && (
-                <div className="absolute right-6 -bottom-6 z-20 flex gap-4">
+                <div className="absolute right-6 -bottom-18 z-20 flex gap-4">
 
                   <button
                     ref={(el) => {

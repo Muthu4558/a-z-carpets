@@ -1,7 +1,6 @@
 import {
   FaFacebookF,
   FaInstagram,
-  FaLinkedin,
   FaPhoneAlt,
 } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
@@ -10,11 +9,12 @@ import Logo from "../assets/a-z-logo.jpeg";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#F5F5F5] text-[#1A1A1A] shadow-2xl border-t border-gray-300">
+    <footer className="bg-[#F5F5F5] text-[#1A1A1A] border-t border-gray-300">
 
-      <div className="relative pt-28 pb-14 px-6">
+      <div className="pt-20 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
 
+          {/* MAIN GRID */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
 
             {/* BRAND */}
@@ -24,6 +24,7 @@ const Footer = () => {
                 alt="Brand Logo"
                 className="w-24 mb-6 mx-auto md:mx-0 rounded-xl"
               />
+              <h2 className="text-xl font-semibold text-[#1A1A1A] mb-6">Coimbatore <span className="text-[#D4AF37]">A-Z Carpets</span></h2>
               <p className="text-gray-600 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
                 Handcrafted luxury carpets designed to bring warmth,
                 elegance and timeless artistry into your interiors.
@@ -36,10 +37,18 @@ const Footer = () => {
                 Collections
               </h3>
               <ul className="space-y-2 text-gray-600 text-sm">
-                <li><a href="#" className="hover:text-[#D4AF37] transition">All Carpets</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Modern Designs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Traditional Rugs</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Premium Collection</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">All Carpets & Rugs</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Hand Tufted Rugs</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Shaggy Carpets</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Persian Silk Carpets</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Designer Carpets</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Luxury Viscose Rugs</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Iranian Imported Rugs</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Irregular Shaped Rugs</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Traditional Persian Rugs</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Round Shaggy Carpets</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Round Tufted Carpets</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition">Children Rugs</a></li>
               </ul>
             </div>
 
@@ -49,8 +58,8 @@ const Footer = () => {
                 Support
               </h3>
               <ul className="space-y-2 text-gray-600 text-sm">
-                <li><a href="#" className="hover:text-[#D4AF37] transition">My Account</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition">Orders</a></li>
+                <li><a href="/profile" className="hover:text-[#D4AF37] transition">Profile</a></li>
+                <li><a href="/order" className="hover:text-[#D4AF37] transition">Orders</a></li>
                 <li><a href="#" className="hover:text-[#D4AF37] transition">Shipping Policy</a></li>
                 <li><a href="#" className="hover:text-[#D4AF37] transition">Privacy Policy</a></li>
               </ul>
@@ -63,11 +72,10 @@ const Footer = () => {
               </h3>
 
               <p className="flex justify-center md:justify-start items-start gap-2 text-gray-600 text-sm mb-3">
-                <MdLocationPin size={50} className="text-[#D4AF37] mt-1" />
+                <MdLocationPin size={20} className="text-[#D4AF37] mt-1" />
                 <span>
-                  SF 45, Mettupalayam Rd, Dhandapani Nagar, NGGO Colony,
-                  K. Vadamadurai, Thudiyalur, Kurudampalayam,
-                 Tamil Nadu 641017
+                  SF 45, Mettupalayam Rd, Dhandapani Nagar,
+                  Thudiyalur, Tamil Nadu 641017
                 </span>
               </p>
 
@@ -87,10 +95,21 @@ const Footer = () => {
 
               {/* SOCIAL ICONS */}
               <div className="flex justify-center md:justify-start gap-4">
-                {[FaInstagram, FaFacebookF].map((Icon, i) => (
+                {[
+                  {
+                    Icon: FaInstagram,
+                    link: "https://www.instagram.com/a_to_z_carpet_wallpaper?igsh=MXVqc2w2dXlhcnFjdg%3D%3D&utm_source=qr",
+                  },
+                  {
+                    Icon: FaFacebookF,
+                    link: "https://www.facebook.com/share/19kGTFsCCB/?mibextid=wwXIfr",
+                  },
+                ].map(({ Icon, link }, i) => (
                   <a
                     key={i}
-                    href="#"
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10 flex items-center justify-center rounded-full border border-[#D4AF37] text-[#D4AF37] transition hover:bg-[#D4AF37] hover:text-white"
                   >
                     <Icon size={14} />
@@ -101,13 +120,28 @@ const Footer = () => {
 
           </div>
 
-          {/* BOTTOM */}
-          <div className="mt-16 border-t border-gray-300 pt-6 text-center text-gray-500 text-sm">
-            © {new Date().getFullYear()}{" "}
-            <span className="text-[#D4AF37] font-medium">
-              A - Z Carpets
-            </span>
-            . All Rights Reserved.
+          {/* BOTTOM SECTION */}
+          <div className="mt-16 border-t border-gray-300 pt-6 text-sm text-gray-500">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+
+              {/* LEFT */}
+              <p className="text-center md:text-left">
+                © {new Date().getFullYear()}{" "}
+                <span className="text-[#D4AF37] font-semibold">
+                  A - Z Carpets
+                </span>
+                . All Rights Reserved.
+              </p>
+
+              {/* RIGHT */}
+              <p className="text-center md:text-right">
+                Developed by{" "}
+                <span className="text-[#D4AF37] font-semibold">
+                  smartIndia.ai
+                </span>
+              </p>
+
+            </div>
           </div>
 
         </div>
