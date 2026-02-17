@@ -66,7 +66,7 @@ const AdminOrders = () => {
                 {/* HEADER */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <h1 className="text-3xl font-bold text-gray-900">
-                        Customer <span className="text-[#57b957]">Orders</span>
+                        Customer <span className="text-[#D4AF37]">Orders</span>
                     </h1>
                 </div>
 
@@ -75,14 +75,14 @@ const AdminOrders = () => {
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
                         <Link
                             to="/admin"
-                            className="text-sm font-medium text-gray-600 hover:text-[#57b957] transition"
+                            className="text-sm font-medium text-gray-600 hover:text-[#D4AF37] transition"
                         >
                             Home
                         </Link>
                         <MdArrowRightAlt className="text-gray-400 text-lg" />
                         <Link
                             to="/admin/orders"
-                            className="text-sm font-semibold text-[#57b957]"
+                            className="text-sm font-semibold text-[#D4AF37]"
                         >
                             Orders
                         </Link>
@@ -112,7 +112,7 @@ const AdminOrders = () => {
 
                                 {/* CARD */}
                                 <div
-                                    className="bg-white rounded-xl shadow border border-[#57b957] p-4 sm:p-5 hover:shadow-lg transition"
+                                    className="bg-white rounded-xl shadow border border-[#D4AF37] p-4 sm:p-5 hover:shadow-lg transition"
                                 >
                                     {/* CUSTOMER DETAILS */}
                                     <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -139,7 +139,7 @@ const AdminOrders = () => {
                                         <div>
                                             <a href="#"
                                             onClick={() => navigate(`/order/${order._id}`)}
-                                            className="p-2 bg-[#57b957] text-white rounded-lg text-sm">Change Status</a>
+                                            className="p-2 bg-[#D4AF37] text-white rounded-lg text-sm">Change Status</a>
                                         </div>
                                     </div>
 
@@ -198,7 +198,7 @@ const AdminOrders = () => {
                                                     : "Online Payment"}
                                             </span>
                                         </p>
-                                        <p className="font-semibold text-[#57b957] text-sm sm:text-base">
+                                        <p className="font-semibold text-[#D4AF37] text-sm sm:text-base">
                                             Total: ₹{order.totalAmount ?? 0}
                                         </p>
                                     </div>

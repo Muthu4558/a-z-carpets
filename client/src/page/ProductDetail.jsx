@@ -30,6 +30,9 @@ const ProductDetail = () => {
   const [showReviews, setShowReviews] = useState(false);
   const reviewsRef = useRef(null);
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
 
   /* ================= FETCH PRODUCT ================= */
@@ -52,13 +55,66 @@ const ProductDetail = () => {
     }
   };
 
+  // ===================can review=====================
+  const checkCanReview = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/products/${id}/can-review`,
+        { withCredentials: true }
+      );
+
+      setCanReview(res.data.canReview);
+    } catch {
+      setCanReview(false);
+    }
+  };
+
+
+  const submitReview = async () => {
+    if (!comment.trim()) {
+      toast.error("Please write a review");
+      return;
+    }
+
+    try {
+      setSubmittingReview(true);
+
+      await axios.post(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/products/${id}/review`,
+        { rating, comment },
+        { withCredentials: true }
+      );
+
+      toast.success("Review added successfully");
+      setComment("");
+      setCanReview(false);
+      fetchProduct();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to submit review");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
+
   useEffect(() => {
     fetchProduct();
+    checkCanReview();
   }, [id]);
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (searchParams.get("review") === "true") {
+      setTimeout(() => {
+        reviewsRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    }
+  }, []);
+
 
   /* ================= DERIVED ================= */
   const images = useMemo(() => {
@@ -318,6 +374,42 @@ const ProductDetail = () => {
             <h2 className="text-2xl font-bold mb-4">
               Reviews ({reviews.length})
             </h2>
+
+            {canReview && (
+              <div className="border rounded-xl p-6 mb-6 bg-white shadow-md">
+                <h3 className="font-bold text-lg mb-4 text-[#D4AF37]">
+                  Write a Review
+                </h3>
+
+                <div className="flex gap-2 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FaStar
+                      key={star}
+                      onClick={() => setRating(star)}
+                      className={`cursor-pointer text-xl ${star <= rating ? "text-yellow-400" : "text-gray-300"
+                        }`}
+                    />
+                  ))}
+                </div>
+
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Write your experience..."
+                  className="w-full border rounded-lg p-3 mb-4"
+                  rows="4"
+                />
+
+                <button
+                  onClick={submitReview}
+                  disabled={submittingReview}
+                  className="bg-[#D4AF37] text-white px-6 py-2 rounded-lg font-semibold"
+                >
+                  {submittingReview ? "Submitting..." : "Submit Review"}
+                </button>
+              </div>
+            )}
+
 
             {reviews.length === 0 && (
               <p className="text-gray-500">No reviews yet.</p>

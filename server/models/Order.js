@@ -25,10 +25,17 @@ const orderSchema = new mongoose.Schema(
     totalAmount: Number,
 
     paymentMethod: {
-      type: String,
-      enum: ["COD", "ONLINE"],
-      required: true,
-    },
+  type: String,
+  enum: ["COD", "RAZORPAY"],
+  required: true,
+},
+
+paymentStatus: {
+  type: String,
+  enum: ["PENDING", "PAID", "FAILED"],
+  default: "PENDING",
+},
+
     paymentId: String,
 
     /* ✅ DELIVERY DATES */

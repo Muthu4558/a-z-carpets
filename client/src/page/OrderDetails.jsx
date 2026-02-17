@@ -122,19 +122,19 @@ const OrderDetails = () => {
         {isAdmin && (
           <div className="max-w-5xl mx-auto mb-6">
             <div className="text-3xl font-bold flex items-center gap-3 mb-4 text-gray-800">
-              Order <span className="text-[#57b957]">Tracking</span>
+              Order <span className="text-[#D4AF37]">Tracking</span>
             </div>
 
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm">
-              <Link to="/admin" className="text-sm text-gray-600 hover:text-[#57b957]">
+              <Link to="/admin" className="text-sm text-gray-600 hover:text-[#D4AF37]">
                 Home
               </Link>
               <MdArrowRightAlt />
-              <Link to="/admin/orders" className="text-sm font-semibold text-gray-600 hover:text-[#57b957]">
+              <Link to="/admin/orders" className="text-sm font-semibold text-gray-600 hover:text-[#D4AF37]">
                 Orders
               </Link>
               <MdArrowRightAlt />
-              <span className="text-sm font-semibold text-[#57b957]">
+              <span className="text-sm font-semibold text-[#D4AF37]">
                 Order Tracking
               </span>
             </div>
@@ -145,11 +145,11 @@ const OrderDetails = () => {
         <div className="max-w-5xl mx-auto">
           {!isAdmin && (
             <h1 className="text-3xl sm:text-4xl font-bold mb-10 text-gray-800 text-center">
-              Order <span className="text-[#57b957]">Tracking</span>
+              Order <span className="text-[#D4AF37]">Tracking</span>
             </h1>)}
 
-          <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 border border-green-200 relative overflow-hidden">
-            <div className="absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-r from-[#57b957]/30 to-[#57b957]/10 rounded-full blur-3xl" />
+          <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 border border-amber-200 relative overflow-hidden">
+            <div className="absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-r from-[#D4AF37]/30 to-[#D4AF37]/10 rounded-full blur-3xl" />
 
             <div className="relative">
               <div className="absolute left-5 top-0 h-full w-1 bg-gray-200 rounded" />
@@ -166,7 +166,7 @@ const OrderDetails = () => {
                       className="flex gap-6 sm:gap-8 relative"
                     >
                       <div
-                        className={`z-10 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full text-white text-xl sm:text-2xl shadow-md ${active ? "bg-[#57b957]" : "bg-gray-300"
+                        className={`z-10 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full text-white text-xl sm:text-2xl shadow-md ${active ? "bg-[#D4AF37]" : "bg-gray-300"
                           }`}
                       >
                         {step.icon}
@@ -174,7 +174,7 @@ const OrderDetails = () => {
 
                       <div className="flex-1">
                         <p
-                          className={`font-semibold text-lg sm:text-xl mb-1 ${active ? "text-[#57b957]" : "text-gray-500"
+                          className={`font-semibold text-lg sm:text-xl mb-1 ${active ? "text-[#D4AF37]" : "text-gray-500"
                             }`}
                         >
                           {step.title}
@@ -213,7 +213,7 @@ const OrderDetails = () => {
                                   to={`/products/${item.product._id}?review=true`}
                                   className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition bg-green-50"
                                 >
-                                  <MdRateReview className="text-[#57b957] text-lg" />
+                                  <MdRateReview className="text-[#D4AF37] text-lg" />
                                   <span className="font-semibold text-gray-700">
                                     Review {item.product.name}
                                   </span>
@@ -247,7 +247,7 @@ const OrderDetails = () => {
 
                     <button
                       onClick={() => updateStatus("DISPATCHED")}
-                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#57b957] to-green-400 text-white font-semibold shadow hover:shadow-lg transition w-full sm:w-auto"
+                      className="px-6 py-3 rounded-xl bg-[#D4AF37] text-white font-semibold shadow hover:shadow-lg transition w-full sm:w-auto"
                     >
                       Mark as Dispatched
                     </button>
@@ -258,7 +258,7 @@ const OrderDetails = () => {
                   !timeline.delivered.status && (
                     <button
                       onClick={() => updateStatus("DELIVERED")}
-                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#57b957] to-green-400 text-white font-semibold shadow hover:shadow-lg transition w-full sm:w-auto"
+                      className="px-6 py-3 rounded-xl bg-[#D4AF37] text-white font-semibold shadow hover:shadow-lg transition w-full sm:w-auto"
                     >
                       Mark as Delivered
                     </button>

@@ -165,50 +165,85 @@ const shippingTotal = useMemo(() => {
 
   /* ---------------- PAYMENT ---------------- */
   const placeOrder = async () => {
-    if (!selectedAddress) return toast.error("Select address");
-    if (!cartItems.length) return toast.error("Cart empty");
+  if (!selectedAddress) return toast.error("Select address");
+  if (!cartItems.length) return toast.error("Cart empty");
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const orderId = `ORD_${Date.now()}`;
+    // 1️⃣ Create DB Order (PENDING)
+    const orderRes = await axios.post(
+      `${import.meta.env.VITE_APP_BASE_URL}/api/orders/place`,
+      {
+        address: selectedAddress,
+        totalAmount: total,
+        paymentMethod: "RAZORPAY",
+      },
+      { withCredentials: true }
+    );
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_APP_BASE_URL}/api/payment/ccavenue-order`,
-        {
-          orderId,
-          amount: total,
-          name: profile.name,
-          email: profile.email,
-          phone: profile.number,
-        },
-        { withCredentials: true }
-      );
+    const dbOrder = orderRes.data;
 
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action =
-        "https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction";
+    // 2️⃣ Create Razorpay Order
+    const razorRes = await axios.post(
+      `${import.meta.env.VITE_APP_BASE_URL}/api/razorpay/create-order`,
+      {
+        amount: total,
+      }
+    );
 
-      const encInput = document.createElement("input");
-      encInput.type = "hidden";
-      encInput.name = "encRequest";
-      encInput.value = res.data.encRequest;
+    const razorOrder = razorRes.data;
 
-      const accessInput = document.createElement("input");
-      accessInput.type = "hidden";
-      accessInput.name = "access_code";
-      accessInput.value = res.data.accessCode;
+    // 3️⃣ Razorpay Options
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: razorOrder.amount,
+      currency: razorOrder.currency,
+      order_id: razorOrder.id,
 
-      form.appendChild(encInput);
-      form.appendChild(accessInput);
-      document.body.appendChild(form);
-      form.submit();
-    } catch {
-      toast.error("Payment initiation failed");
-      setLoading(false);
-    }
-  };
+      handler: async function (response) {
+        try {
+          // 4️⃣ Verify Payment
+          await axios.post(
+            `${import.meta.env.VITE_APP_BASE_URL}/api/razorpay/verify-payment`,
+            {
+              ...response,
+              orderId: dbOrder._id,
+            },
+            { withCredentials: true }
+          );
+
+          toast.success("Payment Successful!");
+          navigate("/thankyou");
+
+        } catch (err) {
+          toast.error("Payment verification failed");
+        }
+      },
+
+      prefill: {
+        name: profile.name,
+        email: profile.email,
+        contact: profile.number,
+      },
+
+      theme: {
+        color: "#D4AF37",
+      },
+    };
+
+    const razor = new window.Razorpay(options);
+    razor.open();
+
+  } catch (error) {
+  console.log("FULL ERROR:", error);
+  console.log("RESPONSE:", error.response?.data);
+  toast.error("Payment initiation failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   /* ---------------- ADDRESS FORM ---------------- */
   const renderAddressForm = (data, setData, onSave) => (
