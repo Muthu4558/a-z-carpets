@@ -15,7 +15,7 @@ import hero3 from "../assets/hero3.jpg";
 const slides = [
   {
     image: hero1,
-    title: "Luxury Carpets",
+    title: "Coimbatore A-Z Carpets",
     subtitle: "CRAFTED FOR ELEGANCE",
     description:
       "Experience timeless craftsmanship with premium handwoven carpets designed to transform your living space.",

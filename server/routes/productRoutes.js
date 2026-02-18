@@ -9,7 +9,8 @@ import {
   updateProduct,
   deleteProduct,
   addProductReview,
-  canReviewProduct 
+  canReviewProduct,
+  filterProducts
 } from '../controllers/productController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -30,11 +31,11 @@ router.post('/add', upload.single('image'), createProduct);
 router.get('/id/:id', getProductById);
 router.post('/:id/review', protect, addProductReview);
 router.get('/featured/all', getFeaturedProducts);
+router.get('/filter', filterProducts);
 router.get('/', getAllProducts);
 router.get("/:id/can-review", protect, canReviewProduct);
 router.get('/:category', getProductsByCategory);
 router.put('/update/:id', upload.single('image'), updateProduct);
 router.delete('/delete/:id', deleteProduct);
-
 
 export default router;
