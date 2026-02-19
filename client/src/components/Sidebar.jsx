@@ -15,7 +15,7 @@ const Sidebar = ({ activePage, setActivePage, handleLogout }) => {
         { label: "Products", icon: <MdProductionQuantityLimits />, page: "products", path: "/admin/products" },
         // { label: "Shipping Amount", icon: <FaShippingFast />, page: "shipping", path: "/admin/shipping" },
         { label: "Customer Orders", icon: <FaFirstOrder />, page: "orders", path: "/admin/orders" },
-        { label: "Blog", icon: <FaBlog />, page: "blog", path: "/admin/blog" },
+        // { label: "Blog", icon: <FaBlog />, page: "blog", path: "/admin/blog" },
         { label: "Enquiry Data", icon: <FaDatabase />, page: "enquiry", path: "/admin/enquiry" },
     ];
 
