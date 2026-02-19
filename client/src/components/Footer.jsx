@@ -24,7 +24,7 @@ const Footer = () => {
                 alt="Brand Logo"
                 className="w-24 mb-6 mx-auto md:mx-0 rounded-xl"
               />
-              <h2 className="text-xl font-semibold text-[#1A1A1A] mb-6">Coimbatore <span className="text-[#D4AF37]">A-Z Carpets</span></h2>
+              <h2 className="text-xl font-semibold text-[#1A1A1A] mb-6">Coimbatore <span className="text-[#D4AF37]">A to Z Carpets & Wallpaper</span></h2>
               <p className="text-gray-600 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
                 Handcrafted luxury carpets designed to bring warmth,
                 elegance and timeless artistry into your interiors.
