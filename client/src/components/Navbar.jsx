@@ -354,10 +354,6 @@ const Navbar = () => {
                 className="md:hidden bg-[#111111] border-t border-[#1A1A1A] overflow-y-auto"
               >
                 <div className="px-6 py-4 space-y-4">
-                  <Link to="/" className="block text-gray-300">Home</Link>
-                  <Link to="/about" className="block text-gray-300">About</Link>
-                  <Link to="/profile" className="flex items-center gap-3 text-gray-300 hover:text-[#D4AF37] transition">Profile</Link>
-
                   {/* Mobile products accordion */}
                   <div>
                     <button
@@ -365,7 +361,7 @@ const Navbar = () => {
                         setMobileDropdownOpen(!mobileDropdownOpen);
                         setMobileOpenSection(null);
                       }}
-                      className="w-full flex justify-between items-center text-gray-300 py-2"
+                      className="w-full flex justify-between items-center text-gray-300 py-3 border-b border-white/20"
                       aria-expanded={mobileDropdownOpen}
                     >
                       <span>Products</span>
@@ -419,9 +415,41 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-                  <Link to="/coimbatore-shop" className="block text-gray-300">Coimbatore Store</Link>
-                  {/* <Link to="/blog" className="block text-gray-300">Blog</Link> */}
-                  <Link to="/contact" className="block text-gray-300">Contact</Link>
+                  <Link
+                    to="/"
+                    className="block text-gray-300 py-3 border-b border-white/20 hover:text-[#D4AF37] transition"
+                  >
+                    Home
+                  </Link>
+
+                  <Link
+                    to="/about"
+                    className="block text-gray-300 py-3 border-b border-white/20 hover:text-[#D4AF37] transition"
+                  >
+                    About
+                  </Link>
+
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 text-gray-300 py-3 border-b border-white/20 hover:text-[#D4AF37] transition"
+                  >
+                    Profile
+                  </Link>
+
+                  <Link
+                    to="/coimbatore-shop"
+                    className="block text-gray-300 py-3 border-b border-white/20 hover:text-[#D4AF37] transition"
+                  >
+                    Coimbatore Store
+                  </Link>
+
+                  <Link
+                    to="/contact"
+                    className="block text-gray-300 py-3 border-b border-white/20 hover:text-[#D4AF37] transition"
+                  >
+                    Contact
+                  </Link>
+
                 </div>
               </motion.div>
             )}

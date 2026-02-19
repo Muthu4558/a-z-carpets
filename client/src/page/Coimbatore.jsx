@@ -1,6 +1,13 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Store1 from "../assets/store/store3.jpeg";
+import Store2 from "../assets/store/store2.jpeg";
+import Store3 from "../assets/store/store1.jpeg";
+import Store4 from "../assets/store/store4.jpeg";
+import Store5 from "../assets/store/store5.jpeg";
+import { FaClock, FaPhoneAlt } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
 
 const Coimbatore = () => {
     return (
@@ -49,7 +56,7 @@ const Coimbatore = () => {
                     {/* SECTION 1 */}
                     <div>
                         <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                            What You’ll Find at Our Coimbatore Store
+                            What You’ll Find at Our <span className="text-[#D4AF37]">Coimbatore Store</span>
                         </h1>
 
                         <p className="text-gray-600 mb-8">
@@ -72,18 +79,56 @@ const Coimbatore = () => {
                         </ul>
                     </div>
 
-                    {/* SECTION 2 – IMAGE LEFT / CONTENT RIGHT */}
+
+                    {/* PREMIUM 5 IMAGE GALLERY */}
+                    <div>
+                        <h2 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-10 text-center">
+                            Inside Our <span className="text-[#D4AF37]">Coimbatore Store</span>
+                        </h2>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+                            <div className="overflow-hidden rounded-xl shadow-md">
+                                <img
+                                    src={Store1}
+                                    alt="Store Interior View"
+                                    className="w-full aspect-[16/9] object-cover hover:scale-105 transition duration-500"
+                                />
+                            </div>
+
+                            <div className="overflow-hidden rounded-xl shadow-md">
+                                <img
+                                    src={Store2}
+                                    alt="Premium Carpet Collection"
+                                    className="w-full aspect-[16/9] object-cover hover:scale-105 transition duration-500"
+                                />
+                            </div>
+
+                            <div className="overflow-hidden rounded-xl shadow-md">
+                                <img
+                                    src={Store3}
+                                    alt="Luxury Rug Display"
+                                    className="w-full aspect-[16/9] object-cover hover:scale-105 transition duration-500"
+                                />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* SECTION 2 */}
                     <div className="grid md:grid-cols-2 gap-12 items-center">
 
                         <img
-                            src="/store1.jpg"   // Replace with your actual store image
+                            src={Store4}
                             alt="Coimbatore Store Interior"
                             className="rounded-lg shadow-lg"
                         />
 
                         <div>
                             <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-4">
-                                Why Choose A-Z Carpets in Coimbatore?
+                                Why Choose A-Z Carpets in <span className="text-[#D4AF37]">Coimbatore?</span>
                             </h2>
 
                             <ul className="list-disc pl-6 space-y-3 text-gray-700">
@@ -96,12 +141,13 @@ const Coimbatore = () => {
                         </div>
                     </div>
 
-                    {/* SECTION 3 – CONTENT LEFT / IMAGE RIGHT */}
+
+                    {/* SECTION 3 */}
                     <div className="grid md:grid-cols-2 gap-12 items-center">
 
                         <div>
                             <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-4">
-                                Perfect for Every Coimbatore Home
+                                Perfect for Every <span className="text-[#D4AF37]">Coimbatore Home</span>
                             </h2>
 
                             <p className="text-gray-700 leading-relaxed">
@@ -112,29 +158,54 @@ const Coimbatore = () => {
                         </div>
 
                         <img
-                            src="/store2.jpg"   // Replace with your actual store image
+                            src={Store5}
                             alt="Carpet Display"
-                            className="rounded-lg shadow-lg"
+                            className="w-full h-80 md:h-96 object-cover rounded-xl shadow-md hover:shadow-xl transition duration-300"
                         />
+
                     </div>
+
 
                     {/* STORE TIMINGS */}
                     <div>
                         <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-4">
-                            Store Timings
+                            Store <span className="text-[#D4AF37]">Timings</span>
                         </h2>
 
-                        <ul className="space-y-2 text-gray-700">
-                            <li>🕘 Open Monday to Sunday | 10:00 AM – 8:30 PM</li>
-                            <li>📍 SF 45, Mettupalayam Rd, Dhandapani Nagar, Thudiyalur, Tamil Nadu 641017</li>
-                            <li>📞 Call Us: +91 96268 46646</li>
+                        <ul className="space-y-4 text-gray-700">
+
+                            <li className="flex items-start gap-3">
+                                <FaClock className="text-[#D4AF37] mt-1" />
+                                <span>Open Monday to Sunday | 10:00 AM – 8:30 PM</span>
+                            </li>
+
+                            <li className="flex items-start gap-3">
+                                <MdLocationOn className="text-[#D4AF37] text-lg mt-1" />
+                                <span>
+                                    SF 45, Mettupalayam Rd, Dhandapani Nagar, Thudiyalur,
+                                    Tamil Nadu 641017
+                                </span>
+                            </li>
+
+                            <li className="flex items-start gap-3">
+                                <FaPhoneAlt className="text-[#D4AF37] mt-1" />
+                                <a
+                                    href="tel:+919626846646"
+                                    className="hover:text-[#D4AF37] transition"
+                                >
+                                    +91 96268 46646
+                                </a>
+                            </li>
+
                         </ul>
+
                     </div>
+
 
                     {/* CTA */}
                     <div className="text-center pt-10">
                         <h3 className="text-2xl font-semibold text-[#1A1A1A] mb-4">
-                            Visit A-Z Carpets in Coimbatore Today!
+                            Visit A-Z Carpets in <span className="text-[#D4AF37]">Coimbatore Today!</span>
                         </h3>
 
                         <p className="text-gray-600 mb-6">
@@ -144,7 +215,7 @@ const Coimbatore = () => {
 
                         <a
                             href="tel:+919626846646"
-                            className="inline-block bg-[#D4AF37] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#C9A227] transition"
+                            className="inline-block bg-[#D4AF37] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#C9A227] transition"
                         >
                             Call Now
                         </a>
@@ -152,6 +223,7 @@ const Coimbatore = () => {
 
                 </div>
             </section>
+
 
             <Footer />
         </>
