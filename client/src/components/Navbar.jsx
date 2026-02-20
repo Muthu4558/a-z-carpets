@@ -220,7 +220,7 @@ const Navbar = () => {
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
 
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-2">
               <img src={Logo} alt="logo" className="w-20 md:w-24 rounded-xl" />
               <div className="flex flex-col leading-tight">
                 <span className="text-lg md:text-xl font-bold text-black tracking-wide">Coimbatore</span>
@@ -265,11 +265,11 @@ const Navbar = () => {
                       <div className="bg-[#121212] text-white shadow-2xl">
                         <div className="max-w-7xl mx-auto px-10 py-12">
 
-                          <div className="grid grid-cols-6 gap-12">
+                          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-12">
 
-                            {megaMenuData.map((col) => (
+                            {/* First 5 Normal Columns */}
+                            {megaMenuData.slice(0, 5).map((col) => (
                               <div key={col.key}>
-
                                 <h4 className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider mb-5">
                                   {col.title}
                                 </h4>
@@ -287,11 +287,74 @@ const Navbar = () => {
                                     </li>
                                   ))}
                                 </ul>
-
                               </div>
                             ))}
 
+                            {/* Last Column — Top & Bottom Sections */}
+                            <div className="flex flex-col space-y-12">
+
+                              {/* Wallpaper */}
+                              <div>
+                                <h4 className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider mb-5">
+                                  Wallpaper
+                                </h4>
+
+                                <ul className="space-y-3">
+                                  <li>
+                                    <Link to="/products/wallpaper/roll"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Roll Wallpaper
+                                    </Link>
+                                  </li>
+
+                                  <li>
+                                    <Link to="/products/wallpaper/customized"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Customized Wallpaper
+                                    </Link>
+                                  </li>
+
+                                  <li>
+                                    <Link to="/products/wallpaper/uv-marble-sheet"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      UV Marble Sheet (Self Adhesive)
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              {/* Wall Panels */}
+                              <div>
+                                <h4 className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider mb-5">
+                                  Wall Panels
+                                </h4>
+
+                                <ul className="space-y-3">
+                                  <li>
+                                    <Link to="/products/wall-panels/pvc-fluted"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      PVC Fluted Panel
+                                    </Link>
+                                  </li>
+
+                                  <li>
+                                    <Link to="/products/wall-panels/charcoal"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Charcoal Panel
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </div>
+
+                            </div>
+
                           </div>
+
 
                         </div>
                       </div>
@@ -370,16 +433,27 @@ const Navbar = () => {
 
                     {mobileDropdownOpen && (
                       <div className="mt-3 bg-[#0F0F0F] border border-[#222] rounded-md overflow-hidden">
+
+                        {/* Existing Sections From megaMenuData */}
                         {megaMenuData.map((section) => (
                           <div key={section.key} className="border-b border-[#1f1f1f]">
                             <button
                               onClick={() =>
-                                setMobileOpenSection((prev) => (prev === section.key ? null : section.key))
+                                setMobileOpenSection((prev) =>
+                                  prev === section.key ? null : section.key
+                                )
                               }
                               className="w-full flex justify-between items-center px-4 py-3 text-left text-gray-200"
                             >
-                              <span className="font-semibold text-[#D4AF37]">{section.title}</span>
-                              <HiChevronDown className={`transition ${mobileOpenSection === section.key ? "rotate-180 text-[#D4AF37]" : ""}`} />
+                              <span className="font-semibold text-[#D4AF37]">
+                                {section.title}
+                              </span>
+                              <HiChevronDown
+                                className={`transition ${mobileOpenSection === section.key
+                                    ? "rotate-180 text-[#D4AF37]"
+                                    : ""
+                                  }`}
+                              />
                             </button>
 
                             <AnimatePresence>
@@ -388,6 +462,7 @@ const Navbar = () => {
                                   initial={{ height: 0, opacity: 0 }}
                                   animate={{ height: "auto", opacity: 1 }}
                                   exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.25 }}
                                   className="px-4 pb-3 pt-1 bg-[#0F0F0F]"
                                 >
                                   <ul className="space-y-2">
@@ -412,8 +487,145 @@ const Navbar = () => {
                             </AnimatePresence>
                           </div>
                         ))}
+
+                        {/* Wallpaper Section */}
+                        <div className="border-b border-[#1f1f1f]">
+                          <button
+                            onClick={() =>
+                              setMobileOpenSection((prev) =>
+                                prev === "wallpaper" ? null : "wallpaper"
+                              )
+                            }
+                            className="w-full flex justify-between items-center px-4 py-3 text-left text-gray-200"
+                          >
+                            <span className="font-semibold text-[#D4AF37]">Wallpaper</span>
+                            <HiChevronDown
+                              className={`transition ${mobileOpenSection === "wallpaper"
+                                  ? "rotate-180 text-[#D4AF37]"
+                                  : ""
+                                }`}
+                            />
+                          </button>
+
+                          <AnimatePresence>
+                            {mobileOpenSection === "wallpaper" && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25 }}
+                                className="px-4 pb-3 pt-1 bg-[#0F0F0F]"
+                              >
+                                <ul className="space-y-2">
+                                  <li>
+                                    <Link
+                                      to="/products/wallpaper/roll"
+                                      onClick={() => {
+                                        setMenuOpen(false);
+                                        setMobileDropdownOpen(false);
+                                        setMobileOpenSection(null);
+                                      }}
+                                      className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
+                                    >
+                                      Roll Wallpaper
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      to="/products/wallpaper/customized"
+                                      onClick={() => {
+                                        setMenuOpen(false);
+                                        setMobileDropdownOpen(false);
+                                        setMobileOpenSection(null);
+                                      }}
+                                      className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
+                                    >
+                                      Customized Wallpaper
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      to="/products/wallpaper/uv-marble-sheet"
+                                      onClick={() => {
+                                        setMenuOpen(false);
+                                        setMobileDropdownOpen(false);
+                                        setMobileOpenSection(null);
+                                      }}
+                                      className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
+                                    >
+                                      UV Marble Sheet (Self Adhesive)
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        {/* Wall Panels Section */}
+                        <div className="border-b border-[#1f1f1f]">
+                          <button
+                            onClick={() =>
+                              setMobileOpenSection((prev) =>
+                                prev === "wall_panels" ? null : "wall_panels"
+                              )
+                            }
+                            className="w-full flex justify-between items-center px-4 py-3 text-left text-gray-200"
+                          >
+                            <span className="font-semibold text-[#D4AF37]">Wall Panels</span>
+                            <HiChevronDown
+                              className={`transition ${mobileOpenSection === "wall_panels"
+                                  ? "rotate-180 text-[#D4AF37]"
+                                  : ""
+                                }`}
+                            />
+                          </button>
+
+                          <AnimatePresence>
+                            {mobileOpenSection === "wall_panels" && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25 }}
+                                className="px-4 pb-3 pt-1 bg-[#0F0F0F]"
+                              >
+                                <ul className="space-y-2">
+                                  <li>
+                                    <Link
+                                      to="/products/wall-panels/pvc-fluted"
+                                      onClick={() => {
+                                        setMenuOpen(false);
+                                        setMobileDropdownOpen(false);
+                                        setMobileOpenSection(null);
+                                      }}
+                                      className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
+                                    >
+                                      PVC Fluted Panel
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      to="/products/wall-panels/charcoal"
+                                      onClick={() => {
+                                        setMenuOpen(false);
+                                        setMobileDropdownOpen(false);
+                                        setMobileOpenSection(null);
+                                      }}
+                                      className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
+                                    >
+                                      Charcoal Panel
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
                       </div>
                     )}
+
                   </div>
                   <Link
                     to="/"

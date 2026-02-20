@@ -78,6 +78,11 @@ import Ag25 from "./page/Ag25";
 import Ag35 from "./page/Ag35";
 import Ag40 from "./page/Ag40";
 import Ag50 from "./page/Ag50";
+import RollWallpaper from "./page/RollWallpaper"
+import CustomizedWallpaper from "./page/CustomizedWallpaper";
+import UVMarble from "./page/⁠UVMarble"
+import PvcFluted from "./page/PvcFluted";
+import CharcoalPannel from "./page/CharcoalPannel";
 
 const AppContent = () => {
     const { loading } = useLoading();
@@ -156,6 +161,11 @@ const AppContent = () => {
                 <Route path="/products/grass/35mm" element={<Ag35 />} />
                 <Route path="/products/grass/40mm" element={<Ag40 />} />
                 <Route path="/products/grass/50mm" element={<Ag50 />} />
+                <Route path="/products/wallpaper/roll" element={<RollWallpaper />} />
+                <Route path="/products/wallpaper/customized" element={<CustomizedWallpaper />} />
+                <Route path="/products/wallpaper/uv-marble-sheet" element={<UVMarble />} />
+                <Route path="products/wall-panels/pvc-fluted" element={<PvcFluted />} />
+                <Route path="products/wall-panels/charcoal" element={<CharcoalPannel />} />
                 {/* admin */}
                 <Route path="/admin/products" element={<PrivateRoute adminOnly={true}><Admin /></PrivateRoute>} />
                 <Route path="/admin/dashboard" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />

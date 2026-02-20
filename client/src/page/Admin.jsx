@@ -16,6 +16,8 @@ const productGroups = [
   { key: "shop_by_category", label: "Shop by Category" },
   { key: "party_exhibition", label: "Party / Exhibition Carpets" },
   { key: "artificial_grass", label: "Artificial Grass" },
+  { key: "wall_paper", label: "Wallpaper" },
+  { key: "wall_pannels", label: "Wall Pannels" },
 ];
 
 /* shop-by-category -> original categories */
@@ -44,6 +46,17 @@ const partyCategories = [
   "Beige Party Carpets",
 ];
 
+const wall_paperCategories = [
+  "Roll Wallpaper",
+  "Customized Wallpaper",
+  "⁠UV Marble Sheet Self Adhesive"
+]
+
+const wall_pannelsCategories = [
+  "Pvc Fluted Pannel",
+  "⁠Charcoal Pannel"
+]
+
 /* artificial grass thickness options */
 const grassCategories = ["25MM", "35MM", "40MM", "50MM"];
 
@@ -55,7 +68,7 @@ const colorOptions = ["beige", "red", "blue", "black", "green", "white", "grey",
 
 /* available sizes (checkboxes) */
 const carpetSizes = [
-  "3x5ft","4x6ft","5x7ft","5x8ft","6x8ft","6x9ft","7x10ft","8x10ft","8x11ft","9x12ft","10x13ft","10x14ft","12x14ft","12x15ft","12x18ft"
+  "3x5ft", "4x6ft", "5x7ft", "5x8ft", "6x8ft", "6x9ft", "7x10ft", "8x10ft", "8x11ft", "9x12ft", "10x13ft", "10x14ft", "12x14ft", "12x15ft", "12x18ft"
 ];
 
 const Admin = () => {
@@ -293,6 +306,10 @@ const Admin = () => {
         return partyCategories;
       case "artificial_grass":
         return grassCategories;
+      case "wall_paper":
+        return wall_paperCategories;
+      case "wall_pannels":
+        return wall_pannelsCategories;
       default:
         return [];
     }
