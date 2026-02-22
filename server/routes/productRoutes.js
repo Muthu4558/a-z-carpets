@@ -28,13 +28,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post('/add', upload.single('image'), createProduct);
-router.get('/id/:id', getProductById);
-router.post('/:id/review', protect, addProductReview);
+
 router.get('/featured/all', getFeaturedProducts);
 router.get('/filter', filterProducts);
+
+router.get('/id/:id', getProductById);
+router.get('/:id/can-review', protect, canReviewProduct);
+
+router.get('/category/:category', getProductsByCategory);
+
 router.get('/', getAllProducts);
-router.get("/:id/can-review", protect, canReviewProduct);
-router.get('/:category', getProductsByCategory);
+
+router.post('/:id/review', protect, addProductReview);
+
 router.put('/update/:id', upload.single('image'), updateProduct);
 router.delete('/delete/:id', deleteProduct);
 
