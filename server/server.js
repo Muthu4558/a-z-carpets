@@ -17,9 +17,10 @@ dotenv.config();
 connectDB();
 
 app.use(cors({
-    origin: process.env.CLIENT_URL.split(","),
+    origin: process.env.CLIENT_URL,  // ✅ Single URL only
     credentials: true
 }));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
@@ -30,7 +31,6 @@ app.use('/api/products', productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/shipping", shippingRoutes);
-app.use("/uploads", express.static("uploads"));
 app.use("/api/blog", blogRoutes);
 app.use("/api/razorpay", razorpayRoutes);
 app.use("/api/enquiries", enquiryRoutes);
