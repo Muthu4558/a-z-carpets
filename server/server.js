@@ -28,6 +28,15 @@ app.use(
   })
 );
 
+// ✅ Fix popup blocking issue (Razorpay / OAuth)
+app.use((req, res, next) => {
+  res.setHeader(
+    "Cross-Origin-Opener-Policy",
+    "same-origin-allow-popups"
+  );
+  next();
+});
+
 // ✅ Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
