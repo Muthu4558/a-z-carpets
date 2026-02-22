@@ -3,20 +3,18 @@ import {
   registerUser,
   loginUser,
   logoutUser,
-  getProfile ,
-  updateProfile, 
+  getProfile,
+  updateProfile,
   addAddress,
   deleteAddress,
   updateAddress,
-  verifyEmail 
+  googleAuth,
 } from "../controllers/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { googleAuth } from "../controllers/authController.js";
 
 const router = express.Router();
 
 router.post("/register", registerUser);
-router.get("/verify-email/:token", verifyEmail);
 router.post("/google", googleAuth);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
@@ -32,7 +30,6 @@ router.get("/verify", protect, (req, res) => {
     isAdmin: req.user.isAdmin,
   });
 });
-
 
 // Address routes
 router.post("/address", protect, addAddress);
