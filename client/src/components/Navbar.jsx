@@ -223,7 +223,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center gap-2">
               <img src={Logo} alt="logo" className="w-20 md:w-24 rounded-xl" />
               <div className="flex flex-col leading-tight">
-                <span className="text-lg md:text-xl font-bold text-black tracking-wide">Coimbatore</span>
+                <span className="text-lg md:text-xl font-bold text-black tracking-wide">Coimbatoresss</span>
                 <span className="text-sm md:text-[15px] font-semibold text-[#D4AF37]">A to Z Carpets & Wallpaper</span>
               </div>
             </Link>
