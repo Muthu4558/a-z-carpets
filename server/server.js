@@ -52,5 +52,5 @@ app.use("/api/blog", blogRoutes);
 app.use("/api/razorpay", razorpayRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
