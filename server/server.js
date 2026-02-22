@@ -35,14 +35,20 @@ app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));
 
 // ✅ Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/shipping", shippingRoutes);
-app.use("/api/blog", blogRoutes);
-app.use("/api/razorpay", razorpayRoutes);
-app.use("/api/enquiries", enquiryRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/products", productRoutes);
+// app.use("/api/cart", cartRoutes);
+// app.use("/api/orders", orderRoutes);
+// app.use("/api/shipping", shippingRoutes);
+// app.use("/api/blog", blogRoutes);
+// app.use("/api/razorpay", razorpayRoutes);
+// app.use("/api/enquiries", enquiryRoutes);
+
+// app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Server Working");
+});
 
 // ✅ Server
 const PORT = process.env.PORT || 5001;
