@@ -18,12 +18,35 @@ connectDB();
 
 const app = express();
 
-const allowedOrigin = process.env.CLIENT_URL;
+// =============================
+// ✅ CORS CONFIGURATION
+// =============================
 
-// ✅ Proper CORS Setup
-app.use(cors());
+const allowedOrigins = [
+  process.env.CLIENT_URL,       // Production frontend
+  "http://localhost:5173",      // Vite dev
+  "http://localhost:3000"       // CRA dev (optional)
+];
 
-// ✅ Fix popup blocking issue (Razorpay / OAuth)
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (Postman, mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true, // Required for cookies
+  })
+);
+
+// =============================
+// ✅ Razorpay / OAuth Popup Fix
+// =============================
 app.use((req, res, next) => {
   res.setHeader(
     "Cross-Origin-Opener-Policy",
@@ -32,13 +55,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ Middleware
+// =============================
+// ✅ MIDDLEWARE
+// =============================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));
 
-// ✅ Routes
+// =============================
+// ✅ ROUTES
+// =============================
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
@@ -48,7 +75,20 @@ app.use("/api/shipping", shippingRoutes);
 app.use("/api/razorpay", razorpayRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 
-// ✅ Server
+// =============================
+// ✅ GLOBAL ERROR HANDLER
+// =============================
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.message);
+  res.status(500).json({
+    success: false,
+    message: err.message || "Server Error",
+  });
+});
+
+// =============================
+// ✅ SERVER START
+// =============================
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
