@@ -21,12 +21,7 @@ const app = express();
 const allowedOrigin = process.env.CLIENT_URL;
 
 // ✅ Proper CORS Setup
-app.use(
-  cors({
-    origin: allowedOrigin,
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // ✅ Fix popup blocking issue (Razorpay / OAuth)
 app.use((req, res, next) => {
