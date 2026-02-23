@@ -9,7 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import shippingRoutes from "./routes/shippingRoutes.js";
-import blogRoutes from "./routes/blogRoutes.js";
+// import blogRoutes from "./routes/blogRoutes.js";
 import razorpayRoutes from "./routes/razorpayRoutes.js";
 import enquiryRoutes from "./routes/enquiryRoutes.js";
 
@@ -49,7 +49,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/shipping", shippingRoutes);
-app.use("/api/blog", blogRoutes);
+// app.use("/api/blog", blogRoutes);
 app.use("/api/razorpay", razorpayRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 
