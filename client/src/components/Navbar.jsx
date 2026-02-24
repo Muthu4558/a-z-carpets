@@ -831,6 +831,7 @@ const Navbar = () => {
                   <div className="mt-4 space-y-2">
                     <Link to="/" className="block py-2 hover:text-[#D4AF37]" onClick={() => setMenuOpen(false)}>Home</Link>
                     <Link to="/about" className="block py-2 hover:text-[#D4AF37]" onClick={() => setMenuOpen(false)}>About</Link>
+                    <Link to="/profile" className="block py-2 hover:text-[#D4AF37]" onClick={() => setMenuOpen(false)}>Profile</Link>
                     <Link to="/coimbatore-shop" className="block py-2 hover:text-[#D4AF37]" onClick={() => setMenuOpen(false)}>Coimbatore Store</Link>
                     <Link to="/order" className="block py-2 hover:text-[#D4AF37]" onClick={() => setMenuOpen(false)}>My Orders</Link>
                     <Link to="/contact" className="block py-2 hover:text-[#D4AF37]" onClick={() => setMenuOpen(false)}>Contact</Link>
