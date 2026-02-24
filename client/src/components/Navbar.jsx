@@ -341,7 +341,7 @@ const Navbar = () => {
                             ))}
 
                             {/* Last Column — Top & Bottom Sections */}
-                            <div className="flex flex-col space-y-12">
+                            <div className="flex flex-col space-y-6">
 
                               {/* Wallpaper */}
                               <div>
@@ -392,10 +392,59 @@ const Navbar = () => {
                                   </li>
 
                                   <li>
+                                    <Link to="/products/wall-panels/wpc-fluted"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      WPC Fluted Panel
+                                    </Link>
+                                  </li>
+
+                                  <li>
                                     <Link to="/products/wall-panels/charcoal"
                                       onClick={() => setDesktopDropdown(false)}
                                       className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
                                       Charcoal Panel
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              {/* other */}
+                              <div>
+                                <h4 className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider mb-5">
+                                  Other
+                                </h4>
+
+                                <ul className="space-y-3">
+                                  <li>
+                                    <Link to="/products/wall-to-wall"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Wall to Wall Carpet
+                                    </Link>
+                                  </li>
+
+                                  <li>
+                                    <Link to="/products/floor-vinyl"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Floor Vinyl Carpet
+                                    </Link>
+                                  </li>
+
+                                  <li>
+                                    <Link to="/products/office-carpet"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Office Carpet
+                                    </Link>
+                                  </li>
+
+                                  <li>
+                                    <Link to="/products/masjid-roll"
+                                      onClick={() => setDesktopDropdown(false)}
+                                      className="block text-sm text-gray-200 hover:text-[#D4AF37] transition duration-200">
+                                      Masjid Roll Carpet
                                     </Link>
                                   </li>
                                 </ul>
