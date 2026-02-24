@@ -74,6 +74,10 @@ import GreyParty from "./page/GreyParty";
 import BrownParty from "./page/BrownParty";
 import DarkGreyParty from "./page/DarkGreyParty";
 import BeigeParty from "./page/BeigeParty";
+import Walltowall from "./page/Walltowall";
+import FloorVinyl from "./page/FloorVinyl";
+import OfficeCarpet from "./page/OfficeCarpet";
+import MasjidRoll from "./page/MasjidRoll"
 import Ag25 from "./page/Ag25";
 import Ag35 from "./page/Ag35";
 import Ag40 from "./page/Ag40";
@@ -82,6 +86,7 @@ import RollWallpaper from "./page/RollWallpaper"
 import CustomizedWallpaper from "./page/CustomizedWallpaper";
 import UVMarble from "./page/⁠UVMarble"
 import PvcFluted from "./page/PvcFluted";
+import WPC from "./page/Wpc";
 import CharcoalPannel from "./page/CharcoalPannel";
 
 const AppContent = () => {
@@ -157,6 +162,10 @@ const AppContent = () => {
                 <Route path="/products/party/brown" element={<BrownParty />} />
                 <Route path="/products/party/dark-grey" element={<DarkGreyParty />} />
                 <Route path="/products/party/beige" element={<BeigeParty />} />
+                <Route path="/products/wall-to-wall" element={<Walltowall />} />
+                <Route path="/products/floor-vinyl" element={<FloorVinyl />} />
+                <Route path="/products/office-carpet" element={<OfficeCarpet />} />
+                <Route path="/products/masjid-roll" element={<MasjidRoll />} />
                 <Route path="/products/grass/25mm" element={<Ag25 />} />
                 <Route path="/products/grass/35mm" element={<Ag35 />} />
                 <Route path="/products/grass/40mm" element={<Ag40 />} />
@@ -165,6 +174,7 @@ const AppContent = () => {
                 <Route path="/products/wallpaper/customized" element={<CustomizedWallpaper />} />
                 <Route path="/products/wallpaper/uv-marble-sheet" element={<UVMarble />} />
                 <Route path="products/wall-panels/pvc-fluted" element={<PvcFluted />} />
+                <Route path="products/wall-panels/wpc-fluted" element={<WPC />} />
                 <Route path="products/wall-panels/charcoal" element={<CharcoalPannel />} />
                 {/* admin */}
                 <Route path="/admin/products" element={<PrivateRoute adminOnly={true}><Admin /></PrivateRoute>} />

@@ -9,20 +9,13 @@ import { useCart } from "../context/CartContext";
 import Logo from "../assets/a-z-logo.jpeg";
 import AnnouncementBar from "./AnnouncementBar";
 
-/**
- * Mega-menu Navbar
- * - Desktop: hover or click opens a full-width mega menu (neat, multi-column)
- * - Mobile: accordion menu (unchanged)
- *
- * Tailwind required. Adjust colors if you want a different shade.
- */
-
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false); // mobile hamburger
   const [desktopDropdown, setDesktopDropdown] = useState(false); // desktop mega
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false); // mobile products root
   const [mobileOpenSection, setMobileOpenSection] = useState(null); // mobile accordion sections
   const [mobileOpenMain, setMobileOpenMain] = useState(null);
+  const [mobileOpenProductChild, setMobileOpenProductChild] = useState(null);
   const [mobileOpenSub, setMobileOpenSub] = useState(null);
   const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [isAuthed, setIsAuthed] = useState(false);
@@ -201,16 +194,26 @@ const Navbar = () => {
         { label: "50 mm Thick", path: "/products/grass/50mm" },
       ],
     },
-    // {
-    //   key: "artificial_grass",
-    //   title: "Artificial Grass",
-    //   items: [
-    //     { label: "25 mm Thick", path: "/products/grass/25mm" },
-    //     { label: "35 mm Thick", path: "/products/grass/35mm" },
-    //     { label: "40 mm Thick", path: "/products/grass/40mm" },
-    //     { label: "50 mm Thick", path: "/products/grass/50mm" },
-    //   ],
-    // },
+    {
+      key: "wall_to_wall",
+      title: "Wall to Wall Carpet",
+      items: [{ label: "View All", path: "/products/wall-to-wall" }],
+    },
+    {
+      key: "floor_vinyl",
+      title: "Floor Vinyl Carpet",
+      items: [{ label: "View All", path: "/products/floor-vinyl" }],
+    },
+    {
+      key: "office_carpet",
+      title: "Office Carpet",
+      items: [{ label: "View All", path: "/products/office-carpet" }],
+    },
+    {
+      key: "masjid_roll",
+      title: "Masjid Roll Carpet",
+      items: [{ label: "View All", path: "/products/masjid-roll" }],
+    },
     {
       key: "wallpaper",
       title: "Wallpaper",
@@ -225,7 +228,18 @@ const Navbar = () => {
       title: "Wall Panels",
       items: [
         { label: "PVC Fluted Panel", path: "/products/wall-panels/pvc-fluted" },
+        { label: "WPC Fluted Panel", path: "/products/wall-panels/wpc-fluted" },
         { label: "Charcoal Panel", path: "/products/wall-panels/charcoal" },
+      ],
+    },
+    {
+      key: "artificial_grass",
+      title: "Artificial Grass",
+      items: [
+        { label: "25 mm Thick", path: "/products/grass/25mm" },
+        { label: "35 mm Thick", path: "/products/grass/35mm" },
+        { label: "40 mm Thick", path: "/products/grass/40mm" },
+        { label: "50 mm Thick", path: "/products/grass/50mm" },
       ],
     },
   ];
@@ -443,7 +457,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Mobile Menu (unchanged behaviour - accordion) */}
           <AnimatePresence>
             {menuOpen && (
               <motion.div
@@ -455,190 +468,312 @@ const Navbar = () => {
               >
                 <div className="px-6 py-4 text-gray-300">
 
-                  {/* ================= CARPETS & RUGS ================= */}
+                  {/* ================= PRODUCTS ================= */}
                   <div className="border-b border-white/10">
                     <button
                       onClick={() =>
-                        setMobileOpenMain(prev =>
-                          prev === "carpets" ? null : "carpets"
-                        )
+                        setMobileOpenMain(prev => prev === "products" ? null : "products")
                       }
                       className="w-full flex justify-between items-center py-3"
                     >
-                      <span className="font-semibold text-[#D4AF37]">
-                        Carpets & Rugs
-                      </span>
+                      <span className="font-semibold text-[#D4AF37]">Products</span>
                       <HiChevronDown
-                        className={`transition ${mobileOpenMain === "carpets"
-                            ? "rotate-180 text-[#D4AF37]"
-                            : ""
+                        className={`transition ${mobileOpenMain === "products" ? "rotate-180 text-[#D4AF37]" : ""
                           }`}
                       />
                     </button>
 
-                    {mobileOpenMain === "carpets" && (
-                      <div className="pl-2 pb-4">
+                    {mobileOpenMain === "products" && (
+                      <div className="pl-2 pb-4 space-y-3">
 
-                        {megaMenuData
-                          .filter(section =>
-                            [
-                              "shop_by_category",
-                              "shop_by_size",
-                              "shop_by_color",
-                              "shop_by_shape",
-                              "party_exhibition",
-                            ].includes(section.key)
-                          )
-                          .map(section => (
-                            <div key={section.key} className="border-b border-white/5">
+                        {/* ================= CARPET ================= */}
+                        <div className="border-b border-white/10 pb-3">
+                          <button
+                            onClick={() =>
+                              setMobileOpenProductChild(prev =>
+                                prev === "carpet" ? null : "carpet"
+                              )
+                            }
+                            className="w-full flex justify-between items-center py-3 text-sm"
+                          >
+                            <span className="font-semibold text-[#D4AF37]">Carpet</span>
+                            <HiChevronDown
+                              className={`transition ${mobileOpenProductChild === "carpet"
+                                ? "rotate-180 text-[#D4AF37]"
+                                : ""
+                                }`}
+                            />
+                          </button>
 
-                              {/* Sub section button */}
-                              <button
-                                onClick={() =>
-                                  setMobileOpenSub(prev =>
-                                    prev === section.key ? null : section.key
-                                  )
-                                }
-                                className="w-full flex justify-between items-center py-3 text-sm"
-                              >
-                                <span className="font-semibold text-[#D4AF37]">
-                                  {section.title}
-                                </span>
-                                <HiChevronDown
-                                  className={`transition ${mobileOpenSub === section.key
+                          {mobileOpenProductChild === "carpet" && (
+                            <div className="pl-4 space-y-2">
+
+                              {/* Carpet & Rugs */}
+                              <div>
+                                <button
+                                  onClick={() =>
+                                    setMobileOpenSub(prev =>
+                                      prev === "carpet_rugs" ? null : "carpet_rugs"
+                                    )
+                                  }
+                                  className="w-full flex justify-between items-center py-2 text-sm border-b border-white/10"
+                                >
+                                  <span className="text-gray-300 font-semibold ">
+                                    Carpet & Rugs
+                                  </span>
+                                  <HiChevronDown
+                                    className={`transition ${mobileOpenSub === "carpet_rugs"
                                       ? "rotate-180 text-[#D4AF37]"
                                       : ""
-                                    }`}
-                                />
-                              </button>
+                                      }`}
+                                  />
+                                </button>
 
-                              {/* Sub items */}
-                              {mobileOpenSub === section.key && (
-                                <ul className="pl-4 pb-3 space-y-2">
-                                  {section.items.map(item =>
-                                    item.isTitle ? (
-                                      <li
-                                        key={item.label}
-                                        className="pt-3 text-[#D4AF37] font-semibold text-xs uppercase tracking-wider"
-                                      >
-                                        {item.label}
-                                      </li>
-                                    ) : (
-                                      <li key={item.path}>
-                                        <Link
-                                          to={item.path}
-                                          onClick={() => {
-                                            setMenuOpen(false);
-                                            setMobileOpenMain(null);
-                                            setMobileOpenSub(null);
-                                          }}
-                                          className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
-                                        >
-                                          {item.label}
-                                        </Link>
-                                      </li>
+                                {mobileOpenSub === "carpet_rugs" && (
+                                  <div className="pl-4 space-y-2 mt-2">
+
+                                    {["shop_by_category", "shop_by_size", "shop_by_color", "shop_by_shape"]
+                                      .map(key => megaMenuData.find(s => s.key === key))
+                                      .map(section => (
+                                        <div key={section.key} className="border-b border-white/10 pb-2">
+
+                                          <button
+                                            onClick={() =>
+                                              setMobileOpenSection(prev =>
+                                                prev === section.key ? null : section.key
+                                              )
+                                            }
+                                            className="w-full flex justify-between items-center py-2 text-xs"
+                                          >
+                                            <span className="text-gray-400 uppercase tracking-wide">
+                                              {section.title}
+                                            </span>
+                                            <HiChevronDown
+                                              className={`transition ${mobileOpenSection === section.key
+                                                ? "rotate-180 text-[#D4AF37]"
+                                                : ""
+                                                }`}
+                                            />
+                                          </button>
+
+                                          {mobileOpenSection === section.key && (
+                                            <ul className="pl-4 mt-2 space-y-1">
+                                              {section.items.map(item => (
+                                                <li key={item.path}>
+                                                  <Link
+                                                    to={item.path}
+                                                    onClick={() => {
+                                                      setMenuOpen(false);
+                                                      setMobileOpenMain(null);
+                                                      setMobileOpenProductChild(null);
+                                                      setMobileOpenSub(null);
+                                                      setMobileOpenSection(null);
+                                                    }}
+                                                    className="block text-sm text-gray-300 hover:text-[#D4AF37]"
+                                                  >
+                                                    {item.label}
+                                                  </Link>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          )}
+
+                                        </div>
+                                      ))}
+
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Party / Exhibition Carpets */}
+                              <div className="border-b border-white/10 pb-2">
+                                <button
+                                  onClick={() =>
+                                    setMobileOpenSection(prev =>
+                                      prev === "party_exhibition" ? null : "party_exhibition"
                                     )
-                                  )}
-                                </ul>
-                              )}
+                                  }
+                                  className="w-full flex justify-between items-center py-2 text-sm"
+                                >
+                                  <span className="text-gray-300">
+                                    Party / Exhibition Carpets
+                                  </span>
+                                  <HiChevronDown
+                                    className={`transition ${mobileOpenSection === "party_exhibition"
+                                      ? "rotate-180 text-[#D4AF37]"
+                                      : ""
+                                      }`}
+                                  />
+                                </button>
+
+                                {mobileOpenSection === "party_exhibition" && (
+                                  <ul className="pl-4 mt-2 space-y-1">
+                                    {megaMenuData
+                                      .find(s => s.key === "party_exhibition")
+                                      ?.items.filter(i => !i.isTitle)
+                                      .map(item => (
+                                        <li key={item.path}>
+                                          <Link
+                                            to={item.path}
+                                            onClick={() => {
+                                              setMenuOpen(false);
+                                              setMobileOpenMain(null);
+                                              setMobileOpenProductChild(null);
+                                              setMobileOpenSub(null);
+                                              setMobileOpenSection(null);
+                                            }}
+                                            className="block text-sm text-gray-300 hover:text-[#D4AF37]"
+                                          >
+                                            {item.label}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                  </ul>
+                                )}
+                              </div>
+
+                              {/* Artificial Grass */}
+                              <div className="border-b border-white/10 pb-2">
+                                <button
+                                  onClick={() =>
+                                    setMobileOpenSection(prev =>
+                                      prev === "artificial_grass" ? null : "artificial_grass"
+                                    )
+                                  }
+                                  className="w-full flex justify-between items-center py-2 text-sm"
+                                >
+                                  <span className="text-gray-300">
+                                    Artificial Grass Carpet
+                                  </span>
+                                  <HiChevronDown
+                                    className={`transition ${mobileOpenSection === "artificial_grass"
+                                      ? "rotate-180 text-[#D4AF37]"
+                                      : ""
+                                      }`}
+                                  />
+                                </button>
+
+                                {mobileOpenSection === "artificial_grass" && (
+                                  <ul className="pl-4 mt-2 space-y-1">
+                                    {megaMenuData
+                                      .find(s => s.key === "artificial_grass")
+                                      ?.items.map(item => (
+                                        <li key={item.path}>
+                                          <Link
+                                            to={item.path}
+                                            onClick={() => {
+                                              setMenuOpen(false);
+                                              setMobileOpenMain(null);
+                                              setMobileOpenProductChild(null);
+                                              setMobileOpenSub(null);
+                                              setMobileOpenSection(null);
+                                            }}
+                                            className="block text-sm text-gray-300 hover:text-[#D4AF37]"
+                                          >
+                                            {item.label}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                  </ul>
+                                )}
+                              </div>
+
+                              {/* Simple Direct Links */}
+                              {["wall_to_wall", "floor_vinyl", "office_carpet", "masjid_roll"]
+                                .map(key => megaMenuData.find(s => s.key === key))
+                                .filter(Boolean)
+                                .map(section => (
+                                  <Link
+                                    key={section.key}
+                                    to={section.items[0].path}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="block text-sm text-gray-300 hover:text-[#D4AF37] py-1 border-b border-white/10 pb-3"
+                                  >
+                                    {section.title}
+                                  </Link>
+                                ))}
+
 
                             </div>
-                          ))}
+                          )}
+                        </div>
 
-                      </div>
-                    )}
-                  </div>
+                        {/* ================= WALLPAPER ================= */}
+                        <div className="border-b border-white/10 pb-3">
+                          <button
+                            onClick={() =>
+                              setMobileOpenProductChild(prev =>
+                                prev === "wallpaper" ? null : "wallpaper"
+                              )
+                            }
+                            className="w-full flex justify-between items-center py-3 text-sm"
+                          >
+                            <span className="font-semibold text-[#D4AF37]">Wallpaper</span>
+                            <HiChevronDown
+                              className={`transition ${mobileOpenProductChild === "wallpaper"
+                                ? "rotate-180 text-[#D4AF37]"
+                                : ""
+                                }`}
+                            />
+                          </button>
 
-                  {/* ================= WALLPAPER ================= */}
-                  <div className="border-b border-white/10">
-                    <button
-                      onClick={() =>
-                        setMobileOpenMain(prev =>
-                          prev === "wallpaper" ? null : "wallpaper"
-                        )
-                      }
-                      className="w-full flex justify-between items-center py-3"
-                    >
-                      <span className="font-semibold text-[#D4AF37]">
-                        Wallpaper
-                      </span>
-                      <HiChevronDown
-                        className={`transition ${mobileOpenMain === "wallpaper"
-                            ? "rotate-180 text-[#D4AF37]"
-                            : ""
-                          }`}
-                      />
-                    </button>
-
-                    {mobileOpenMain === "wallpaper" && (
-                      <div className="pl-4 pb-4">
-                        {megaMenuData
-                          .filter(section => section.key === "wallpaper")
-                          .map(section => (
-                            <ul key={section.key} className="space-y-2">
-                              {section.items.map(item => (
-                                <li key={item.path}>
-                                  <Link
-                                    to={item.path}
-                                    onClick={() => {
-                                      setMenuOpen(false);
-                                      setMobileOpenMain(null);
-                                    }}
-                                    className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
-                                  >
-                                    {item.label}
-                                  </Link>
-                                </li>
-                              ))}
+                          {mobileOpenProductChild === "wallpaper" && (
+                            <ul className="pl-4 space-y-2">
+                              {megaMenuData
+                                .find(s => s.key === "wallpaper")
+                                ?.items.map(item => (
+                                  <li key={item.path}>
+                                    <Link
+                                      to={item.path}
+                                      onClick={() => setMenuOpen(false)}
+                                      className="block text-sm text-gray-300 hover:text-[#D4AF37]"
+                                    >
+                                      {item.label}
+                                    </Link>
+                                  </li>
+                                ))}
                             </ul>
-                          ))}
-                      </div>
-                    )}
-                  </div>
+                          )}
+                        </div>
 
-                  {/* ================= WALL PANELS ================= */}
-                  <div className="border-b border-white/10">
-                    <button
-                      onClick={() =>
-                        setMobileOpenMain(prev =>
-                          prev === "wall_panels" ? null : "wall_panels"
-                        )
-                      }
-                      className="w-full flex justify-between items-center py-3"
-                    >
-                      <span className="font-semibold text-[#D4AF37]">
-                        Wall Panels
-                      </span>
-                      <HiChevronDown
-                        className={`transition ${mobileOpenMain === "wall_panels"
-                            ? "rotate-180 text-[#D4AF37]"
-                            : ""
-                          }`}
-                      />
-                    </button>
+                        {/* ================= WALL PANEL ================= */}
+                        <div>
+                          <button
+                            onClick={() =>
+                              setMobileOpenProductChild(prev =>
+                                prev === "wall_panels" ? null : "wall_panels"
+                              )
+                            }
+                            className="w-full flex justify-between items-center py-3 text-sm"
+                          >
+                            <span className="font-semibold text-[#D4AF37]">Wall Panel</span>
+                            <HiChevronDown
+                              className={`transition ${mobileOpenProductChild === "wall_panels"
+                                ? "rotate-180 text-[#D4AF37]"
+                                : ""
+                                }`}
+                            />
+                          </button>
 
-                    {mobileOpenMain === "wall_panels" && (
-                      <div className="pl-4 pb-4">
-                        {megaMenuData
-                          .filter(section => section.key === "wall_panels")
-                          .map(section => (
-                            <ul key={section.key} className="space-y-2">
-                              {section.items.map(item => (
-                                <li key={item.path}>
-                                  <Link
-                                    to={item.path}
-                                    onClick={() => {
-                                      setMenuOpen(false);
-                                      setMobileOpenMain(null);
-                                    }}
-                                    className="block text-sm text-gray-300 hover:bg-[#D4AF37] hover:text-black px-2 py-2 rounded transition"
-                                  >
-                                    {item.label}
-                                  </Link>
-                                </li>
-                              ))}
+                          {mobileOpenProductChild === "wall_panels" && (
+                            <ul className="pl-4 space-y-2">
+                              {megaMenuData
+                                .find(s => s.key === "wall_panels")
+                                ?.items.map(item => (
+                                  <li key={item.path}>
+                                    <Link
+                                      to={item.path}
+                                      onClick={() => setMenuOpen(false)}
+                                      className="block text-sm text-gray-300 hover:text-[#D4AF37]"
+                                    >
+                                      {item.label}
+                                    </Link>
+                                  </li>
+                                ))}
                             </ul>
-                          ))}
+                          )}
+                        </div>
+
                       </div>
                     )}
                   </div>

@@ -37,6 +37,10 @@ const shopCategories = [
 
 /* party/exhibition colors (as categories) */
 const partyCategories = [
+  "Wall to Wall Carpet",
+  "Floor Vinyl Carpet",
+  "Office Carpet",
+  "Masjid Roll Carpet",
   "Green Party Carpets",
   "Blue Party Carpets",
   "Red Party Carpets",
@@ -54,6 +58,7 @@ const wall_paperCategories = [
 
 const wall_pannelsCategories = [
   "Pvc Fluted Pannel",
+  "Wpc Fluted Pannel",
   "⁠Charcoal Pannel"
 ]
 
