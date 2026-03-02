@@ -29,7 +29,7 @@ const ShaggyCarpets = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Shaggy Carpets`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Shaggy Carpets`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

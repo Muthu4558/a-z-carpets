@@ -29,7 +29,7 @@ const PersianSilk = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Persian Silk Carpets`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Persian Silk Carpets`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

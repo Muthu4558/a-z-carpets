@@ -29,7 +29,7 @@ const ChildrenRugs = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Children Rugs`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Children Rugs`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

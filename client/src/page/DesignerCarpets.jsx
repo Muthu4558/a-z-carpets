@@ -29,7 +29,7 @@ const DesignerCarpets = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Designer Carpets`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Designer Carpets`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

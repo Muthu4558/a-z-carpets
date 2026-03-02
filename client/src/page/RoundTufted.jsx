@@ -29,7 +29,7 @@ const RoundTufted = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Round Tufted Carpets`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Round Tufted Carpets`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

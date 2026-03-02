@@ -29,7 +29,7 @@ const IranianRugs = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Iranian Imported Rugs`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Iranian Imported Rugs`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

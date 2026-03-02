@@ -29,7 +29,7 @@ const RoundCarpets = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Round Shaggy Carpets`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Round Shaggy Carpets`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);

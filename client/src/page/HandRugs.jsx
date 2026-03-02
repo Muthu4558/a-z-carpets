@@ -29,7 +29,7 @@ const HandRugs = () => {
   useEffect(() => {
     startLoading();
     axios
-      .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Hand Tufted Rugs`)
+      .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Hand Tufted Rugs`)
       .then((res) => {
         setProducts(res.data || []);
         setFilteredProducts(res.data || []);

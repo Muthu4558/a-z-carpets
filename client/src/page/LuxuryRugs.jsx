@@ -29,7 +29,7 @@ const LuxuryRugs = () => {
     useEffect(() => {
         startLoading();
         axios
-            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/Luxury Viscose Rugs`)
+            .get(`${import.meta.env.VITE_APP_BASE_URL}/api/products/filter?category=Luxury Viscose Rugs`)
             .then((res) => {
                 setProducts(res.data || []);
                 setFilteredProducts(res.data || []);
