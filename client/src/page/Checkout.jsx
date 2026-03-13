@@ -63,55 +63,56 @@ const Checkout = () => {
 
   /* ---------------- PRODUCT TOTAL ---------------- */
   const productTotal = useMemo(() => {
-    return cartItems.reduce(
-      (sum, item) =>
-        sum +
-        (item.product.offerPrice ?? item.product.price) *
-          item.quantity,
-      0
-    );
+    return cartItems.reduce((sum, item) => {
+      const price =
+        item.selectedSize?.price ??
+        item.product.offerPrice ??
+        item.product.price;
+
+      return sum + price * item.quantity;
+    }, 0);
   }, [cartItems]);
 
-// Determine if product is half or full for shipping
-const getWeightType = (product) => {
-  // Use packSize if present, else fallback to weight/size
-  const packSize = product.packSize ?? "1"; // "0.5" or "1"
-  const weightStr = product.weight ?? product.size ?? "1";
+  // Determine if product is half or full for shipping
+  const getWeightType = (product) => {
+    // Use packSize if present, else fallback to weight/size
+    const packSize = product.packSize ?? "1"; // "0.5" or "1"
+    const weightStr = product.weight ?? product.size ?? "1";
 
-  // Normalize: check if 0.5 → half, else full
-  if (packSize === "0.5" || packSize === 0 || packSize.toString() === "0.5") return "half";
+    // Normalize: check if 0.5 → half, else full
+    if (packSize === "0.5" || packSize === 0 || packSize.toString() === "0.5") return "half";
 
-  return "full";
-};
+    return "full";
+  };
 
 
   /* ---------------- SHIPPING TOTAL (FROM DB) ---------------- */
-const shippingTotal = useMemo(() => {
-  if (!selectedAddress || !shippingRules.length) return 0;
+  const shippingTotal = useMemo(() => {
+    if (!selectedAddress || !shippingRules.length) return 0;
 
-  const state = selectedAddress.state?.trim();
-  const district = selectedAddress.district?.trim();
+    const state = selectedAddress.state?.trim();
+    const district = selectedAddress.district?.trim();
 
-  return cartItems.reduce((sum, item) => {
-    const weightType = getWeightType(item.product); // "half" or "full"
-    const qty = item.quantity;
+    return cartItems.reduce((sum, item) => {
+      const weightType = getWeightType(item.product); // "half" or "full"
+      const qty = item.quantity;
 
-    // District-level shipping
-    let rule = shippingRules.find(
-      (r) => r.state === state && r.district && r.district === district
-    );
+      // District-level shipping
+      let rule = shippingRules.find(
+        (r) => r.state === state && r.district && r.district === district
+      );
 
-    // Fallback to state-level
-    if (!rule) {
-      rule = shippingRules.find((r) => r.state === state && !r.district);
-    }
+      // Fallback to state-level
+      if (!rule) {
+        rule = shippingRules.find((r) => r.state === state && !r.district);
+      }
 
-    if (!rule) return sum;
+      if (!rule) return sum;
 
-    const charge = weightType === "half" ? rule.halfKg : rule.oneKg;
-    return sum + charge * qty;
-  }, 0);
-}, [cartItems, selectedAddress, shippingRules]);
+      const charge = weightType === "half" ? rule.halfKg : rule.oneKg;
+      return sum + charge * qty;
+    }, 0);
+  }, [cartItems, selectedAddress, shippingRules]);
 
 
   const total = productTotal + shippingTotal;
@@ -165,84 +166,84 @@ const shippingTotal = useMemo(() => {
 
   /* ---------------- PAYMENT ---------------- */
   const placeOrder = async () => {
-  if (!selectedAddress) return toast.error("Select address");
-  if (!cartItems.length) return toast.error("Cart empty");
+    if (!selectedAddress) return toast.error("Select address");
+    if (!cartItems.length) return toast.error("Cart empty");
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    // 1️⃣ Create DB Order (PENDING)
-    const orderRes = await axios.post(
-      `${import.meta.env.VITE_APP_BASE_URL}/api/orders/place`,
-      {
-        address: selectedAddress,
-        totalAmount: total,
-        paymentMethod: "RAZORPAY",
-      },
-      { withCredentials: true }
-    );
+      // 1️⃣ Create DB Order (PENDING)
+      const orderRes = await axios.post(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/orders/place`,
+        {
+          address: selectedAddress,
+          totalAmount: total,
+          paymentMethod: "RAZORPAY",
+        },
+        { withCredentials: true }
+      );
 
-    const dbOrder = orderRes.data;
+      const dbOrder = orderRes.data;
 
-    // 2️⃣ Create Razorpay Order
-    const razorRes = await axios.post(
-      `${import.meta.env.VITE_APP_BASE_URL}/api/razorpay/create-order`,
-      {
-        amount: total,
-      }
-    );
-
-    const razorOrder = razorRes.data;
-
-    // 3️⃣ Razorpay Options
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: razorOrder.amount,
-      currency: razorOrder.currency,
-      order_id: razorOrder.id,
-
-      handler: async function (response) {
-        try {
-          // 4️⃣ Verify Payment
-          await axios.post(
-            `${import.meta.env.VITE_APP_BASE_URL}/api/razorpay/verify-payment`,
-            {
-              ...response,
-              orderId: dbOrder._id,
-            },
-            { withCredentials: true }
-          );
-
-          toast.success("Payment Successful!");
-          navigate("/thankyou");
-
-        } catch (err) {
-          toast.error("Payment verification failed");
+      // 2️⃣ Create Razorpay Order
+      const razorRes = await axios.post(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/razorpay/create-order`,
+        {
+          amount: total,
         }
-      },
+      );
 
-      prefill: {
-        name: profile.name,
-        email: profile.email,
-        contact: profile.number,
-      },
+      const razorOrder = razorRes.data;
 
-      theme: {
-        color: "#D4AF37",
-      },
-    };
+      // 3️⃣ Razorpay Options
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: razorOrder.amount,
+        currency: razorOrder.currency,
+        order_id: razorOrder.id,
 
-    const razor = new window.Razorpay(options);
-    razor.open();
+        handler: async function (response) {
+          try {
+            // 4️⃣ Verify Payment
+            await axios.post(
+              `${import.meta.env.VITE_APP_BASE_URL}/api/razorpay/verify-payment`,
+              {
+                ...response,
+                orderId: dbOrder._id,
+              },
+              { withCredentials: true }
+            );
 
-  } catch (error) {
-  console.log("FULL ERROR:", error);
-  console.log("RESPONSE:", error.response?.data);
-  toast.error("Payment initiation failed");
-  } finally {
-    setLoading(false);
-  }
-};
+            toast.success("Payment Successful!");
+            navigate("/thankyou");
+
+          } catch (err) {
+            toast.error("Payment verification failed");
+          }
+        },
+
+        prefill: {
+          name: profile.name,
+          email: profile.email,
+          contact: profile.number,
+        },
+
+        theme: {
+          color: "#D4AF37",
+        },
+      };
+
+      const razor = new window.Razorpay(options);
+      razor.open();
+
+    } catch (error) {
+      console.log("FULL ERROR:", error);
+      console.log("RESPONSE:", error.response?.data);
+      toast.error("Payment initiation failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   /* ---------------- ADDRESS FORM ---------------- */
@@ -348,11 +349,10 @@ const shippingTotal = useMemo(() => {
                 <label
                   key={a._id}
                   onClick={() => setSelectedAddress(a)}
-                  className={`flex gap-3 p-4 border rounded-lg cursor-pointer mb-2 ${
-                    selectedAddress?._id === a._id
+                  className={`flex gap-3 p-4 border rounded-lg cursor-pointer mb-2 ${selectedAddress?._id === a._id
                       ? "bg-white border-[#D4AF37]"
                       : ""
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -391,21 +391,31 @@ const shippingTotal = useMemo(() => {
           <div className="bg-white rounded-xl shadow p-4 border border-[#D4AF37] h-fit text-black">
             <h2 className="font-semibold mb-4 text-[#D4AF37]">Order Summary</h2>
 
-            {cartItems.map((item) => (
-              <div
-                key={item.product._id}
-                className="flex justify-between text-sm mb-1"
-              >
-                <span>
-                  {item.product.name} × {item.quantity}
-                </span>
-                <span>
-                  ₹
-                  {(item.product.offerPrice ?? item.product.price) *
-                    item.quantity}
-                </span>
-              </div>
-            ))}
+            {cartItems.map((item) => {
+              const price =
+                item.selectedSize?.price ??
+                item.product.offerPrice ??
+                item.product.price;
+
+              return (
+                <div
+                  key={item.product._id + (item.selectedSize?.size || "")}
+                  className="flex justify-between text-sm mb-1"
+                >
+                  <span>
+                    {item.product.name}
+                    {item.selectedSize && (
+                      <span className="text-xs text-gray-500 ml-1">
+                        ({item.selectedSize.size})
+                      </span>
+                    )}
+                    {" "}× {item.quantity}
+                  </span>
+
+                  <span>₹{price * item.quantity}</span>
+                </div>
+              );
+            })}
 
             <div className="flex justify-between text-sm mt-3">
               <span>Shipping</span>

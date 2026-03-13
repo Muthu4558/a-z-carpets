@@ -1,3 +1,4 @@
+// src/pages/Admin.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -53,14 +54,14 @@ const partyCategories = [
 const wall_paperCategories = [
   "Roll Wallpaper",
   "Customized Wallpaper",
-  "⁠UV Marble Sheet Self Adhesive"
-]
+  "⁠UV Marble Sheet Self Adhesive",
+];
 
 const wall_pannelsCategories = [
   "Pvc Fluted Pannel",
   "Wpc Fluted Pannel",
-  "⁠Charcoal Pannel"
-]
+  "⁠Charcoal Pannel",
+];
 
 /* artificial grass thickness options */
 const grassCategories = ["25MM", "35MM", "40MM", "50MM"];
@@ -69,11 +70,36 @@ const grassCategories = ["25MM", "35MM", "40MM", "50MM"];
 const shapes = ["round", "rectangular", "irregular"];
 
 /* color options for 'shop_by_category' products (as extra dropdown) */
-const colorOptions = ["beige", "red", "blue", "black", "green", "white", "grey", "brown", "pink", "yellow"];
+const colorOptions = [
+  "beige",
+  "red",
+  "blue",
+  "black",
+  "green",
+  "white",
+  "grey",
+  "brown",
+  "pink",
+  "yellow",
+];
 
 /* available sizes (checkboxes) */
 const carpetSizes = [
-  "3x5ft", "4x6ft", "5x7ft", "5x8ft", "6x8ft", "6x9ft", "7x10ft", "8x10ft", "8x11ft", "9x12ft", "10x13ft", "10x14ft", "12x14ft", "12x15ft", "12x18ft"
+  "3x5ft",
+  "4x6ft",
+  "5x7ft",
+  "5x8ft",
+  "6x8ft",
+  "6x9ft",
+  "7x10ft",
+  "8x10ft",
+  "8x11ft",
+  "9x12ft",
+  "10x13ft",
+  "10x14ft",
+  "12x14ft",
+  "12x15ft",
+  "12x18ft",
 ];
 
 const Admin = () => {
@@ -89,11 +115,11 @@ const Admin = () => {
     companyName: "",
     color: "", // optional - displayed for shop_by_category or party_exhibition as needed
     shape: "", // optional - for shop_by_category
-    price: "",
+    price: "", // overall fallback price (optional)
     offerPrice: "",
     warranty: "",
     type: "",
-    sizes: [],
+    sizes: [], // now array of objects: [{size:"3x5ft", price:1200}, ...]
     productDetails: "",
     stock: "",
     image: null,
@@ -119,7 +145,9 @@ const Admin = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}/api/products`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/products`
+      );
       setProducts(res.data || []);
     } catch (err) {
       console.error(err);
@@ -132,18 +160,23 @@ const Admin = () => {
     const { name, value, files, type, checked } = e.target;
 
     if (name === "image" && files?.[0]) {
-      setFormData(prev => ({ ...prev, image: files[0], imagePreview: URL.createObjectURL(files[0]) }));
+      setFormData((prev) => ({
+        ...prev,
+        image: files[0],
+        imagePreview: URL.createObjectURL(files[0]),
+      }));
       setPreview(URL.createObjectURL(files[0]));
-    } else if (type === "checkbox") {
-      setFormData(prev => ({ ...prev, [name]: checked }));
+    } else if (type === "checkbox" && name !== "featured") {
+      // general checkboxes handled elsewhere
+      setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   /* when productGroup changes, clear dependent fields */
   const handleProductGroupChange = (value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       productGroup: value,
       category: "",
@@ -152,13 +185,31 @@ const Admin = () => {
     }));
   };
 
-  /* ================= MULTIPLE SIZE ================= */
-  const handleSizeChange = (size) => {
-    setFormData(prev => {
-      if (prev.sizes.includes(size)) {
-        return { ...prev, sizes: prev.sizes.filter(s => s !== size) };
+  /* ================= SIZE HANDLING ================= */
+  const isSizeSelected = (size) =>
+    !!formData.sizes.find((s) => s.size === size);
+
+  const handleSizeToggle = (size) => {
+    setFormData((prev) => {
+      const exists = prev.sizes.find((s) => s.size === size);
+      if (exists) {
+        // remove it
+        return { ...prev, sizes: prev.sizes.filter((s) => s.size !== size) };
+      } else {
+        // add with empty price (user must fill)
+        return { ...prev, sizes: [...prev.sizes, { size, price: "" }] };
       }
-      return { ...prev, sizes: [...prev.sizes, size] };
+    });
+  };
+
+  const handleSizePriceChange = (size, priceValue) => {
+    // accept numeric or empty
+    const cleaned = priceValue === "" ? "" : Number(priceValue);
+    setFormData((prev) => {
+      const sizes = prev.sizes.map((s) =>
+        s.size === size ? { ...s, price: cleaned } : s
+      );
+      return { ...prev, sizes };
     });
   };
 
@@ -167,9 +218,29 @@ const Admin = () => {
     e.preventDefault();
 
     // minimal required validations
-    if (!formData.productGroup || !formData.category || !formData.name || !formData.companyName || !formData.price || !formData.productDetails) {
+    if (
+      !formData.productGroup ||
+      !formData.category ||
+      !formData.name ||
+      !formData.companyName ||
+      !formData.productDetails
+    ) {
       toast.error("Please fill required fields");
       return;
+    }
+
+    // require at least one size and each selected size must have a price > 0
+    if (!formData.sizes || formData.sizes.length === 0) {
+      toast.error("Please select at least one size and set a price for it");
+      return;
+    }
+    for (const s of formData.sizes) {
+      if (s.price === "" || isNaN(s.price) || Number(s.price) <= 0) {
+        toast.error(
+          `Please set a valid price for size ${s.size} (greater than 0)`
+        );
+        return;
+      }
     }
 
     const data = new FormData();
@@ -183,7 +254,6 @@ const Admin = () => {
       } else if (value !== null && value !== undefined) {
         // skip imagePreview
         if (key === "imagePreview") return;
-        // for file put actual file
         data.append(key, value);
       }
     });
@@ -238,7 +308,20 @@ const Admin = () => {
   };
 
   const handleEdit = (product) => {
-    // map backend product to formData shape; product may or may not have fields
+    // product.sizes could be stored as array of strings (old) or array of objects {size,price}
+    let parsedSizes = [];
+    if (Array.isArray(product.sizes)) {
+      if (product.sizes.length > 0 && typeof product.sizes[0] === "object") {
+        parsedSizes = product.sizes.map((s) => ({
+          size: s.size,
+          price: typeof s.price === "number" ? s.price : s.price ? Number(s.price) : "",
+        }));
+      } else {
+        // array of strings
+        parsedSizes = product.sizes.map((s) => ({ size: s, price: "" }));
+      }
+    }
+
     setFormData({
       productGroup: product.productGroup || "",
       category: product.category || "",
@@ -250,16 +333,20 @@ const Admin = () => {
       offerPrice: product.offerPrice || "",
       warranty: product.warranty || "",
       type: product.type || "",
-      sizes: product.sizes || [],
+      sizes: parsedSizes,
       productDetails: product.productDetails || "",
       stock: product.stock || 0,
       image: null,
-      imagePreview: product.image ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}` : null,
+      imagePreview: product.image
+        ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}`
+        : null,
       featured: !!product.featured,
     });
 
     setEditingProductId(product._id);
-    setPreview(product.image ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}` : null);
+    setPreview(
+      product.image ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}` : null
+    );
     setShowModal(true);
   };
 
@@ -267,7 +354,9 @@ const Admin = () => {
     if (!productToDelete) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_APP_BASE_URL}/api/products/delete/${productToDelete}`);
+      await axios.delete(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/products/delete/${productToDelete}`
+      );
       toast.success("Product deleted successfully");
       fetchProducts();
     } catch (err) {
@@ -280,20 +369,23 @@ const Admin = () => {
 
   /* ================= FILTER ================= */
   const filtered = products
-    .filter(p => filterCategory === "All" ? true : p.category === filterCategory)
-    .filter(p => showFeaturedOnly ? p.featured : true)
-    .filter(p => {
+    .filter((p) => (filterCategory === "All" ? true : p.category === filterCategory))
+    .filter((p) => (showFeaturedOnly ? p.featured : true))
+    .filter((p) => {
       if (!q) return true;
       const s = q.toLowerCase();
       return (
-        p.name?.toLowerCase().includes(s) ||
-        p.companyName?.toLowerCase().includes(s)
+        p.name?.toLowerCase().includes(s) || p.companyName?.toLowerCase().includes(s)
       );
     });
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_APP_BASE_URL}/api/auth/logout`, {}, { withCredentials: true });
+      await axios.post(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
       localStorage.removeItem("token");
       toast.success("Logged out");
       window.location.href = "/login";
@@ -318,6 +410,28 @@ const Admin = () => {
       default:
         return [];
     }
+  };
+
+  /* helper to display product card price (From ₹min or fallback) */
+  const getProductDisplayPrice = (product) => {
+    try {
+      if (Array.isArray(product.sizes) && product.sizes.length > 0) {
+        // sizes may be objects or strings
+        const numericPrices = product.sizes
+          .map((s) => {
+            if (typeof s === "object") return Number(s.price || 0);
+            return 0; // old-format string has no price
+          })
+          .filter((p) => !isNaN(p) && p > 0);
+        if (numericPrices.length > 0) {
+          return Math.min(...numericPrices);
+        }
+      }
+    } catch (err) {
+      // ignore
+    }
+    // fallback
+    return product.offerPrice || product.price || 0;
   };
 
   return (
@@ -353,37 +467,40 @@ const Admin = () => {
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map(product => (
-            <motion.div key={product._id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition">
-              <img src={product.image ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}` : "/placeholder.png"} className="w-full h-48 object-cover" alt={product.name} />
+          {filtered.map(product => {
+            const displayPrice = getProductDisplayPrice(product);
+            return (
+              <motion.div key={product._id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition">
+                <img src={product.image ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}` : "/placeholder.png"} className="w-full h-48 object-cover" alt={product.name} />
 
-              <div className="p-4">
-                <h3 className="text-lg font-semibold truncate">{product.name}</h3>
-                <p className="text-sm text-gray-500">{product.companyName}</p>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold truncate">{product.name}</h3>
+                  <p className="text-sm text-gray-500">{product.companyName}</p>
 
-                <div className="text-lg font-bold text-[#D4AF37] mt-2">
-                  ₹{product.offerPrice || product.price}
+                  <div className="text-lg font-bold text-[#D4AF37] mt-2">
+                    {displayPrice ? <>From ₹{displayPrice}</> : "Price not set"}
+                  </div>
+
+                  <div className="text-sm mt-1">
+                    {product.stock > 0 ? (
+                      <span className="text-green-600">Stock: {product.stock}</span>
+                    ) : (
+                      <span className="text-red-600">Out of Stock</span>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between gap-2 mt-3">
+                    <button onClick={() => handleEdit(product)} className="flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer">
+                      <FaEdit /> Edit
+                    </button>
+                    <button onClick={() => setProductToDelete(product._id)} className="flex items-center gap-2 text-red-600 hover:text-red-800 cursor-pointer">
+                      <FaTrash /> Delete
+                    </button>
+                  </div>
                 </div>
-
-                <div className="text-sm mt-1">
-                  {product.stock > 0 ? (
-                    <span className="text-green-600">Stock: {product.stock}</span>
-                  ) : (
-                    <span className="text-red-600">Out of Stock</span>
-                  )}
-                </div>
-
-                <div className="flex justify-between gap-2 mt-3">
-                  <button onClick={() => handleEdit(product)} className="flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer">
-                    <FaEdit /> Edit
-                  </button>
-                  <button onClick={() => setProductToDelete(product._id)} className="flex items-center gap-2 text-red-600 hover:text-red-800 cursor-pointer">
-                    <FaTrash /> Delete
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* ADD / EDIT MODAL (UI SAME) */}
@@ -455,20 +572,47 @@ const Admin = () => {
                     <input type="number" name="stock" value={formData.stock} onChange={handleChange} placeholder="Stock" required className="input-style" />
                   )}
 
-                  <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price" required className="input-style" />
-                  <input type="number" name="offerPrice" value={formData.offerPrice} onChange={handleChange} placeholder="Offer Price" className="input-style" />
+                  <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Fallback Price (optional)" className="input-style" />
+                  <input type="number" name="offerPrice" value={formData.offerPrice} onChange={handleChange} placeholder="Offer Price (optional)" className="input-style" />
                 </div>
 
                 {/* SIZES */}
                 <div>
-                  <label className="block font-semibold mb-3">Available Sizes</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {carpetSizes.map((size) => (
-                      <label key={size} className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border cursor-pointer hover:border-[#D4AF37]">
-                        <input type="checkbox" checked={formData.sizes.includes(size)} onChange={() => handleSizeChange(size)} />
-                        <span className="text-sm">{size}</span>
-                      </label>
-                    ))}
+                  <label className="block font-semibold mb-3">Available Sizes (set price for each)</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {carpetSizes.map((size) => {
+                      const selected = isSizeSelected(size);
+                      const sizeObj = formData.sizes.find((s) => s.size === size) || { price: "" };
+                      return (
+                        <div key={size} className="flex items-center justify-between gap-3 bg-gray-50 px-3 py-2 rounded-lg border hover:border-[#D4AF37]">
+                          <div className="flex items-center gap-3">
+                            <input
+                              id={`size-${size}`}
+                              type="checkbox"
+                              checked={selected}
+                              onChange={() => handleSizeToggle(size)}
+                            />
+                            <label htmlFor={`size-${size}`} className="text-sm">{size}</label>
+                          </div>
+
+                          {selected && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm">₹</span>
+                              <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={sizeObj.price === undefined ? "" : sizeObj.price}
+                                onChange={(e) => handleSizePriceChange(size, e.target.value)}
+                                placeholder="Price"
+                                className="w-28 input-style"
+                                required
+                              />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 

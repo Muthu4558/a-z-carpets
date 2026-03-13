@@ -152,9 +152,22 @@ const ProductDetail = () => {
     );
   }
 
-  const price = Number(product.price ?? 0);
-  const offerPrice = product.offerPrice ? Number(product.offerPrice) : null;
-  const discount = offerPrice && price ? Math.round(((price - offerPrice) / price) * 100) : 0;
+  /* ===== PRICE + OFFER PRICE BASED ON SIZE ===== */
+
+  const isSizeSelected = !!selectedSize;
+
+  const price = isSizeSelected
+    ? Number(selectedSize.price)
+    : Number(product.price ?? 0);
+
+  const offerPrice = !isSizeSelected && product.offerPrice
+    ? Number(product.offerPrice)
+    : null;
+
+  const discount =
+    !isSizeSelected && offerPrice && price
+      ? Math.round(((price - offerPrice) / price) * 100)
+      : 0;
 
   const setQuantitySafe = (val) => {
     const q = Number(val) || 1;
@@ -300,15 +313,37 @@ const ProductDetail = () => {
               <p className="text-gray-500 mt-2">{product.companyName || "Premium Collection"}</p>
 
               <div className="mt-6 flex items-center gap-4 flex-wrap">
-                {offerPrice ? (
+
+                {selectedSize ? (
+
+                  <span className="text-3xl font-bold text-[#D4AF37]">
+                    ₹{price}
+                  </span>
+
+                ) : offerPrice ? (
+
                   <>
-                    <span className="text-gray-400 line-through text-lg">₹{price}</span>
-                    <span className="text-3xl font-bold text-[#D4AF37]">₹{offerPrice}</span>
-                    <span className="bg-[#fff7ed] text-[#a65b00] text-sm px-3 py-1 rounded-full">{discount}% OFF</span>
+                    <span className="text-gray-400 line-through text-lg">
+                      ₹{price}
+                    </span>
+
+                    <span className="text-3xl font-bold text-[#D4AF37]">
+                      ₹{offerPrice}
+                    </span>
+
+                    <span className="bg-[#fff7ed] text-[#a65b00] text-sm px-3 py-1 rounded-full">
+                      {discount}% OFF
+                    </span>
                   </>
+
                 ) : (
-                  <span className="text-3xl font-bold text-[#D4AF37]">₹{price}</span>
+
+                  <span className="text-3xl font-bold text-[#D4AF37]">
+                    ₹{price}
+                  </span>
+
                 )}
+
               </div>
 
               <p className="mt-6 text-gray-700 leading-relaxed">{product.productDetails}</p>
@@ -328,23 +363,39 @@ const ProductDetail = () => {
               {/* SIZE SELECTION (only if sizes exist) */}
               {Array.isArray(product.sizes) && product.sizes.length > 0 && (
                 <div className="mt-6">
-                  <h3 className="font-semibold text-gray-800 mb-3">Select Size</h3>
+                  <h3 className="font-semibold text-gray-800 mb-3">
+                    Select Size
+                  </h3>
 
                   <div className="flex flex-wrap gap-3">
-                    {product.sizes.map((size, i) => (
+
+                    {product.sizes.map((sizeObj, i) => (
                       <button
                         key={i}
                         type="button"
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-5 py-2 rounded-full border text-sm font-medium transition ${selectedSize === size ? "bg-[#D4AF37] text-white border-[#D4AF37] shadow-md" : "border-gray-300 text-gray-700 hover:border-[#D4AF37] hover:text-[#D4AF37]"}`}
+                        onClick={() => setSelectedSize(sizeObj)}
+                        className={`px-5 py-2 rounded-full border text-sm font-medium transition
+                        ${selectedSize?.size === sizeObj.size
+                            ? "bg-[#D4AF37] text-white border-[#D4AF37] shadow-md"
+                            : "border-gray-300 text-gray-700 hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                          }`}
                       >
-                        {size}
+                        {sizeObj.size}
+
+                        {sizeObj.price && (
+                          <span className="ml-2 text-xs">
+                            ₹{sizeObj.price}
+                          </span>
+                        )}
                       </button>
                     ))}
+
                   </div>
 
                   {!selectedSize && product.sizes.length > 0 && (
-                    <p className="text-xs text-red-500 mt-2">Please select a size</p>
+                    <p className="text-xs text-red-500 mt-2">
+                      Please select a size
+                    </p>
                   )}
                 </div>
               )}

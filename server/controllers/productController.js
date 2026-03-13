@@ -34,7 +34,12 @@ export const createProduct = async (req, res) => {
       offerPrice: offerPrice ? Number(offerPrice) : undefined,
       warranty: warranty || "",
       type: type || "",
-      sizes: sizes ? JSON.parse(sizes) : [],
+      sizes: sizes
+  ? JSON.parse(sizes).map((s) => ({
+      size: s.size,
+      price: Number(s.price)
+    }))
+  : [],
       productDetails: productDetails || "",
       stock: Number(stock) || 0,
       image,
@@ -111,7 +116,12 @@ export const updateProduct = async (req, res) => {
       offerPrice: offerPrice ? Number(offerPrice) : undefined,
       warranty: warranty || "",
       type: type || "",
-      sizes: sizes ? JSON.parse(sizes) : [],
+      sizes: sizes
+  ? JSON.parse(sizes).map((s) => ({
+      size: s.size,
+      price: Number(s.price)
+    }))
+  : [],
       productDetails: productDetails || "",
       stock: Number(stock) || 0,
       featured: featured === "true" || featured === true,
@@ -235,8 +245,8 @@ export const filterProducts = async (req, res) => {
     }
 
     if (size) {
-      filter.sizes = size;
-    }
+  filter["sizes.size"] = size;
+}
 
     if (color) {
       filter.color = color;

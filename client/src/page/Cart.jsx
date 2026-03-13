@@ -10,6 +10,69 @@ import Footer from "../components/Footer";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const BRAND = "#D4AF37";
+const BASE = import.meta.env.VITE_APP_BASE_URL || "";
+
+/* ---------- Helpers ---------- */
+
+// Normalize selectedSize from cart item into an object { size, price }
+// Handles cases where selectedSize is already an object or just a string.
+const resolveSelectedSize = (item) => {
+  if (!item) return null;
+  const sel = item.selectedSize;
+  const productSizes = item.product?.sizes;
+
+  if (!sel) return null;
+
+  // If already an object with size/price, return it
+  if (typeof sel === "object" && (sel.size || sel.price)) {
+    return {
+      size: sel.size ?? "",
+      price: typeof sel.price === "number" ? sel.price : Number(sel.price) || null,
+    };
+  }
+
+  // If stored as a string (e.g. "5x7"), try to find matching size object inside product.sizes
+  if (typeof sel === "string" && Array.isArray(productSizes)) {
+    const match = productSizes.find((s) => String(s.size) === sel || String(s.size) === String(sel));
+    if (match) {
+      return { size: match.size, price: match.price };
+    }
+    // fallback to use the string as size but price unknown
+    return { size: sel, price: null };
+  }
+
+  // If selectedSize is a number (rare), treat as price only
+  if (typeof sel === "number") {
+    return { size: "", price: sel };
+  }
+
+  return null;
+};
+
+// Get effective unit price for cart item (size price > offerPrice > price > 0)
+const unitPriceForItem = (item) => {
+  if (!item || !item.product) return 0;
+  const selectedSize = resolveSelectedSize(item);
+
+  if (selectedSize?.price && !isNaN(Number(selectedSize.price))) {
+    return Number(selectedSize.price);
+  }
+
+  if (item.product.offerPrice && !isNaN(Number(item.product.offerPrice))) {
+    return Number(item.product.offerPrice);
+  }
+
+  return Number(item.product.price ?? 0);
+};
+
+// Safe image src builder
+const getImageSrc = (img) => {
+  if (!img) return "/placeholder.png";
+  const isUrl = typeof img === "string" && (img.startsWith("http://") || img.startsWith("https://"));
+  return isUrl ? img : `${BASE}/uploads/${img}`;
+};
+
+/* ---------- Components ---------- */
 
 const ConfirmDeleteModal = ({ open, productName, onCancel, onConfirm }) => {
   if (!open) return null;
@@ -48,13 +111,7 @@ const ConfirmDeleteModal = ({ open, productName, onCancel, onConfirm }) => {
 
 const EmptyState = () => (
   <div className="text-center py-20">
-    <div className="mx-auto w-48">
-      {/* <img
-        src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-4085814-3371650.png"
-        alt="Empty cart"
-        className="w-full"
-      /> */}
-    </div>
+    <div className="mx-auto w-48" />
     <h3 className="mt-6 text-2xl font-semibold text-gray-700">Your cart is empty</h3>
     <p className="mt-2 text-gray-500">Browse products and add your favourites to the cart.</p>
     <a href="/products/all-products" className="mt-4 inline-block px-4 py-2 bg-[#D4AF37] text-white rounded-lg">
@@ -62,6 +119,8 @@ const EmptyState = () => (
     </a>
   </div>
 );
+
+/* ---------- Main Cart Page ---------- */
 
 const Cart = () => {
   const location = useLocation();
@@ -74,30 +133,25 @@ const Cart = () => {
 
   // Ensure page starts at top on mount / route change
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // change to instant jump if you prefer: window.scrollTo(0,0)
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
 
   // Refresh cart when this page mounts or when route changes.
-  // This ensures data is fetched after redirect from login.
   useEffect(() => {
     fetchCart({ showLoader: true });
     // eslint-disable-next-line
   }, []);
 
-
   const total = useMemo(
     () =>
       cartItems.reduce((acc, item) => {
-        if (!item.product) return acc; // 🛑 skip null product
-
-        const price =
-          item.product.offerPrice ?? item.product.price ?? 0;
-
-        return acc + price * item.quantity;
+        if (!item || !item.product) return acc;
+        const price = unitPriceForItem(item);
+        const qty = Number(item.quantity ?? 1);
+        return acc + price * qty;
       }, 0),
     [cartItems]
   );
-
 
   const askDelete = (productId, productName) => {
     setConfirmProductId(productId);
@@ -131,7 +185,6 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      {/* <ToastContainer position="top-right" /> */}
 
       <ConfirmDeleteModal
         open={confirmOpen}
@@ -146,7 +199,10 @@ const Cart = () => {
           <div className="lg:col-span-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-lg bg-white shadow flex items-center justify-center border" style={{ borderColor: "#e8efe6" }}>
+                <div
+                  className="w-14 h-14 rounded-lg bg-white shadow flex items-center justify-center border"
+                  style={{ borderColor: "#e8efe6" }}
+                >
                   <FaShoppingCart className="text-2xl" style={{ color: BRAND }} />
                 </div>
                 <div>
@@ -169,22 +225,29 @@ const Cart = () => {
             ) : (
               <div className="space-y-5">
                 {cartItems
-                  .filter(item => item.product)   // 🛑 remove null products
+                  .filter((item) => item.product) // remove null products
                   .map((item) => {
+                    const selectedSizeObj = resolveSelectedSize(item);
+                    const price = unitPriceForItem(item);
+                    const subtotal = price * Number(item.quantity ?? 1);
 
-                    const price = item.product.offerPrice ?? item.product.price;
+                    // key: productId + size so duplicates with different sizes don't clash
+                    const key = `${item.product._id}-${selectedSizeObj?.size ?? "nosize"}-${item.quantity}`;
+
                     return (
                       <motion.div
-                        key={item.product._id}
+                        key={key}
                         initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-white rounded-2xl p-4 shadow-sm border border-[#D4AF37] flex flex-col md:flex-row items-center gap-4"
                       >
-                        <div className="flex items-center gap-4 flex-1 cursor-pointer"
-                          onClick={() => navigate(`/products/${item.product._id}`)}>
+                        <div
+                          className="flex items-center gap-4 flex-1 cursor-pointer"
+                          onClick={() => navigate(`/products/${item.product._id}`)}
+                        >
                           <div className="w-28 h-28 flex items-center justify-center rounded-xl overflow-hidden bg-gray-50 border">
                             <img
-                              src={`${import.meta.env.VITE_APP_BASE_URL}/uploads/${item.product.image}`}
+                              src={getImageSrc(item.product.image)}
                               alt={item.product.name}
                               className="w-full h-full object-cover"
                             />
@@ -192,12 +255,13 @@ const Cart = () => {
 
                           <div className="min-w-0">
                             <h3 className="text-lg font-semibold text-[#D4AF37] truncate">{item.product.name}</h3>
+
                             {/* SIZE DISPLAY */}
                             {item.product?.sizes?.length > 0 && (
                               <div className="mt-1 text-sm">
-                                {item.selectedSize ? (
+                                {selectedSizeObj ? (
                                   <span className="px-3 py-1 rounded-full bg-[#fff7ed] text-[#a65b00] text-xs font-medium">
-                                    Size: {item.selectedSize}
+                                    Size: {selectedSizeObj.size || "—"} {selectedSizeObj.price ? `• ₹${Number(selectedSizeObj.price).toLocaleString()}` : ""}
                                   </span>
                                 ) : (
                                   <span className="text-red-500 text-xs font-medium">
@@ -210,17 +274,27 @@ const Cart = () => {
                             <p className="text-sm text-gray-400 mt-1 line-clamp-2">{item.product.shortDescription ?? ""}</p>
 
                             <div className="mt-3 flex items-center gap-3">
-                              {item.product.offerPrice ? (
+                              {item.selectedSize ? (
+                                <div className="text-lg font-bold" style={{ color: BRAND }}>
+                                  ₹{item.selectedSize.price}
+                                </div>
+                              ) : item.product.offerPrice ? (
                                 <>
-                                  <div className="text-sm text-black line-through">₹{item.product.price}</div>
-                                  <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.offerPrice}</div>
+                                  <div className="text-sm text-black line-through">
+                                    ₹{item.product.price}
+                                  </div>
+                                  <div className="text-lg font-bold" style={{ color: BRAND }}>
+                                    ₹{item.product.offerPrice}
+                                  </div>
                                 </>
                               ) : (
-                                <div className="text-lg font-bold" style={{ color: BRAND }}>₹{item.product.price}</div>
+                                <div className="text-lg font-bold" style={{ color: BRAND }}>
+                                  ₹{item.product.price}
+                                </div>
                               )}
                             </div>
 
-                            <div className="mt-2 text-sm text-black">Subtotal: ₹{price * item.quantity}</div>
+                            <div className="mt-2 text-sm text-black">Subtotal: ₹{Number(subtotal).toLocaleString()}</div>
                           </div>
                         </div>
 
@@ -269,7 +343,9 @@ const Cart = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <div className="text-sm text-black">Order summary</div>
-                    <div className="text-2xl font-bold mt-1" style={{ color: BRAND }}>₹{total}</div>
+                    <div className="text-2xl font-bold mt-1" style={{ color: BRAND }}>
+                      ₹{Number(total).toLocaleString()}
+                    </div>
                   </div>
                   <div className="text-sm text-black">incl. taxes</div>
                 </div>
@@ -299,9 +375,7 @@ const Cart = () => {
                   <FaShoppingCart /> Proceed to Checkout
                 </button>
 
-                <div className="mt-4 text-xs text-black">
-                  Secure payments • Easy returns • 24/7 support
-                </div>
+                <div className="mt-4 text-xs text-black">Secure payments • Easy returns • 24/7 support</div>
               </div>
 
               {/* Mobile sticky checkout bottom */}
@@ -309,7 +383,9 @@ const Cart = () => {
                 <div className="bg-white rounded-2xl p-3 shadow-xl border border-[#D4AF37] flex items-center justify-between">
                   <div>
                     <div className="text-xs text-gray-500">Total</div>
-                    <div className="text-lg font-bold" style={{ color: BRAND }}>₹{total}</div>
+                    <div className="text-lg font-bold" style={{ color: BRAND }}>
+                      ₹{Number(total).toLocaleString()}
+                    </div>
                   </div>
                   <button
                     onClick={() => {

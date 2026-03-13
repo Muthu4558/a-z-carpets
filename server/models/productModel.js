@@ -26,10 +26,17 @@ const productSchema = new mongoose.Schema(
     type: { type: String }, // Hand Made | Machine Made - keep freeform
 
     sizes: [
-      {
-        type: String,
-      },
-    ],
+  {
+    size: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    }
+  }
+],
 
     productDetails: { type: String, required: true },
 

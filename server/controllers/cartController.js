@@ -27,10 +27,10 @@ export const addToCart = async (req, res) => {
 
     // 1️⃣ Exact match (same product + same size)
     const exactItem = cart.items.find(
-      (item) =>
-        item.product.toString() === productId &&
-        (item.selectedSize || null) === (selectedSize || null)
-    );
+  (item) =>
+    item.product.toString() === productId &&
+    item.selectedSize?.size === selectedSize?.size
+);
 
     if (exactItem) {
       // Normal increase
@@ -41,7 +41,7 @@ export const addToCart = async (req, res) => {
         const nullSizeItem = cart.items.find(
           (item) =>
             item.product.toString() === productId &&
-            (!item.selectedSize || item.selectedSize === null)
+            (!item.selectedSize || !item.selectedSize.size)
         );
 
         if (nullSizeItem) {
