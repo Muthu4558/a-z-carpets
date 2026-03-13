@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema(
     // shape optional (round, rectangular, irregular)
     shape: { type: String },
 
-    price: { type: Number, required: true },
+    price: { type: Number, default: 0 },
     offerPrice: { type: Number },
 
     warranty: { type: String },
@@ -47,7 +47,11 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
 
-    image: { type: String },
+    images: [
+  {
+    type: String
+  }
+],
 
     featured: { type: Boolean, default: false },
 

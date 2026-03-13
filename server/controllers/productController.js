@@ -21,7 +21,7 @@ export const createProduct = async (req, res) => {
       featured,
     } = req.body;
 
-    const image = req.file?.filename;
+    const images = req.files ? req.files.map(file => file.filename) : [];
 
     const product = await Product.create({
       productGroup: productGroup || "",
@@ -42,7 +42,7 @@ export const createProduct = async (req, res) => {
   : [],
       productDetails: productDetails || "",
       stock: Number(stock) || 0,
-      image,
+      images,
       featured: featured === "true" || featured === true,
     });
 
@@ -127,7 +127,9 @@ export const updateProduct = async (req, res) => {
       featured: featured === "true" || featured === true,
     };
 
-    if (req.file) updateData.image = req.file.filename;
+    if (req.files && req.files.length > 0) {
+  updateData.images = req.files.map(file => file.filename);
+}
 
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
 

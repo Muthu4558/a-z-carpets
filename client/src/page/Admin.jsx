@@ -122,8 +122,8 @@ const Admin = () => {
     sizes: [], // now array of objects: [{size:"3x5ft", price:1200}, ...]
     productDetails: "",
     stock: "",
-    image: null,
-    imagePreview: null,
+    images: [],
+    imagePreview: [],
     featured: false,
   });
 
@@ -159,14 +159,15 @@ const Admin = () => {
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
 
-    if (name === "image" && files?.[0]) {
-      setFormData((prev) => ({
-        ...prev,
-        image: files[0],
-        imagePreview: URL.createObjectURL(files[0]),
-      }));
-      setPreview(URL.createObjectURL(files[0]));
-    } else if (type === "checkbox" && name !== "featured") {
+    if (name === "images") {
+  const filesArray = Array.from(files).slice(0,5);
+
+  setFormData((prev) => ({
+    ...prev,
+    images: filesArray,
+    imagePreview: filesArray.map(file => URL.createObjectURL(file))
+  }));
+} else if (type === "checkbox" && name !== "featured") {
       // general checkboxes handled elsewhere
       setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
@@ -247,16 +248,20 @@ const Admin = () => {
 
     // append form data (sizes as JSON)
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === "sizes") {
-        data.append("sizes", JSON.stringify(value || []));
-      } else if (key === "featured") {
-        data.append("featured", value ? "true" : "false");
-      } else if (value !== null && value !== undefined) {
-        // skip imagePreview
-        if (key === "imagePreview") return;
-        data.append(key, value);
-      }
-    });
+  if (key === "sizes") {
+    data.append("sizes", JSON.stringify(value || []));
+  } 
+  else if (key === "images") {
+    value.forEach(img => data.append("images", img));
+  }
+  else if (key === "featured") {
+    data.append("featured", value ? "true" : "false");
+  } 
+  else if (value !== null && value !== undefined) {
+    if (key === "imagePreview") return;
+    data.append(key, value);
+  }
+});
 
     try {
       if (editingProductId) {
@@ -298,8 +303,8 @@ const Admin = () => {
       sizes: [],
       productDetails: "",
       stock: "",
-      image: null,
-      imagePreview: null,
+      images: [],
+      imagePreview: [],
       featured: false,
     });
     setPreview(null);
@@ -336,10 +341,12 @@ const Admin = () => {
       sizes: parsedSizes,
       productDetails: product.productDetails || "",
       stock: product.stock || 0,
-      image: null,
-      imagePreview: product.image
-        ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}`
-        : null,
+      images: null,
+      imagePreview: product.images
+  ? product.images.map(img =>
+      `${import.meta.env.VITE_APP_BASE_URL}/uploads/${img}`
+    )
+  : [],
       featured: !!product.featured,
     });
 
@@ -471,7 +478,15 @@ const Admin = () => {
             const displayPrice = getProductDisplayPrice(product);
             return (
               <motion.div key={product._id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition">
-                <img src={product.image ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.image}` : "/placeholder.png"} className="w-full h-48 object-cover" alt={product.name} />
+                <img
+  src={
+    product.images?.[0]
+      ? `${import.meta.env.VITE_APP_BASE_URL}/uploads/${product.images[0]}`
+      : "/placeholder.png"
+  }
+  className="w-full h-48 object-cover"
+  alt={product.name}
+/>
 
                 <div className="p-4">
                   <h3 className="text-lg font-semibold truncate">{product.name}</h3>
@@ -630,15 +645,28 @@ const Admin = () => {
                   <label className="block font-semibold mb-2">Product Image</label>
                   <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 cursor-pointer hover:border-[#D4AF37] transition">
                     <span className="text-sm text-gray-500">Click to upload image</span>
-                    <input type="file" name="image" accept="image/*" onChange={handleChange} className="hidden" />
+                    <input
+  type="file"
+  name="images"
+  accept="image/*"
+  multiple
+  onChange={handleChange}
+  className="hidden"
+/>
                   </label>
 
                   {/* IMAGE PREVIEW */}
-                  {formData.imagePreview && (
-                    <div className="mt-4">
-                      <img src={formData.imagePreview} alt="Preview" className="w-40 h-40 object-cover rounded-xl border" />
-                    </div>
-                  )}
+                  {formData.imagePreview?.length > 0 && (
+  <div className="flex gap-3 mt-4 flex-wrap">
+    {formData.imagePreview.map((img, i) => (
+      <img
+        key={i}
+        src={img}
+        className="w-32 h-32 object-cover rounded-xl border"
+      />
+    ))}
+  </div>
+)}
                 </div>
 
                 {/* SUBMIT BUTTON */}
